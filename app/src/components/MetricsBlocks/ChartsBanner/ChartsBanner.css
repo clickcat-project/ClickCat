@@ -1,0 +1,26 @@
+.chartsBanner {
+  height: 100%;
+  width: 100%;
+}
+.chartsRenderer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* .chartsRenderer>div {
+  width: 100% !important;
+} */
+
+.chartsRenderer > div:first-of-type {
+  z-index: 2;
+  background: #fff;
+}
+
+.chartsRenderer::after {
+  position: absolute;
+  content: 'No data';
+  top: calc(50% - 10px);
+  left: calc(50% - 22px);
+  color: #000;
+}

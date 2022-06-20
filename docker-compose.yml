@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  clickcat:
+    build: .
+    image: clickcat:latest
+    volumes:
+      - .:/clickcat
+    ports:
+      - "9001:9001"

@@ -1,0 +1,29 @@
+.sider-container {
+  position: sticky;
+  top: 0;
+  overflow: auto;
+  max-height: 100vh;
+}
+.baseContent {
+  background-color: #F8F8F8;
+  border-bottom: 1px solid crimson;
+  height: 100%;
+}
+
+:global {
+  .ant-tabs-content {
+    height: 100%;
+  }
+  .ant-tabs {
+    height: 100%;
+  }
+}
+/* .setHeight {
+  height: 100%;
+  :global {
+    & > .Pane2 {
+      height: 100%;
+      overflow-y: auto;
+    }
+  }
+} */

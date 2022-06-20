@@ -1,0 +1,54 @@
+.ProcessesTabPage {
+  padding: 84px 30px 0 30px;
+  height: 100%;
+  background: #f8f8f8;
+  :global {
+    .ant-tabs {
+      height: 100%;
+    }
+    .ant-tabs-content-holder {
+      padding: 20px;
+      background-color: #fff;
+    }
+    .ant-tabs-content {
+      height: 100%;
+    }
+    .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap {
+      background: #F0F0F0;
+    }
+    .ant-divider-vertical {
+      border-color: #E3E3E3;
+    }
+    .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+      background: #E1E0DD;
+    }
+
+    .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active {
+      background-color: var(--tab-bg);
+    }
+
+    .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #fff;
+    }
+
+    .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab::after {
+      display: none;
+    }
+    .wtHolder::-webkit-scrollbar {
+      height: 8px;
+    }
+    .handsontable-dark .handsontable th {
+      background: #fbfbfb;
+    }
+    .handsontable-dark .handsontable:not(:nth-of-type(2)) th {
+      background: #fff;
+    }
+    .handsontable-dark .handsontable td {
+      background: #fff !important;
+    }
+  }
+}
+
+.tableBtnHover:hover {
+  color: var(--color-yellow-text);
+}

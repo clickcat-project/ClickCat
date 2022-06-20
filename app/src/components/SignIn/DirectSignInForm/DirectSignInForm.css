@@ -1,0 +1,21 @@
+.itemPosition {
+  position: relative;
+}
+
+.itemPosition.disabled {
+  :global(.ant-input) {
+    color: rgba(0, 0, 0, .85);
+  }
+}
+
+.imgIcon, .fontIcon {
+  position: absolute;
+  top: 15px;
+  left: 16px;
+  z-index: 10;
+}
+
+.fontIcon {
+  font-size: 14px;
+  color: #4E5969;
+}

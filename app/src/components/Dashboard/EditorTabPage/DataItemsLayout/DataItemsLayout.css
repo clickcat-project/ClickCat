@@ -1,0 +1,27 @@
+@value font-size,font-family from '~assets/styles/vars.css';
+
+.grid-item {
+  padding: 0 0.2em 0.2em 0;
+  /* transform: unset !important; Fix HOTTable but drop Grid */
+}
+
+.text {
+  font-family: font-family;
+  white-space: pre;
+  padding-top: 1em;
+  width: 100%;
+  height: 100%;
+  background: unset !important;
+}
+
+.error {
+  font-size: font-size;
+  /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
+  font-family: font-family;
+  background: unset !important;
+  padding: 1em 0;
+  border: 0;
+  /* color: tomato; */
+  width: 100%;
+  height: 100%;
+}

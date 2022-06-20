@@ -1,0 +1,95 @@
+.add-connection-btn {
+  width: 90%;
+  margin-top: 1em;
+}
+
+.form {
+  width: 500px;
+}
+
+.layout-connection-list {
+  overflow-x: hidden;
+  
+}
+.logo {
+  float: left;
+}
+
+.logoimg {
+  width: 270px;
+  height: 110px; 
+}
+
+.loginContainer {
+  position: relative;
+  background: linear-gradient(180deg, #FFF1DF 0%, #FFFBF5 100%);
+  :global(.ant-tabs > .ant-tabs-nav) {
+    background-color: transparent;
+  }
+  :global(.ant-tabs-tab .ant-tabs-tab-btn) {
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  :global(.ant-tabs-top > .ant-tabs-nav::before) {
+    display: block;
+    background-color: #DBD4CC;
+  }
+  :global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 22px;
+    color: var(--color-yellow-text);
+  }
+  :global(.ant-tabs-content) {
+    padding-top: 36px;
+  }
+}
+
+.directSignInForm {
+  :global(.ant-input) {
+    width: 500px;
+    height: 48px;
+    line-height: 48px;
+    background: #FFEFD3 !important;
+    border: 1px solid #FFE6B5;
+    box-shadow: unset !important;
+    color: #999999;
+    text-indent: 42px;
+  }
+  :global(.ant-input::-webkit-input-placeholder) {
+    color: #999;
+  }
+}
+
+.loginLeftBottom, .loginLeftTop, .loginRight {
+  position: absolute;
+}
+
+.loginLeftBottom {
+  height: 52%;
+  left: 0;
+  bottom: 48px;
+}
+.loginLeftTop {
+  height: 20%;
+  left: 0;
+  top: 0;
+}
+
+.loginRight {
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+
+.loginTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 70px;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 40px;
+}

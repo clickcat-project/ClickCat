@@ -1,0 +1,41 @@
+.metricsServer {
+  /* padding: 84px 20px 0 20px; */
+  padding-top: 84px;
+  border: unset;
+  background-color: #f8f8f8;
+  min-height: 100%;
+  :global {
+    .ant-collapse-content > .ant-collapse-content-box {
+      padding: 10px 0 0 0;
+    }
+    .ant-collapse {
+      border: unset;
+    }
+    .ant-collapse-content {
+      background-color: #f8f8f8;
+      border: unset;
+    }
+    .ant-collapse-item > .ant-collapse-header {
+      width: calc(100% - 20px);
+      margin: auto;
+      font-size: 20px;
+      font-weight: 500;
+      background-color: #fff;
+    }
+
+    .ant-collapse-item > .ant-collapse-header > div {
+      line-height: 28px;
+    }
+
+    .ant-collapse-item {
+      border: unset;
+      margin-bottom: 10px;
+    }
+    .ant-collapse-item:last-of-type {
+      margin-bottom: 0;
+    }
+    .ant-select-arrow {
+      background: transparent;
+    }
+  }
+}

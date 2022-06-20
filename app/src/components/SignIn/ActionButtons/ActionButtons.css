@@ -1,0 +1,21 @@
+.root {
+  button {
+    width: 100%;
+    display: block !important;
+  }
+
+  button + button,
+  button + span {
+    margin-left: 1em;
+    display: block !important;
+    width: 100%;
+  }
+  .loginBtn {
+    margin-top: 44px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #4E5969;
+    background: #FFB300;
+  }
+}

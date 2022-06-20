@@ -1,0 +1,56 @@
+.AddContainer {
+  position: relative;
+  padding: 0 30px 30px;
+  background-color: #fff;
+
+  :global {
+    .ant-form-item-label > label {
+      color: rgba(0, 0, 0, 0.85);
+    }
+    .ant-btn {
+      width: 76px;
+      height: 36px;
+      border-radius: 2px;
+    }
+  }
+}
+
+.AddContainer > form {
+  margin: auto;
+  padding-top: 200px;
+  width: 700px;
+}
+
+.title {
+  height: 60px;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 60px;
+  border-bottom: 1px solid #F0F0F0;
+}
+.firstStepForm {
+  padding-top: 130px;
+}
+
+.firstStepForm > form, .secondStepForm > form {
+  width: 700px;
+  margin: auto;
+}
+.btnBox {
+  margin-top: 200px;
+  text-align: center;
+}
+.previous {
+  color: var(--color-yellow-text);
+  border: 1px solid var(--tab-bg);
+  background-color: #fff;
+}
+
+.previous:hover {
+  color: var(--color-yellow-text);
+  background-color: #fff;
+}
+
+.secondStepForm {
+  padding-top: 60px;
+}

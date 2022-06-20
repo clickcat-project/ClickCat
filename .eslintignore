@@ -1,0 +1,6 @@
+node_modules
+dist
+/dist/**
+node_modules/
+**/*.test.{js,jsx,ts,tsx}
+app/src/components/Dashboard/EditorTabPage/SqlEditor/monaco/sql-worker/grammar/languages/CHSql

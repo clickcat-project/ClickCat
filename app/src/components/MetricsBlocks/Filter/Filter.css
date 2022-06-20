@@ -1,0 +1,36 @@
+.filter {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin: auto;
+  width: calc(100% - 20px);
+  height: 36px;
+  background: #F0F0F0;
+  border: 1px solid #E2E2E2;
+
+  :global {
+    .ant-select {
+      color: rgba(62, 62, 69, 0.85);
+    }
+    .ant-select-multiple .ant-select-selection-item-remove {
+      color: rgba(62, 62, 69, 0.85);
+    }
+    .ant-select-arrow {
+      color: #8C8C8C;
+    }
+    .ant-divider-vertical {
+      border-color: #e3e3e3;
+    }
+    .ant-select-single.ant-select-open .ant-select-selection-item {
+      color: rgba(62, 62, 69, 0.85);
+    }
+  }
+}
+
+.filterTip {
+  color: rgba(62, 62, 69, 0.45);
+}
+
+.filterIcon {
+  color: rgba(62, 62, 69, 0.85);
+}

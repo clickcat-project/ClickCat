@@ -1,0 +1,25 @@
+.root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1002;
+
+  &::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+    background-color: rgba(38, 42, 61, 0.7);;
+    z-index: 999;
+  }
+}
+
+.loadingIcon, .loadingText {
+  color: #fff;
+  z-index: 1000;
+}

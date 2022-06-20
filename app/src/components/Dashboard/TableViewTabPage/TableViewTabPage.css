@@ -1,0 +1,67 @@
+.TableViewTabPageOuterTabs {
+  :global {
+    .ant-tabs-nav .ant-tabs-tab-active {
+      background-color: var(--tab-bg);
+    }
+    .ant-tabs-nav .ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: #fff
+    }
+  }
+}
+
+.TableViewTabPageInnerTabs {
+  :global {
+    .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane,
+    div > .ant-tabs-content-holder > .ant-tabs-content > .ant-tabs-tabpane {
+      padding-left: 0;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active {
+      background-color: #fff;
+    }
+    .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+      font-weight: 400;
+      color: #3E3E45;
+    }
+    .ant-tabs-tabpane.ant-tabs-tabpane-active > section {
+      height: calc(100% - 15px) !important;
+    }
+    .ant-tabs-tab {
+      margin-top: 0 !important;
+      height: 36px;
+      background-color: #E1E0DD;
+      border-bottom: 1px solid #fff;
+    }
+    .ant-tabs-nav-list .ant-tabs-tab:nth-of-type(3) {
+      border: unset;
+    }
+    .ant-tabs-ink-bar {
+      display: none;
+    }
+    .ant-tabs-tab:hover .ant-tabs-tab-btn {
+      color: var(--color-yellow-text);
+    }
+    .ant-tabs-tab.ant-tabs-tab-active:hover .ant-tabs-tab-btn {
+      color: #3E3E45;
+    }
+    .handsontable th {
+      background-color: #fff;
+    }
+    .ht_master:not(.innerBorderLeft):not(.emptyColumns) ~ .handsontable tbody tr th {
+      border-left: unset;
+    }
+    .ht_master:not(.innerBorderLeft):not(.emptyColumns) ~ .handsontable:not(.ht_clone_top) thead tr th:first-child {
+      border-top: 1px solid #fff !important;
+      border-left: unset;
+    }
+    .ht_master:not(.innerBorderTop) ~ .handsontable thead tr:last-child th {
+      border-top: unset;
+    }
+    .FullScreener__setOverflow--959cc {
+      height: 100%;
+    }
+  }
+}
+
+.actions {
+  height: 36px;
+}

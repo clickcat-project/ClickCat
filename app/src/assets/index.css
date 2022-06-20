@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'dinBold';
+  src: url('/assets/DIN-BOLD.OTF');
+}
+
+body
+{
+  /* first for reload*/
+  background: #424242;
+}

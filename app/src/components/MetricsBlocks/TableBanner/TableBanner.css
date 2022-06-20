@@ -1,0 +1,25 @@
+.tableBanner {
+  height: 100%;
+  width: 100%;
+  padding: 30px 20px;
+}
+.lightTable {
+  :global {
+    .ant-table {
+      background: transparent;
+      .ant-table-thead .ant-table-cell {
+        background: #FBFBFB;
+        color: #3E3E45;
+      }
+      .ant-table-tbody .ant-table-cell {
+        color: #3E3E45;
+        background: #fff;
+      }
+    }
+  }
+}
+.tableEmpty span {
+  display: block;
+  color: rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
