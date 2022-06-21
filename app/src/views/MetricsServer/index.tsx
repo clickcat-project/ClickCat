@@ -382,20 +382,22 @@ class MetricsServer extends React.Component<RoutedProps> {
       {
         x: 0,
         y: 0,
-        w: 6,
+        w: 4,
         h: 1,
         component: <CountBanner
+          numberStyle={{fontSize: 24}}
           banner={versionImg}
           queryAction={this.queryFn(sqls.queryVersion())}
           outerTitle={'Version'}
         ></CountBanner>,
       },
       {
-        x: 6,
+        x: 4,
         y: 0,
-        w: 6,
+        w: 4,
         h: 1,
         component: <CountBanner
+          numberStyle={{fontSize: 24}}
           banner={dataAnalysisServerUptime}
           outerTitle={'Server uptime'}
           showType={'duration'}
@@ -403,48 +405,52 @@ class MetricsServer extends React.Component<RoutedProps> {
         ></CountBanner>,
       },
       {
-        x: 12,
+        x: 8,
         y: 0,
-        w: 6,
+        w: 4,
         h: 1,
         component: <CountBanner
+          numberStyle={{fontSize: 24}}
           banner={databaseNumber}
           queryAction={this.queryFn(sqls.queryDatabaseNumber(databaseClusterAnalysis))}
           showType={'toLocaleString'}
         ></CountBanner>,
       },
       {
-        x: 18,
+        x: 12,
         y: 0,
-        w: 6,
+        w: 4,
         h: 1,
         component: <CountBanner
           banner={tableNumber}
           queryAction={this.queryFn(sqls.queryTableNumber(databaseClusterAnalysis))}
           showType={'toLocaleString'}
+          numberStyle={{fontSize: 24}}
         ></CountBanner>,
       },
       {
-        x: 0,
-        y: 1,
-        w: 6,
+        x: 16,
+        y: 0,
+        w: 4,
         h: 1,
         component: <CountBanner
           // numberStyle={{fontSize: '1rem'}}
           banner={dataAnalysisTotalRow}
           queryAction={this.queryFn(sqls.queryRowNumber(databaseClusterAnalysis))}
           showType={'toLocaleString'}
+          numberStyle={{fontSize: 24}}
         ></CountBanner>,
       },
       {
-        x: 6,
-        y: 1,
-        w: 6,
+        x: 20,
+        y: 0,
+        w: 4,
         h: 1,
         component: <CountBanner
           banner={dataAnalysisTotalColumns}
           queryAction={this.queryFn(sqls.queryColumnNumber(databaseClusterAnalysis))}
           showType={'toLocaleString'}
+          numberStyle={{fontSize: 24}}
         ></CountBanner>,
       },
       {

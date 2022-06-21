@@ -62,6 +62,12 @@ export const List = ({ setIsWhich, store, setFinalValue }: Props) => {
   // }
 
   return <div className={css.ListContianer} style={!data.length ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}}>
+    <section className={classNames(css.listBox, css.addBtn)} onClick={() => {
+      setIsWhich(2)
+    }}>
+      <PlusOutlined className={css.addIcon} />
+      <span className={css.addText}>NEW</span>
+    </section>
     {
       data.length ? data.map((item, i) => {
         return <section key={i} className={css.listBox}>
@@ -92,12 +98,6 @@ export const List = ({ setIsWhich, store, setFinalValue }: Props) => {
         </section>
       }) : <></>
     }
-    <section className={classNames(css.listBox, css.addBtn)} onClick={() => {
-      setIsWhich(2)
-    }}>
-      <PlusOutlined className={css.addIcon} />
-      <span className={css.addText}>NEW</span>
-    </section>
   </div>
 }
 
