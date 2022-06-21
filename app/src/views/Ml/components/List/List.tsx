@@ -55,15 +55,15 @@ export const List = ({ setIsWhich, store, setFinalValue }: Props) => {
     })()
   }, [])
 
-  if (!data.length) {
-    return <div className={css.empty}>
-      No data
-    </div>
-  }
+  // if (!data.length) {
+  //   return <div className={css.empty}>
+  //     No data
+  //   </div>
+  // }
 
-  return <div className={css.ListContianer}>
+  return <div className={css.ListContianer} style={!data.length ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}}>
     {
-      data.map((item, i) => {
+      data.length ? data.map((item, i) => {
         return <section key={i} className={css.listBox}>
           <div className={css.listTitleBox}>
             <p className={css.listTitle}>{item.job_name}</p>
@@ -90,16 +90,14 @@ export const List = ({ setIsWhich, store, setFinalValue }: Props) => {
             }}>view result</span>
           </div>
         </section>
-      })
+      }) : <></>
     }
-    { data.length &&
-      <section className={classNames(css.listBox, css.addBtn)} onClick={() => {
-        setIsWhich(2)
-      }}>
-        <PlusOutlined className={css.addIcon} />
-        <span className={css.addText}>NEW</span>
-      </section>
-    }
+    <section className={classNames(css.listBox, css.addBtn)} onClick={() => {
+      setIsWhich(2)
+    }}>
+      <PlusOutlined className={css.addIcon} />
+      <span className={css.addText}>NEW</span>
+    </section>
   </div>
 }
 
