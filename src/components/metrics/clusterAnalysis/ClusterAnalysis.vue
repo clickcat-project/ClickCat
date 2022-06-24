@@ -189,7 +189,7 @@ const queryFunction = (
           ></TableBanner>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
+      <el-row :gutter="10" style="margin-bottom: 0;">
         <el-col :span="8">
           <Progress
             title="Replicated tables by delay"

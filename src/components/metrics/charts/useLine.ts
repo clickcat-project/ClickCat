@@ -61,9 +61,6 @@ export function formatLineOptions(data?: CommonMeta[], grid?: CommonObj, legend?
       formatter: function (params: CommonObj[]) {
         const pa = params[0]
         return pa.name + ' ' + pa.value
-      },
-      axisPointer: {
-        animation: false
       }
     },
     xAxis: {

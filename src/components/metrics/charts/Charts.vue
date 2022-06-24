@@ -24,7 +24,11 @@ const props = defineProps<{
   timeDuration?: string,
 }>()
 
-const chartInstanceOuter = ref<echarts.ECharts | null>(null)
+// Vue3 下 echarts 的 tooltip 不显示
+// 原因 Vue3 中使用了 Proxy 对象代理，但 echarts 中使用了大量的 ‘===’ 造成对比失败
+// 处理办法1：对Proxy对象进行拆箱。见 https://blog.csdn.net/xy109/article/details/113869790?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-113869790-blog-124255820.pc_relevant_antiscanv2&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-113869790-blog-124255820.pc_relevant_antiscanv2&utm_relevant_index=1
+// 处理办法2：如下，不使用响应式 ，直接赋值，由于没有使用响应式，‘===’ 成立，tooltip成功显示
+let chartInstanceOuter: echarts.ECharts | null = null
 const formatOptionouter = ref<(data: CommonData, grid?: CommonObj, legend?: CommonObj) => echarts.EChartsOption>()
 
 watch([
@@ -41,7 +45,7 @@ watch([
 
 onMounted(() => {//需要获取到element,所以是onMounted的Hook
   const {chartInstance, formatOption} = getCurrentChart(props.type, document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement)
-  chartInstanceOuter.value = chartInstance as unknown as echarts.ECharts
+  chartInstanceOuter = chartInstance as unknown as echarts.ECharts
   formatOptionouter.value = formatOption as any
   getData()
 })
@@ -92,12 +96,12 @@ const getData = () => {
         })
       }
       if (!data || !data.length) {
-        chartInstanceOuter.value?.dispose()
+        chartInstanceOuter?.dispose()
       } else {
         if (formatOptionouter.value) {
-          if (chartInstanceOuter.value) {
+          if (chartInstanceOuter) {
             const options = formatOptionouter.value(data, props.grid, props.legend)
-            chartInstanceOuter.value?.setOption(options)
+            chartInstanceOuter?.setOption(options)
           }
         }
       }
