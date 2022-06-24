@@ -1,36 +1,24 @@
-# Output
-dist/
+# Logs
+logs
 *.log
-click-cat/
-click-cat.zip
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Temp and caches
-node_modules/
-.cache/
-.awcache/
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-*~
-
-# IDE
-.idea/
-*.iml
-.vscode/
-.history/
-
-# Remove after prepare project
-app/src/components/Handsontable/
-
-# Yarn
-.yarn
-.yarn/*
-!.yarn/cache
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
-
-# Grammars 
-grammar/output
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

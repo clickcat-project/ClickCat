@@ -1,7 +1,0 @@
-.root {
-  height: 40px;
-  line-height: 40px;
-  :global(.anticon) {
-    margin-right: 0.3em;
-  }
-}
