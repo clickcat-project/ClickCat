@@ -53,6 +53,7 @@ export const getStartAndEndTime = (time: string | number) => {
 export const number2Other = (val: number, type?: string): number | string => {
   // 利用 toLocaleString 的特性将数字转成带 , 的字符串
   if (type === 'toLocaleString') {
+    console.log(val, type, val.toLocaleString(), '_________')
     return val.toLocaleString()
   }
   // 将时间转换为天数

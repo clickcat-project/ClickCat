@@ -39,7 +39,12 @@ const getData = () => {
   )
     .then(res => {
       const key = res.meta[0].name as string
-      showData.value = (res.data[0] as any)[key]
+      const isUInt64 = res.meta[0].type.includes('UInt64')
+      if (isUInt64) {
+        showData.value = +(res.data[0] as any)[key]
+      } else {
+        showData.value = (res.data[0] as any)[key]
+      }
     })
 }
 
