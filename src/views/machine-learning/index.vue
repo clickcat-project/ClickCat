@@ -5,18 +5,20 @@
 }
 </route>
 <script lang='ts' setup>
-import { onMounted } from 'vue'
-// import { testApi } from '../../api/index'
-
-onMounted(() => {
-  // testApi('1234').then(res => {
-  //   console.log(res)
-  // })
-})
+import ListVue from '@/components/machine-learning/List/List.vue';
 </script>
 <template>
-  <div>Dashboard</div>
+  <section class="ml-container">
+    <ListVue />
+  </section>
 </template>
 <style lang='scss' scoped>
- 
+.ml-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px 30px;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
 </style>

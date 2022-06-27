@@ -2,10 +2,13 @@ import { ProxyOptions } from 'vite'
 type ProxyTargetList = Record<string, ProxyOptions>;
 
 const init: ProxyTargetList = {
-  '/server': {
-    target: 'http://192.168.9.114:8080',
+  '/ml': {
+    target: 'http://172.16.1.192:8080/',
     changeOrigin: true,
-    rewrite: (path) => path.replace(/^\/server/, '')
+    rewrite: (path) => {
+      console.log(path, 'path')
+      return path.replace(/^\/ml/, '')
+    }
   },
 }
 

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import menuRoutes from 'virtual:generated-pages'
 type RouteItem = RouteRecordRaw & { meta: AppRoute.RouteMeta }
-
+console.log(menuRoutes, 'menuRoutes')
 const routes: RouteItem[] = [
   {
     path: '',

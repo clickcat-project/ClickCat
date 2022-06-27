@@ -24,14 +24,31 @@ const getData = () => {
 onBeforeMount(() => {
   getData()
 })
+
+const emit = defineEmits(['selectionChange'])
+
+const handleSelectionChange = (val: any[]) => {
+  emit('selectionChange', val)
+}
+
+const refresh = () => {
+  getData()
+}
+
+defineExpose({
+  refresh
+})
 </script>
 <template>
   <el-table
     :data="tableData"
-    style="width: 100%"
+    style="width: 100%;"
+    height="100%"
     tooltip-effect="dark"
     :border="true"
+    @selection-change="handleSelectionChange"
   >
+    <el-table-column fixed="left" type="selection" width="55" />
     <template
       v-for="col in columns"
       :key="col.name"

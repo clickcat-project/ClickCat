@@ -8,6 +8,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.28.0
   '@vitejs/plugin-vue': ^2.3.3
   axios: ^0.27.2
+  cross-env: ^7.0.3
   dayjs: ^1.11.3
   echarts: ^5.3.3
   element-plus: ^2.2.6
@@ -51,6 +52,7 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.28.0_fe28c36a09305ff6004282ca7beab41d
   '@typescript-eslint/parser': 5.28.0_eslint@8.17.0+typescript@4.7.3
   '@vitejs/plugin-vue': 2.3.3_vite@2.9.12+vue@3.2.37
+  cross-env: 7.0.3
   eslint: 8.17.0
   eslint-config-standard: 17.0.0_f3f186c0d41e2cf317c415e00a938adc
   eslint-define-config: 1.5.1
@@ -1258,6 +1260,14 @@ packages:
 
   /create-require/1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
+    dev: true
+
+  /cross-env/7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
     dev: true
 
   /cross-spawn/7.0.3:

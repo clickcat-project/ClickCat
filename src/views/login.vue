@@ -200,6 +200,7 @@
     query(undefined, `&query=SELECT version() as version${loginForm.params ? `&${loginForm.params}` : ''}`, connection)
       .then(() => {
         loginStore.setConnection(connection)
+        console.log(loginStore.connection, 'loginStore.connection')
         goTo('Metrics')
       })
   }
