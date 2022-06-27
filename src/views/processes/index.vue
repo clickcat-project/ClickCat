@@ -1,7 +1,7 @@
 <route>
 {
   name: "Processes",
-  meta: { title: '工作台' }
+  meta: { title: 'Processes' }
 }
 </route>
 <script lang='ts' setup>
@@ -15,7 +15,12 @@ onMounted(() => {
 })
 </script>
 <template>
-  <div>Dashboard</div>
+  <el-tabs type="border-card">
+    <el-tab-pane label="Processes">
+      
+    </el-tab-pane>
+    <el-tab-pane label="Mutations" :lazy="true">Config</el-tab-pane>
+  </el-tabs>
 </template>
 <style lang='scss' scoped>
  

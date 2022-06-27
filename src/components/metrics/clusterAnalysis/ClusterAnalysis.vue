@@ -125,6 +125,7 @@ const queryFunction = (
             :database="databaseReal"
             :table="tableReal"
             sql-func-name="queryRowNumber"
+            show-type="toLocaleString"
           ></count>
         </el-col>
         <el-col :span="4">
@@ -135,6 +136,7 @@ const queryFunction = (
             :outer-title="'Number of columns'"
             :database="databaseReal"
             sql-func-name="queryColumnNumber"
+            show-type="toLocaleString"
           ></count>
         </el-col>
       </el-row>
