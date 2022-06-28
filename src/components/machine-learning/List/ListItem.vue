@@ -2,6 +2,12 @@
 defineProps<{
   item: {job_name: string}
 }>()
+
+const emit = defineEmits(['toResult'])
+
+const toResult = (item: any) => {
+  emit('toResult', item)
+}
 </script>
 <template>
   <section key={i} class="list-box">
@@ -21,7 +27,7 @@ defineProps<{
           model_path
         })
       }} -->
-      <span class="list-btn">view result</span>
+      <span class="list-btn" @click="toResult(item)">view result</span>
     </div>
   </section>
 </template>

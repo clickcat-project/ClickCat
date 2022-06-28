@@ -8,23 +8,30 @@ import ListItemVue from './ListItem.vue';
 import { queryList } from '../query'
 
 const loginStore = useLoginStore()
-
+const emit = defineEmits(['add', 'toResult'])
 const list = ref<{job_name: string}[]>([])
 
 onBeforeMount(async () => {
   const data = await queryList(loginStore.connection)
   list.value = data
 })
+
+const add = () => {
+  emit('add')
+}
+const toResult = (item: any) => {
+  emit('toResult', item)
+}
 </script>
 <template>
   <section class="ml-list-container" :style="!list.length ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}">
-    <section class="list-box add-btn">
+    <section class="list-box add-btn" @click="add">
       <el-icon :size="18">
         <Plus />
       </el-icon>
       <span class="add-text">NEW</span>
     </section>
-    <ListItemVue v-for="(item, i) in list" :item="item" :key="i"></ListItemVue>
+    <ListItemVue v-for="(item, i) in list" :item="item" :key="i" @to-result="toResult"></ListItemVue>
   </section>
 </template>
 <style lang='scss' scoped>
