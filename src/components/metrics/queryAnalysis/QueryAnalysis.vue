@@ -5,7 +5,8 @@ import dayjs from 'dayjs'
 import Count from '@/components/metrics/Count.vue'
 import ChartsVue from '../charts/Charts.vue'
 import FiltersVue from '../filter/Filters.vue'
-import TableBanner from '../TableBanner.vue'
+import TableBannerVue from '../TableBanner.vue'
+import VirtualizedTableVue from '../VirtualizedTable.vue'
 
 import { query } from '@/utils/http'
 import sqls, { SqlParams } from '../dataAnalysis/sqls'
@@ -14,6 +15,7 @@ import { getRealSqlOfArr, getStartAndEndTime, getUndefined } from '../dataAnalys
 import totalImg from '@/assets/images/metrics/total_query_analysis.svg'
 import aveMemory from '@/assets/images/metrics/ave_memory.svg'
 import aveTime from '@/assets/images/metrics/ave_time.svg'
+import TableBanner from '../TableBanner.vue'
 
 type ChangeValue = {
   database?: string,
@@ -246,14 +248,22 @@ const queryFunction = (
       </el-row>
       <el-row :gutter="10" style="margin-bottom: 0;">
         <el-col :span="24">
-          <TableBanner
+          <!-- <VirtualizedTableVue
             title="Query overview"
             sql-func-name="queryOverviewQueryAnalysis"
             :query-func="queryFunction"
             :time-range="timeRange"
             :time-duration="timeDuration"
             :height="470"
-          ></TableBanner>
+          ></VirtualizedTableVue> -->
+          <TableBannerVue
+            title="Query overview"
+            sql-func-name="queryOverviewQueryAnalysis"
+            :query-func="queryFunction"
+            :time-range="timeRange"
+            :time-duration="timeDuration"
+            :height="470"
+          ></TableBannerVue>
         </el-col>
       </el-row>
     </template>

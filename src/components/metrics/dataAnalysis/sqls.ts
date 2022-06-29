@@ -786,7 +786,7 @@ function queryOverviewQueryAnalysis (
     { value: `event_time > '${startTime}' AND event_time < '${endTime}'` },
   ])
   return formatJson(
-      `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY event_time ORDER BY event_time ASC`
+      `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY event_time ORDER BY event_time ASC LIMIT 1000`
     )
 }
 
