@@ -1,9 +1,9 @@
 import { useLioginOutsideStore } from '@/store/modules/login'
 
-function getRequestInit(query?: string): RequestInit {
+function getRequestInit(query?: string, isLogin: boolean = false): RequestInit {
   const init: RequestInit = {
     mode: 'cors',
-    method: 'post',
+    method: isLogin ? 'get' : 'post',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'Accept-Encoding': 'gzip',
@@ -95,10 +95,10 @@ function getRequestUrl(connection?: Connection, settings?: string): string {
   return url
 }
 
-export function query(sql?: string, settings?: string, connection?: Connection): Promise<any> {
+export function query(sql?: string, settings?: string, connection?: Connection, isLogin: boolean = false): Promise<any> {
   const sqlStr = sql ? (sql.includes('FORMAT JSON') ? sql : sql + '\n\n FORMAT JSON') : undefined
 
-  const init = getRequestInit(sqlStr)
+  const init = getRequestInit(sqlStr, isLogin)
   const loginStore = useLioginOutsideStore()
   const connectionData = connection ?? loginStore.connection
   const url = getRequestUrl(connectionData, settings)

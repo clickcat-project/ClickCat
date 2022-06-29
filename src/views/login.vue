@@ -197,10 +197,10 @@
 
   const login = () => {
     const connection = activeName.value === 'direct' ? loginForm : demoLoginForm
-    query(undefined, `&query=SELECT version() as version${loginForm.params ? `&${loginForm.params}` : ''}`, connection)
+    query(undefined, `&query=SELECT version() as version${loginForm.params ? `&${loginForm.params}` : ''}`, connection, true)
       .then(() => {
         loginStore.setConnection(connection)
-        console.log(loginStore.connection, 'loginStore.connection')
+        localStorage.setItem('connection', JSON.stringify({ connection }))
         goTo('Metrics')
       })
   }
