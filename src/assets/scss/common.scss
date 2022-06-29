@@ -26,3 +26,10 @@
 .el-popper {
   max-width: 600px;
 }
+.dark.el-popper.is-light {
+  border-color: #404E65;
+  background-color: #404E65;
+}
+.dark.el-popper.is-light .el-dropdown-menu {
+  background-color: #404E65;
+}

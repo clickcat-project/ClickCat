@@ -1,22 +1,34 @@
 <route>
 {
   name: "SQL",
-  meta: { title: '工作台' }
+  meta: { title: 'SQL' }
 }
 </route>
 <script lang='ts' setup>
-import { onMounted } from 'vue'
-// import { testApi } from '../../api/index'
-
-onMounted(() => {
-  // testApi('1234').then(res => {
-  //   console.log(res)
-  // })
-})
+import FilterVue from '@/components/sql/Filter.vue';
 </script>
 <template>
-  <div>Dashboard</div>
+  <section class="SQL-container">
+    <aside class="sidebar">
+      <FilterVue />
+    </aside>
+    <section></section>
+  </section>
 </template>
 <style lang='scss' scoped>
- 
+.SQL-container {
+  display: grid;
+  grid-template-columns: 290px auto;
+  grid-template-rows: auto;
+  width: 100%;
+  height: 100%;
+
+  & > aside.sidebar {
+    background-color: #10223E;
+    overflow-y: auto;
+  }
+  & > section.content {
+    background-color: #fff;
+  }
+}
 </style>
