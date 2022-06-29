@@ -2,7 +2,6 @@ import { Connection } from "@/store/modules/login/types"
 import { formatData } from "./utils"
 
 export const queryList = async (connection: any = {}) => {
-  console.log(import.meta.env.VITE_BASE_URL, 'import.meta.env.VITE_BASE_URL')
   const { connectionUrl, username, password } = connection
   // http://192.168.202.63
   const res = await fetch(`${import.meta.env.VITE_BASE_URL}/list`, {
