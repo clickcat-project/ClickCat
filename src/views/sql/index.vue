@@ -12,7 +12,7 @@ import FilterVue from '@/components/sql/Filter.vue';
     <aside class="sidebar">
       <FilterVue />
     </aside>
-    <section></section>
+    <section class="content"></section>
   </section>
 </template>
 <style lang='scss' scoped>

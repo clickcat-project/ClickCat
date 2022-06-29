@@ -11,6 +11,7 @@ const sqlStore = useSqlStore()
 
 const columns = ref<any[]>([])
 const tree = ref<any[]>([])
+const br = '\n';
 
 onBeforeMount(() => {
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
@@ -59,24 +60,43 @@ const clickNode = (node: any, data: any) => {
         :expand-on-click-node="false"
       >
         <template #default="{ node, data }">
-          <span>{{ node.database }}</span>
           <template v-if="node.data.database && !node.data.table">
-            <el-dropdown trigger="contextmenu" popper-class="dark">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              popper-class="click-cat-dark"
+              :content="`${node.data.engine}${br}${node.data.size}`"
+              placement="right"
+            >
+              <el-dropdown trigger="contextmenu" popper-class="dark">
+                <span class="custom-tree-node has-dropdown">
+                  <span>{{ node.label }}</span>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>Open table</el-dropdown-item>
+                    <el-dropdown-item>Make SELECT</el-dropdown-item>
+                    <el-dropdown-item>Make SQL Describe</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-tooltip>
+          </template>
+          <template v-else-if="node.data.database && node.data.table">
+             <el-tooltip
+              class="box-item"
+              effect="dark"
+              popper-class="click-cat-dark"
+              :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
+              placement="right"
+            >
               <span class="custom-tree-node has-dropdown">
                 <span>{{ node.label }}</span>
               </span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>Open table</el-dropdown-item>
-                  <el-dropdown-item>Make SELECT</el-dropdown-item>
-                  <el-dropdown-item>Make SQL Describe</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+            </el-tooltip>
           </template>
           <span v-else class="custom-tree-node">
             <span>{{ node.label }}</span>
-            <span @click="clickNode(node, data)">1234</span>
           </span>
         </template>
       </el-tree>

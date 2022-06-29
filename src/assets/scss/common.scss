@@ -33,3 +33,23 @@
 .dark.el-popper.is-light .el-dropdown-menu {
   background-color: #404E65;
 }
+
+.dark.el-popper.is-light .el-popper__arrow::before {
+  background-color: #404E65;
+  border: unset;
+}
+.dark .el-dropdown-menu__item:not(.is-disabled):focus {
+  background: var(--click-cat-dark-background);
+}
+.dark .el-dropdown-menu__item {
+  color: #fff;
+}
+
+.click-cat-dark.el-popper.is-dark {
+  background-color: var(--click-cat-dark-background);
+}
+
+.click-cat-dark.el-popper.is-dark .el-popper__arrow::before {
+  background-color: var(--click-cat-dark-background);
+  border-color: var(--click-cat-dark-background);
+}
