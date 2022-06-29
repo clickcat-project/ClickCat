@@ -777,16 +777,32 @@ function queryReadWriteQueryAnalysis (
 
 function queryOverviewQueryAnalysis (
   {
+    type,
+    initial_user,
+    query_kind,
     startTime,
     endTime,
-    timeDuration = '1 MINUTE'
+    // timeDuration = '1 MINUTE'
   }: SqlParams
 ) {
   const whereStr = dealSQLWhere([
-    { value: `event_time > '${startTime}' AND event_time < '${endTime}'` },
+    { key: 'type', value: type },
+    { key: 'initial_user', value: initial_user },
+    { key: 'query_kind', value: query_kind },
+    { value: `event_time > '${startTime}' AND event_time < '${endTime}'` }
+    // { value: `toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration})` },
   ])
   return formatJson(
-      `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY event_time ORDER BY event_time ASC LIMIT 1000`
+    `SELECT query_start_time, type, query_duration_ms, 
+    initial_user, substring(query_id,1, 8) as query_id, 
+    query_kind, normalizeQuery(query) AS normalized_query, 
+    concat( toString(read_rows), ' rows / ', 
+    formatReadableSize(read_bytes) ) AS read, concat( toString(written_rows), 
+    ' rows / ', formatReadableSize(written_bytes) ) AS written, 
+    concat( toString(result_rows), ' rows / ', formatReadableSize(result_bytes) ) AS result, 
+    formatReadableSize(memory_usage) AS "memory usage" FROM system.query_log 
+    ${whereStr} ORDER BY query_duration_ms DESC LIMIT  300`
+      // `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY event_time ORDER BY event_time ASC LIMIT 1000`
     )
 }
 
