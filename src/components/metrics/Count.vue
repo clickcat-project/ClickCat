@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, computed, onBeforeMount, watch} from 'vue'
-import { number2Other } from './dataAnalysis/utils'
+import { number2Other, round2 } from './dataAnalysis/utils'
 import { DataQueryFunc } from './types'
 
 const props = defineProps<{
@@ -53,7 +53,7 @@ const showTitle = computed(() => {
 })
 
 const showDataReal = computed(() => {
-  return number2Other(showData.value, props.showType)
+  return number2Other(round2(showData.value), props.showType)
 })
 
 watch([

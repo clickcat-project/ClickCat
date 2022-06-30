@@ -93,7 +93,7 @@ let chartInstance: echarts.ECharts
 
 onBeforeMount(() => {
   queryDatabases()
-  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').toDate(), dayjs().endOf('day').toDate()]
+  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').startOf('day').toDate(), dayjs().endOf('day').toDate()]
 })
 
 onMounted(() => {
@@ -137,8 +137,8 @@ const nextStep = async () => {
       database,
       table,
       time_filed: timeField,
-      start_time: dayjs(timeRange[0]).format('YYYY-MM-DD HH:mm:ss'),
-      end_time: dayjs(timeRange[1]).format('YYYY-MM-DD HH:mm:ss'),
+      start_time: dayjs(timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+      end_time: dayjs(timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
       job_name: jobName
     }
 
@@ -172,8 +172,8 @@ const queryDataForMlSecondStep = () => {
   query(sqls.queryDataForMlSecondStep(
     formLabelAlign.database,
     formLabelAlign.table,
-    dayjs(formLabelAlign.timeRange[0]).format('YYYY-MM-DD HH:mm:ss'),
-    dayjs(formLabelAlign.timeRange[1]).format('YYYY-MM-DD HH:mm:ss'),
+    dayjs(formLabelAlign.timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    dayjs(formLabelAlign.timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
     formLabelAlign.timeField
   ))
     .then(res => {
@@ -265,7 +265,7 @@ const changeTimeRange = (val: any) => {
           <el-select
             v-model="formLabelAlign.timeField"
             popper-class="primary-select-dropdown" 
-            placeholder="Select Table"
+            placeholder="Select Time Field"
             filterable
             @change="changeField"
             style="width: 600px"

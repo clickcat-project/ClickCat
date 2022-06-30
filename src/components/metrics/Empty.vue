@@ -2,7 +2,7 @@
 </script>
 <template>
   <section class="empty">
-    No data
+    No Data
   </section>
 </template>
 <style lang='scss' scoped>

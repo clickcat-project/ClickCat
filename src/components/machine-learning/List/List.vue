@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useLoginStore } from '@/store';
 
@@ -10,6 +10,10 @@ import { queryList } from '../query'
 const loginStore = useLoginStore()
 const emit = defineEmits(['add', 'toResult'])
 const list = ref<{job_name: string}[]>([])
+
+const listLengthLess = computed(() => {
+  return !list.value.length || list.value.length < 3
+})
 
 onBeforeMount(async () => {
   const data = await queryList(loginStore.connection)
@@ -24,7 +28,7 @@ const toResult = (item: any) => {
 }
 </script>
 <template>
-  <section class="ml-list-container" :style="!list.length ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}">
+  <section class="ml-list-container" :style="listLengthLess ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}">
     <section class="list-box add-btn" @click="add">
       <el-icon :size="18">
         <Plus />
