@@ -71,7 +71,7 @@
           </el-input>
           <el-input
             v-model="loginForm.params"
-            placeholder="Extend paramas query"
+            placeholder="key1=value&key2=value"
             class="login-input"
           >
             <template #prepend>
@@ -83,6 +83,7 @@
           </el-input>
         </div>
       </el-tab-pane>
+
       <el-tab-pane
         label="DEMO"
         name="demo"

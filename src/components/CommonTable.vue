@@ -8,8 +8,10 @@ const props = defineProps<{
 
 const columns = ref<{name: string}[]>([])
 const tableData = ref<CommonObj[]>([])
+const loading = ref<boolean>(true)
 
 const getData = () => {
+  loading.value = true
   props.queryFunc()
     .then((res) => {
       columns.value = res.meta.map((item: { name: string; }) => {
@@ -18,6 +20,9 @@ const getData = () => {
         }
       })
       tableData.value = res.data
+    })
+    .finally(() => {
+      loading.value = false
     })
 }
 
@@ -40,7 +45,9 @@ defineExpose({
 })
 </script>
 <template>
+<section class="common-table-container" v-loading="loading">
   <el-table
+    v-if="!loading"
     :data="tableData"
     style="width: 100%;"
     height="100%"
@@ -61,6 +68,11 @@ defineExpose({
       />
     </template>
   </el-table>
+</section>
 </template>
 <style lang='scss' scoped>
+.common-table-container {
+  width: 100%;
+  height: 100%;
+}
 </style>

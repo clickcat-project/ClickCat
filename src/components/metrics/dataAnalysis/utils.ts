@@ -82,6 +82,9 @@ export const number2Other = (val: number, type?: string): number | string => {
       ${ hours ? hours + ' hour' : '' }
     `
   }
+  if (type === 'MB') {
+    return (val / 1024 / 1024).toFixed(2)
+  }
   // 不传 type ，直接返回
   return val
 }

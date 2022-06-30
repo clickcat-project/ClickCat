@@ -12,7 +12,7 @@ const emit = defineEmits(['add', 'toResult'])
 const list = ref<{job_name: string}[]>([])
 
 const listLengthLess = computed(() => {
-  return !list.value.length || list.value.length < 3
+  return !list.value.length || list.value.length < 4
 })
 
 onBeforeMount(async () => {

@@ -68,10 +68,17 @@ export const formatData = (data: { '0': { '0': any, '1': any } }) => {
   const realKey = Object.keys(real).sort()
   const realData = realKey.map(key => real[key])
   const forecastData = realKey.map((key, i) => {
-    return forecast[i] || real[key]
+    return forecast[i]
   })
-  const diff = Object.keys(forecast).map((key: any) => {
-    return [dayjs(+realKey[key]).format('YYYY-MM-DD HH:mm:ss'), real[realKey[key]]]
+  let diff: any[] = []
+  Object.keys(forecast).forEach((key: any) => {
+    const effectNum = forecast[key] * 0.1
+    const less = forecast[key] - effectNum
+    const bigger = forecast[key] + effectNum
+    const realVal = real[realKey[key]]
+    if (realVal < less || realVal >= bigger) {
+      diff.push([dayjs(+realKey[key]).format('YYYY-MM-DD HH:mm:ss'), real[realKey[key]]])
+    }
   })
   const realKeyFormat = realKey.map(item => {
     return dayjs(+item).format('YYYY-MM-DD HH:mm:ss')

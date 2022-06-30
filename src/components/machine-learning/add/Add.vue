@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts/core'
 import type { FormInstance, FormRules } from 'element-plus'
@@ -36,10 +36,8 @@ const formLabelAlign = reactive<{
 })
 
 const validateTimeRange = (rule: any, value: any, callback: any) => {
-  const [ startTimeDate, endTimeDate ] = value
-  const startTime = +startTimeDate
-  const endTime = + endTimeDate
-  if (startTime > endTime) {
+  const isCorrect = isCorrectTime(value)
+  if (!isCorrect) {
     callback(new Error('Start date cannot be later than end date'))
   } else {
     callback()
@@ -87,6 +85,12 @@ const title = computed(() => {
     return 'Time Range'
   }
   return 'Job Name'
+})
+
+watch(step, (newVal) => {
+  if (newVal === 2) {
+    queryDataForMlSecondStep()
+  }
 })
 
 let chartInstance: echarts.ECharts
@@ -143,7 +147,6 @@ const nextStep = async () => {
     }
 
     const addReturnData = await addTraining(queryData)
-    console.log(addReturnData, 'addReturnData')
     emit('toResult', addReturnData)
   }
 }
@@ -169,6 +172,11 @@ const queryTimeField = () => {
 }
 
 const queryDataForMlSecondStep = () => {
+  const isCorrect = isCorrectTime(formLabelAlign.timeRange as any)
+  if (!formLabelAlign.timeField || !isCorrect) {
+    console.log(!formLabelAlign.timeField, !isCorrect, '1111111111')
+    return
+  }
   query(sqls.queryDataForMlSecondStep(
     formLabelAlign.database,
     formLabelAlign.table,
@@ -206,10 +214,15 @@ const changeField = () => {
   queryDataForMlSecondStep()
 }
 
-const changeTimeRange = (val: any) => {
-  if (formLabelAlign.timeField) {
-    queryDataForMlSecondStep()
-  }
+const isCorrectTime = (times: Date[]) => {
+  const [ startTimeDate, endTimeDate ] = times
+  const startTime = +startTimeDate
+  const endTime = +endTimeDate
+  return startTime < endTime
+}
+
+const changeTimeRange = () => {
+  queryDataForMlSecondStep()
 }
 </script>
 <template>
@@ -296,6 +309,7 @@ const changeTimeRange = (val: any) => {
             :clearable="false"
             placeholder="Pick a day"
             size="default"
+            @change="changeTimeRange"
           />
           <span class="time-range-divider">--</span>
           <!-- v-model="formLabelAlign.timeRange[1]" -->
@@ -305,6 +319,7 @@ const changeTimeRange = (val: any) => {
             :clearable="false"
             placeholder="Pick a day"
             size="default"
+            @change="changeTimeRange"
           />
         </el-form-item>
       </template>

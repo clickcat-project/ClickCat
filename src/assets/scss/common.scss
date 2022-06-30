@@ -26,7 +26,7 @@
 .el-popper {
   max-width: 600px;
 }
-.show-custom-primary-color .el-button.el-button--primary:hover {
+.show-custom-primary-color .el-button:last-of-type, .show-custom-primary-color .el-button:last-of-type:hover {
   background-color: var(--el-color-primary);
   border-color: var(--el-color-primary);
 }

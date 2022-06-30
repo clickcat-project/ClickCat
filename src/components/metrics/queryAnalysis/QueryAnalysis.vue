@@ -103,12 +103,12 @@ const queryFunction = (
             :query-func="queryFunction"
             :banner="totalImg"
             :outer-title="'Total queries'"
-            show-type="toLocaleString"
             :time-range="timeRange"
             :type="typeReal"
             :user="userReal"
             :query-kind="queryKindReal"
             sql-func-name="queryTotalQueryAnalysis"
+            show-type="toLocaleString"
           ></count>
         </el-col>
         <el-col :span="8">
@@ -122,6 +122,8 @@ const queryFunction = (
             :user="userReal"
             :query-kind="queryKindReal"
             :time-duration="timeDuration"
+            unit="MB"
+            show-type="MB"
           ></count>
         </el-col>
         <el-col :span="8">
@@ -135,6 +137,7 @@ const queryFunction = (
             :user="userReal"
             :query-kind="queryKindReal"
             :time-duration="timeDuration"
+            unit="milliseconds"
           ></count>
         </el-col>
       </el-row>
