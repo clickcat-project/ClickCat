@@ -6,7 +6,8 @@
 </route>
 <script lang='ts' setup>
 import FilterVue from '@/components/sql/Filter.vue';
-import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
+// import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
+import EditorTabsVue from '@/components/sql/EditorTabs.vue';
 </script>
 <template>
   <section class="SQL-container">
@@ -14,7 +15,7 @@ import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
       <FilterVue />
     </aside>
     <section class="content">
-      <SimpleEditorVue />
+      <EditorTabsVue />
     </section>
   </section>
 </template>
