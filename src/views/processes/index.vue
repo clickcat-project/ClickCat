@@ -7,7 +7,7 @@
 <script lang='ts' setup>
 import { ref } from 'vue';
 import { Close, Refresh } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 import CommonTableVue from '@/components/CommonTable.vue';
 import { queryProcesses, queryMutations } from '@/components/processes/query';
@@ -37,12 +37,26 @@ const changeMutations = (val: ListItem[]) => {
 const kill = async () => {
   let sql = ''
   if (defaultCard.value === 'Processes') {
+    if (!selectedProcesses.length) {
+      return ElMessage({
+        message: 'Please select at least one piece of "Processes" data.',
+        grouping: true,
+        type: 'error',
+      })
+    }
     const idArr = selectedProcesses.map(item => {
       return `query_id ='${item.query_id}'`
     })
     // KILL QUERY WHERE query_id='2-857d-4a57-9ee0-327da5d60a90' or  query_id='2-857d-4a57-9ee0-327da5d60a90'
     sql = `KILL QUERY WHERE ${idArr?.join(' or ')}`
   } else if (defaultCard.value === 'Mutations') {
+    if (!selectedProcesses.length) {
+      return ElMessage({
+        message: 'Please select at least one piece of "Mutations" data.',
+        grouping: true,
+        type: 'error',
+      })
+    }
     // KILL MUTATION WHERE database = 'default' AND table = 'table' AND mutation_id = 'mutation_3.txt'
     const idArr = selectedMutations.map(item => {
       return `database = '${item.database}' AND table = '${item.table}' AND mutation_id='${item.mutation_id}'`
@@ -56,11 +70,11 @@ const kill = async () => {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
       type: 'warning',
+      customClass: 'show-custom-primary-color',
     }
   )
   await query(sql)
   if (defaultCard.value === 'Processes') {
-    console.log(processesRef.value.refresh, 'processesRef.value.refresh')
     await processesRef.value.refresh()
   } else {
     await mutationsRef.value.refresh()

@@ -26,3 +26,13 @@
 .el-popper {
   max-width: 600px;
 }
+.show-custom-primary-color .el-button.el-button--primary:hover {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+}
+
+.show-custom-primary-color .el-button:first-of-type, .show-custom-primary-color .el-button:first-of-type:hover {
+  color: var(--el-color-primary);
+  background-color: #fff;
+  border-color: var(--el-color-primary);
+}

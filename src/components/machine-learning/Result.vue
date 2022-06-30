@@ -21,15 +21,22 @@ const props = defineProps<{
 const emit = defineEmits(['toList'])
 
 const renderer = ref<HTMLElement>()
+const loading = ref<boolean>(false)
 
 onMounted(() => {
   queryDataAndShowCharts()
 })
 
 const queryDataAndShowCharts = async () => {
-  const {realData, forecastData, realKey, diff} = await queryResultForMl(loginStore.connection, props.selectedItem)
-  const echartsInstance = echarts.init(renderer.value as HTMLElement);
-  echartsInstance.setOption(formatResultLineOption(realData, forecastData, realKey, diff));
+  loading.value = true
+  try {
+    const {realData, forecastData, realKey, diff} = await queryResultForMl(loginStore.connection, props.selectedItem)
+    const echartsInstance = echarts.init(renderer.value as HTMLElement);
+    echartsInstance.setOption(formatResultLineOption(realData, forecastData, realKey, diff));
+    loading.value = false
+  } catch (error) {
+    loading.value = false
+  }
 }
 
 const toList = () => {
@@ -48,7 +55,7 @@ const toList = () => {
       </div>
       <!-- <Button type='primary'>Forecast</Button> -->
     </div>
-    <div class="charts-box">
+    <div class="charts-box" v-loading="loading">
       <div ref="renderer" style="height: 548px; width: 100%" class="charts-renderer"></div>
     </div>
   </div>

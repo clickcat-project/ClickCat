@@ -3,22 +3,32 @@ import logo from '@/assets/images/logo.svg'
 import logout from '@/assets/images/login/logout.svg'
 import { useRoute, useRouter } from 'vue-router'
 import { useGoTo } from './hooks'
+import { RouteName } from './types'
 
 const router = useRouter()
 const route = useRoute()
 const goTo = useGoTo()
 
-const nvaList = ['Metrics', 'SQL', 'Processes', 'Machine Learning', 'History SQL']
+const nvaList = [
+  RouteName.Metrics,
+  RouteName.SQL,
+  RouteName.Processes,
+  RouteName.Ml,
+  RouteName.HistorySQL
+]
 const logoutFunc = () => {
   router.push({
     path: '/login'
   })
 }
+const goMetrics = () => {
+  goTo(RouteName.Metrics)
+}
 </script>
 
 <template>
   <div class="header">
-    <div class="logo-container">
+    <div class="logo-container" @click="goMetrics">
       <img
         :src="logo"
         alt="ClickCat"
@@ -64,11 +74,12 @@ const logoutFunc = () => {
   height: 64px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
-  z-index: 1;
+  z-index: 10;
 }
 .logo-container {
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   span {
     font-size: 20px;
