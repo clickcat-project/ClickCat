@@ -35,6 +35,17 @@ const formLabelAlign = reactive<{
   jobName: ''
 })
 
+const validateTimeRange = (rule: any, value: any, callback: any) => {
+  const [ startTimeDate, endTimeDate ] = value
+  const startTime = +startTimeDate
+  const endTime = + endTimeDate
+  if (startTime > endTime) {
+    callback(new Error('Start date cannot be later than end date'))
+  } else {
+    callback()
+  }
+}
+
 const rules = reactive<FormRules>({
   database: [
     { required: true, message: 'Please select database', trigger: 'change' }
@@ -45,6 +56,13 @@ const rules = reactive<FormRules>({
       message: 'Please select table',
       trigger: 'change',
     },
+  ],
+  timeRange: [
+    {
+      required: true,
+      validator: validateTimeRange,
+      trigger: 'change'
+    }
   ],
   timeField: [
     {
@@ -75,7 +93,7 @@ let chartInstance: echarts.ECharts
 
 onBeforeMount(() => {
   queryDatabases()
-  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').valueOf(), dayjs().endOf('day').valueOf()]
+  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').toDate(), dayjs().endOf('day').toDate()]
 })
 
 onMounted(() => {
@@ -189,7 +207,9 @@ const changeField = () => {
 }
 
 const changeTimeRange = (val: any) => {
-  queryDataForMlSecondStep()
+  if (formLabelAlign.timeField) {
+    queryDataForMlSecondStep()
+  }
 }
 </script>
 <template>
@@ -259,7 +279,7 @@ const changeTimeRange = (val: any) => {
           </el-select>
         </el-form-item>
         <el-form-item label="Time  Range" prop="timeRange">
-          <el-date-picker
+          <!-- <el-date-picker
             v-model="formLabelAlign.timeRange"
             type="daterange"
             :clearable="false"
@@ -268,6 +288,23 @@ const changeTimeRange = (val: any) => {
             end-placeholder="End date"
             :size="'default'"
             @change="changeTimeRange"
+          /> -->
+          <!-- v-model="formLabelAlign.timeRange[0]" -->
+          <el-date-picker
+            v-model="formLabelAlign.timeRange[0]"
+            type="date"
+            :clearable="false"
+            placeholder="Pick a day"
+            size="default"
+          />
+          <span class="time-range-divider">--</span>
+          <!-- v-model="formLabelAlign.timeRange[1]" -->
+          <el-date-picker
+            v-model="formLabelAlign.timeRange[1]"
+            type="date"
+            :clearable="false"
+            placeholder="Pick a day"
+            size="default"
           />
         </el-form-item>
       </template>
@@ -323,6 +360,11 @@ const changeTimeRange = (val: any) => {
     width: 100%;
     height: 450px;
     margin-bottom: 100px;
+  }
+  .time-range-divider {
+    display: inline-block;
+    margin: 0 10px;
+    color: #C9C9C9;
   }
 }
 </style>

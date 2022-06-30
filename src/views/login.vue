@@ -58,6 +58,7 @@
           </el-input>
           <el-input
             v-model="loginForm.password"
+            type="password"
             placeholder="Password"
             class="login-input"
           >
@@ -129,6 +130,7 @@
           </el-input>
           <el-input
             v-model="demoLoginForm.password"
+            type="password"
             :disabled="true"
             placeholder="Password"
             class="login-input"
