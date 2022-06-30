@@ -32,3 +32,15 @@ export type TableItem = {
 export type DatabaseItem = {
   name: string
 }
+
+// eslint-disable-next-line import/prefer-default-export
+export enum TextInsertType {
+  Sql = 'sql',
+  Table = 'table',
+  Column = 'column',
+}
+
+export enum TabsType {
+  Editor = 'editor',
+  TableView = 'tableView'
+}

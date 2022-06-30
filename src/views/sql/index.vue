@@ -6,13 +6,16 @@
 </route>
 <script lang='ts' setup>
 import FilterVue from '@/components/sql/Filter.vue';
+import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
 </script>
 <template>
   <section class="SQL-container">
     <aside class="sidebar">
       <FilterVue />
     </aside>
-    <section class="content"></section>
+    <section class="content">
+      <SimpleEditorVue />
+    </section>
   </section>
 </template>
 <style lang='scss' scoped>

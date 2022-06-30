@@ -1,13 +1,20 @@
 import { defineStore } from 'pinia'
 import piniaStore from '@/store/index'
+import { TabsType } from '@/components/sql/types'
 
-export const useSqlStore = defineStore<any, any>(
+export const useSqlStore = defineStore(
   // 唯一ID
   'sql',
   {
     state: () => ({
       columns: [],
-      tabs: []
+      tabs: [
+        {
+          name: 'SQL_1',
+          sql: '',
+          type: TabsType.Editor
+        }
+      ]
     }),
     persist: {
       enabled: true,
@@ -18,7 +25,7 @@ export const useSqlStore = defineStore<any, any>(
     getters: {},
     actions: {
       setColumns (columns: any[]) {
-        this.columns = columns
+        this.columns = columns as never[]
       }
     },
   },
