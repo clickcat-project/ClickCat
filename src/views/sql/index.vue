@@ -22,16 +22,19 @@ import EditorTabsVue from '@/components/sql/EditorTabs.vue';
 <style lang='scss' scoped>
 .SQL-container {
   display: grid;
-  grid-template-columns: 290px auto;
-  grid-template-rows: auto;
+  grid-template-columns: 290px 1fr;
+  grid-template-rows: 1fr;
   width: 100%;
   height: 100%;
 
   & > aside.sidebar {
+    height: 100%;
     background-color: #10223E;
     overflow-y: auto;
   }
   & > section.content {
+    position: relative;
+    height: 100%;
     background-color: #fff;
   }
 }

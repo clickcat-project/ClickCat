@@ -1,7 +1,8 @@
-export type Connection = {
-  connectionUrl: string,
-  password: string,
-  username: string,
-  connectionName: string,
-  params: string
+import { TabsType } from "@/components/sql/types"
+
+export type TabItem = {
+  name?: string,
+  sql?: string,
+  type?: TabsType,
+  title?: string,
 }

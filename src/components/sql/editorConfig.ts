@@ -8,7 +8,7 @@ export const defaultOptions: monaco.editor.IEditorConstructionOptions = {
   automaticLayout: true, // Enable that the editor will install an interval to check if its container dom node size has changed. Enabling this might have a severe performance impact. Defaults to false.
   formatOnPaste: true,
   fontFamily: 'Monaco,Menlo,Ubuntu Mono,Consolas,"source-code-pro","monospace"',
-  fontSize: 13,
+  fontSize: 14,
   mouseWheelZoom: true,
   // cursorSmoothCaretAnimation: true,
   fontWeight: 'lighter',

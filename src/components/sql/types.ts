@@ -44,3 +44,9 @@ export enum TabsType {
   Editor = 'editor',
   TableView = 'tableView'
 }
+
+export type Statistics = {
+  bytes_read: number
+  elapsed: string
+  rows_read: number
+}
