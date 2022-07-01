@@ -53,3 +53,13 @@
   background-color: var(--click-cat-dark-background);
   border-color: var(--click-cat-dark-background);
 }
+.show-custom-primary-color .el-button:last-of-type, .show-custom-primary-color .el-button:last-of-type:hover {
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
+}
+
+.show-custom-primary-color .el-button:first-of-type, .show-custom-primary-color .el-button:first-of-type:hover {
+  color: var(--el-color-primary);
+  background-color: #fff;
+  border-color: var(--el-color-primary);
+}

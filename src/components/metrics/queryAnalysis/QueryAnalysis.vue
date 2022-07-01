@@ -6,7 +6,6 @@ import Count from '@/components/metrics/Count.vue'
 import ChartsVue from '../charts/Charts.vue'
 import FiltersVue from '../filter/Filters.vue'
 import TableBannerVue from '../TableBanner.vue'
-import VirtualizedTableVue from '../VirtualizedTable.vue'
 
 import { query } from '@/utils/http'
 import sqls, { SqlParams } from '../dataAnalysis/sqls'
@@ -15,7 +14,6 @@ import { getRealSqlOfArr, getStartAndEndTime, getUndefined } from '../dataAnalys
 import totalImg from '@/assets/images/metrics/total_query_analysis.svg'
 import aveMemory from '@/assets/images/metrics/ave_memory.svg'
 import aveTime from '@/assets/images/metrics/ave_time.svg'
-import TableBanner from '../TableBanner.vue'
 
 type ChangeValue = {
   database?: string,
@@ -105,12 +103,12 @@ const queryFunction = (
             :query-func="queryFunction"
             :banner="totalImg"
             :outer-title="'Total queries'"
-            show-type="toLocaleString"
             :time-range="timeRange"
             :type="typeReal"
             :user="userReal"
             :query-kind="queryKindReal"
             sql-func-name="queryTotalQueryAnalysis"
+            show-type="toLocaleString"
           ></count>
         </el-col>
         <el-col :span="8">
@@ -124,6 +122,8 @@ const queryFunction = (
             :user="userReal"
             :query-kind="queryKindReal"
             :time-duration="timeDuration"
+            unit="MB"
+            show-type="MB"
           ></count>
         </el-col>
         <el-col :span="8">
@@ -137,6 +137,7 @@ const queryFunction = (
             :user="userReal"
             :query-kind="queryKindReal"
             :time-duration="timeDuration"
+            unit="milliseconds"
           ></count>
         </el-col>
       </el-row>
@@ -181,6 +182,8 @@ const queryFunction = (
             :time-range="timeRange"
             :time-duration="timeDuration"
             :query-func="queryFunction"
+            :legend="{left: 'top'}"
+            :grid="{ height: '65%' }"
             type="line"
             :height="470"
           ></ChartsVue>

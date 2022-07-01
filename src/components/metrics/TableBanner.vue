@@ -95,7 +95,7 @@ onBeforeMount(() => {
             min-width="150"
           >
             <template #default="scope">
-              <span>{{ scope.row[col.name].toFixed(4) * 100 + '%' }}</span>
+              <span>{{ (scope.row[col.name] * 100).toFixed(2) + '%' }}</span>
             </template>
           </el-table-column>
         </template>

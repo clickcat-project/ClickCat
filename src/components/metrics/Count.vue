@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref, computed, onBeforeMount, watch} from 'vue'
-import { number2Other } from './dataAnalysis/utils'
+import { number2Other, round2 } from './dataAnalysis/utils'
 import { DataQueryFunc } from './types'
 
 const props = defineProps<{
@@ -12,11 +12,12 @@ const props = defineProps<{
   database?: string,
   table?: string,
   timeRange?: string[],
-  showType?: 'toLocaleString' | 'duration',
+  showType?: 'toLocaleString' | 'duration' | 'MB',
   type?: string,
   user?: string,
   queryKind?: string,
   timeDuration?: string,
+  unit?: string
 }>()
 
 const showData = ref(0)
@@ -53,7 +54,7 @@ const showTitle = computed(() => {
 })
 
 const showDataReal = computed(() => {
-  return number2Other(showData.value, props.showType)
+  return `${number2Other(round2(showData.value), props.showType)} ${props.unit || ''}`
 })
 
 watch([

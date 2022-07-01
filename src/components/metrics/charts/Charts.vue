@@ -95,14 +95,18 @@ const getData = () => {
           }
         })
       }
+      
       if (!data || !data.length) {
         chartInstanceOuter?.dispose()
       } else {
         if (formatOptionouter.value) {
-          if (chartInstanceOuter) {
-            const options = formatOptionouter.value(data, props.grid, props.legend)
-            chartInstanceOuter?.setOption(options)
-          }
+          chartInstanceOuter?.dispose()
+          // if (chartInstanceOuter) {
+          const {chartInstance} = getCurrentChart(props.type, document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement)
+          chartInstanceOuter = chartInstance as unknown as echarts.ECharts
+          const options = formatOptionouter.value(data, props.grid, props.legend)
+          chartInstance.setOption(options)
+          // }
         }
       }
     })

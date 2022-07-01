@@ -58,6 +58,7 @@
           </el-input>
           <el-input
             v-model="loginForm.password"
+            type="password"
             placeholder="Password"
             class="login-input"
           >
@@ -70,7 +71,7 @@
           </el-input>
           <el-input
             v-model="loginForm.params"
-            placeholder="Extend paramas query"
+            placeholder="key1=value&key2=value"
             class="login-input"
           >
             <template #prepend>
@@ -82,6 +83,7 @@
           </el-input>
         </div>
       </el-tab-pane>
+
       <el-tab-pane
         label="DEMO"
         name="demo"
@@ -129,6 +131,7 @@
           </el-input>
           <el-input
             v-model="demoLoginForm.password"
+            type="password"
             :disabled="true"
             placeholder="Password"
             class="login-input"

@@ -5,6 +5,9 @@ import ChartsVue from '../charts/Charts.vue'
 import FiltersVue from '../filter/Filters.vue'
 
 import versionImg from '@/assets/images/metrics/version.svg'
+import serverUptime from '@/assets/images/metrics/server_uptime.svg'
+import totalRow from '@/assets/images/metrics/data_analysis_total_row.svg'
+import totalColumns from '@/assets/images/metrics/data_analysis_total_columns.svg'
 import { query } from '@/utils/http'
 import sqls, { SqlParams } from './sqls'
 import { computed, ref } from 'vue'
@@ -71,7 +74,7 @@ const queryFunction = (
       <el-col :span="6">
         <Count
           :query-func="queryFunction"
-          :banner="versionImg"
+          :banner="serverUptime"
           :outer-title="'Server uptime'"
           sql-func-name="queryServerUptime"
           show-type="duration"
@@ -80,7 +83,7 @@ const queryFunction = (
       <el-col :span="6">
         <Count
           :query-func="queryFunction"
-          :banner="versionImg"
+          :banner="totalRow"
           :outer-title="'Total rows'"
           sql-func-name="queryTotalRows"
           show-type="toLocaleString"
@@ -89,7 +92,7 @@ const queryFunction = (
       <el-col :span="6">
         <Count
           :query-func="queryFunction"
-          :banner="versionImg"
+          :banner="totalColumns"
           :outer-title="'Total columns'"
           :database="databaseReal"
           :table="tableReal"

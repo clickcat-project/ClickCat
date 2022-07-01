@@ -50,6 +50,14 @@ export const getStartAndEndTime = (time: string | number) => {
   return []
 }
 
+// 保留两位小数
+export const round2 = (val: any) => {
+  if (!isNumber(val)) {
+    return val
+  }
+  return Math.round(val * 100) / 100
+}
+
 export const number2Other = (val: number, type?: string): number | string => {
   // 利用 toLocaleString 的特性将数字转成带 , 的字符串
   if (type === 'toLocaleString') {
@@ -73,6 +81,9 @@ export const number2Other = (val: number, type?: string): number | string => {
       ${ days ? days + ' day' : '' }
       ${ hours ? hours + ' hour' : '' }
     `
+  }
+  if (type === 'MB') {
+    return (val / 1024 / 1024).toFixed(2)
   }
   // 不传 type ，直接返回
   return val

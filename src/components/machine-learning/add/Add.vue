@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
 import dayjs from 'dayjs';
 import * as echarts from 'echarts/core'
 import type { FormInstance, FormRules } from 'element-plus'
@@ -35,6 +35,15 @@ const formLabelAlign = reactive<{
   jobName: ''
 })
 
+const validateTimeRange = (rule: any, value: any, callback: any) => {
+  const isCorrect = isCorrectTime(value)
+  if (!isCorrect) {
+    callback(new Error('Start date cannot be later than end date'))
+  } else {
+    callback()
+  }
+}
+
 const rules = reactive<FormRules>({
   database: [
     { required: true, message: 'Please select database', trigger: 'change' }
@@ -45,6 +54,13 @@ const rules = reactive<FormRules>({
       message: 'Please select table',
       trigger: 'change',
     },
+  ],
+  timeRange: [
+    {
+      required: true,
+      validator: validateTimeRange,
+      trigger: 'change'
+    }
   ],
   timeField: [
     {
@@ -71,11 +87,17 @@ const title = computed(() => {
   return 'Job Name'
 })
 
+watch(step, (newVal) => {
+  if (newVal === 2) {
+    queryDataForMlSecondStep()
+  }
+})
+
 let chartInstance: echarts.ECharts
 
 onBeforeMount(() => {
   queryDatabases()
-  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').valueOf(), dayjs().endOf('day').valueOf()]
+  formLabelAlign.timeRange = [dayjs().subtract(7, 'day').startOf('day').toDate(), dayjs().endOf('day').toDate()]
 })
 
 onMounted(() => {
@@ -119,13 +141,12 @@ const nextStep = async () => {
       database,
       table,
       time_filed: timeField,
-      start_time: dayjs(timeRange[0]).format('YYYY-MM-DD HH:mm:ss'),
-      end_time: dayjs(timeRange[1]).format('YYYY-MM-DD HH:mm:ss'),
+      start_time: dayjs(timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+      end_time: dayjs(timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
       job_name: jobName
     }
 
     const addReturnData = await addTraining(queryData)
-    console.log(addReturnData, 'addReturnData')
     emit('toResult', addReturnData)
   }
 }
@@ -151,11 +172,16 @@ const queryTimeField = () => {
 }
 
 const queryDataForMlSecondStep = () => {
+  const isCorrect = isCorrectTime(formLabelAlign.timeRange as any)
+  if (!formLabelAlign.timeField || !isCorrect) {
+    console.log(!formLabelAlign.timeField, !isCorrect, '1111111111')
+    return
+  }
   query(sqls.queryDataForMlSecondStep(
     formLabelAlign.database,
     formLabelAlign.table,
-    dayjs(formLabelAlign.timeRange[0]).format('YYYY-MM-DD HH:mm:ss'),
-    dayjs(formLabelAlign.timeRange[1]).format('YYYY-MM-DD HH:mm:ss'),
+    dayjs(formLabelAlign.timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    dayjs(formLabelAlign.timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
     formLabelAlign.timeField
   ))
     .then(res => {
@@ -188,7 +214,14 @@ const changeField = () => {
   queryDataForMlSecondStep()
 }
 
-const changeTimeRange = (val: any) => {
+const isCorrectTime = (times: Date[]) => {
+  const [ startTimeDate, endTimeDate ] = times
+  const startTime = +startTimeDate
+  const endTime = +endTimeDate
+  return startTime < endTime
+}
+
+const changeTimeRange = () => {
   queryDataForMlSecondStep()
 }
 </script>
@@ -245,7 +278,7 @@ const changeTimeRange = (val: any) => {
           <el-select
             v-model="formLabelAlign.timeField"
             popper-class="primary-select-dropdown" 
-            placeholder="Select Table"
+            placeholder="Select Time Field"
             filterable
             @change="changeField"
             style="width: 600px"
@@ -259,7 +292,7 @@ const changeTimeRange = (val: any) => {
           </el-select>
         </el-form-item>
         <el-form-item label="Time  Range" prop="timeRange">
-          <el-date-picker
+          <!-- <el-date-picker
             v-model="formLabelAlign.timeRange"
             type="daterange"
             :clearable="false"
@@ -267,6 +300,25 @@ const changeTimeRange = (val: any) => {
             start-placeholder="Start date"
             end-placeholder="End date"
             :size="'default'"
+            @change="changeTimeRange"
+          /> -->
+          <!-- v-model="formLabelAlign.timeRange[0]" -->
+          <el-date-picker
+            v-model="formLabelAlign.timeRange[0]"
+            type="date"
+            :clearable="false"
+            placeholder="Pick a day"
+            size="default"
+            @change="changeTimeRange"
+          />
+          <span class="time-range-divider">--</span>
+          <!-- v-model="formLabelAlign.timeRange[1]" -->
+          <el-date-picker
+            v-model="formLabelAlign.timeRange[1]"
+            type="date"
+            :clearable="false"
+            placeholder="Pick a day"
+            size="default"
             @change="changeTimeRange"
           />
         </el-form-item>
@@ -323,6 +375,11 @@ const changeTimeRange = (val: any) => {
     width: 100%;
     height: 450px;
     margin-bottom: 100px;
+  }
+  .time-range-divider {
+    display: inline-block;
+    margin: 0 10px;
+    color: #C9C9C9;
   }
 }
 </style>
