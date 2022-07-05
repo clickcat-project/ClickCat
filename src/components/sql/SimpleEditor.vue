@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { CaretRight } from '@element-plus/icons-vue'
 import * as monaco from 'monaco-editor'
 
@@ -7,12 +7,14 @@ import { defaultOptions } from './editorConfig'
 import { themeCobalt } from './theme/Cobalt';
 import createSqlCompleter from './utils/sql-completion'
 import { TabItem } from '@/store/modules/sql/types';
+import { useSqlStore } from '@/store';
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
 
 monaco.editor.defineTheme('cobalt', themeCobalt)
 
 const global: any = {};
+let timer: any = null
 
 const getHints = (model: any) => {
   let id = model.id.substring(6);
@@ -24,6 +26,7 @@ monaco.languages.registerCompletionItemProvider(
   createSqlCompleter(getHints) as any
 );
 
+const sqlStore = useSqlStore()
 const props = defineProps<{
   tab: TabItem,
 }>()
@@ -32,6 +35,9 @@ const emit = defineEmits(['change', 'queryAction'])
 
 const editorRenderer = ref<HTMLElement>()
 
+watch(() => props.tab.sql, (newVal) => {
+  sqlStore.addSqlIsCommand && editorInstance.setValue(newVal as string)
+})
 onMounted(() => {
   initEditor()
 })
@@ -45,7 +51,12 @@ const initEditor = () => {
   editorInstance.setValue(props.tab.sql as string)
   editorInstance.focus()
   editorInstance.onDidChangeModelContent(() => {
-    emit('change', editorInstance.getValue())
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      emit('change', editorInstance.getValue())
+    }, 300)
   });
 }
 

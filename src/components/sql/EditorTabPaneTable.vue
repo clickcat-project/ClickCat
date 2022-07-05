@@ -6,7 +6,8 @@ import { Statistics } from './types';
 const props = defineProps<{
   columns: any[],
   tableData: any[],
-  statistics?: Statistics
+  statistics?: Statistics,
+  notTitle?: boolean
 }>()
 
 const emit = defineEmits(['changeRows', 'export', 'fullScreen'])
@@ -29,7 +30,7 @@ const fullScreen = () => {
   <section ref="containerRef" class="editor-table-container">
     <div class="content-container">
       <h3 class="table-title">
-        <span class="title-content">Data / Table</span>
+        <span v-if="!notTitle" class="title-content">Data / Table</span>
       </h3>
       <div class="table-container">
         <el-table
@@ -98,6 +99,7 @@ const fullScreen = () => {
 .editor-table-container {
   position: relative;
   width: 100%;
+  height: 100%;
   .action-box {
     position: absolute;
     top: 0;

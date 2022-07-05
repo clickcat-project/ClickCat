@@ -9,6 +9,7 @@ export const defaultOptions: monaco.editor.IEditorConstructionOptions = {
   formatOnPaste: true,
   fontFamily: 'Monaco,Menlo,Ubuntu Mono,Consolas,"source-code-pro","monospace"',
   fontSize: 14,
+  lineHeight: 30,
   mouseWheelZoom: true,
   // cursorSmoothCaretAnimation: true,
   fontWeight: 'lighter',

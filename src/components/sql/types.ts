@@ -50,3 +50,9 @@ export type Statistics = {
   elapsed: string
   rows_read: number
 }
+
+export enum ColumnCommand {
+  OpenTable = 'openTable',
+  MakeSelect = 'makeSelect',
+  MakeSqlDescribe = 'makeSqlDescribe'
+}

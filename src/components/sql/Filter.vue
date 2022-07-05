@@ -6,8 +6,10 @@ import { useSqlStore } from '@/store/modules/sql';
 
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
+import { ColumnCommand } from './types'
 
 const sqlStore = useSqlStore()
+const emit = defineEmits(['tableCommand'])
 
 const columns = ref<any[]>([])
 const tree = ref<any[]>([])
@@ -28,6 +30,13 @@ onBeforeMount(() => {
 })
 const clickNode = (node: any, data: any) => {
   console.log(node, data, '00000000')
+}
+
+const clickCommand = (node: any, command: string) => {
+  emit('tableCommand', {
+    node,
+    command
+  })
 }
 </script>
 
@@ -68,15 +77,15 @@ const clickNode = (node: any, data: any) => {
               :content="`${node.data.engine}${br}${node.data.size}`"
               placement="right"
             >
-              <el-dropdown trigger="contextmenu" popper-class="dark">
+              <el-dropdown trigger="contextmenu" @command="(command) => clickCommand(node, command)" popper-class="dark">
                 <span class="custom-tree-node has-dropdown">
                   <span>{{ node.label }}</span>
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>Open table</el-dropdown-item>
-                    <el-dropdown-item>Make SELECT</el-dropdown-item>
-                    <el-dropdown-item>Make SQL Describe</el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.OpenTable">Open table</el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.MakeSelect">Make SELECT</el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">Make SQL Describe</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>

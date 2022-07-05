@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import piniaStore from '@/store/index'
-import { TabsType } from '@/components/sql/types'
+import { TableItem, TabsType } from '@/components/sql/types'
 import { TabItem } from './types'
 
 const firstDate = +new Date() + ''
@@ -17,9 +17,11 @@ export const useSqlStore = defineStore(
           name:  firstDate,
           sql: '',
           type: TabsType.Editor,
+          node: ''
         }
       ],
-      activeTabs: firstDate
+      activeTabs: firstDate,
+      addSqlIsCommand: false
     }),
     persist: {
       enabled: true,
@@ -38,8 +40,19 @@ export const useSqlStore = defineStore(
         const tabOld = this.tabs[index]
         this.tabs[index] = {
           ...tabOld,
-          ...tab
+          ...(tab as any)
         }
+      },
+      addTableTabs (node: TableItem) {
+        const currentKey = +new Date() + ''
+        this.tabs.push({
+          name: currentKey,
+          title: node.name,
+          sql: '',
+          type: TabsType.TableView,
+          node: node as any
+        })
+        this.activeTabs = currentKey
       },
       addEditorTabs () {
         this.tabs.push({
@@ -47,6 +60,7 @@ export const useSqlStore = defineStore(
           title: `SQL_${this.tabs.length + 1}`,
           sql: '',
           type: TabsType.Editor,
+          node: ''
         })
       },
       removeTabs(index: number) {
@@ -54,6 +68,9 @@ export const useSqlStore = defineStore(
       },
       setActiveTabs (val: string) {
         this.activeTabs = val
+      },
+      toggleAddSqlIsCommand () {
+        this.addSqlIsCommand = !this.addSqlIsCommand
       }
     },
   },

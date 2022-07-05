@@ -5,6 +5,7 @@ import { useSqlStore } from '@/store';
 import { TabsType } from './types'
 
 import EditorTabPane from './EditorTabPane.vue'
+import TableTabPane from './TableTabPane.vue';
 
 const sqlStore = useSqlStore()
 
@@ -40,7 +41,7 @@ const removeTabs = (val: any) => {
   if (index > 0) {
     const activetabIndex = tabs.value.findIndex(item => item.name === sqlStore.activeTabs)
     if (activetabIndex === index) {
-      const activeTab = tabs.value[index]
+      const activeTab = tabs.value[index - 1]
       editableTabsValue.value = activeTab.name
       sqlStore.setActiveTabs(activeTab.name)
     }
@@ -68,6 +69,7 @@ const removeTabs = (val: any) => {
         lazy
       >
         <EditorTabPane :tab="item" v-if="item.type === tabType.Editor" />
+        <TableTabPane v-else :tab="item" />
       </el-tab-pane>
     </el-tabs>
   </section>
@@ -92,7 +94,7 @@ const removeTabs = (val: any) => {
     border: unset;
   }
   .el-tabs--card.editor-tabs > :deep(.el-tabs__header .el-tabs__nav-wrap) {
-    background: #e2e2e2;
+    background: #f0f0f0;
   }
   .el-tabs--card.editor-tabs > :deep(.el-tabs__content) {
     width: 100%;
