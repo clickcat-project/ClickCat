@@ -5,11 +5,11 @@
 }
 </route>
 <script lang='ts' setup>
-import { computed } from 'vue';
+import { computed } from 'vue'
 
-import ListItemVue from '@/components/history-sql/ListItem.vue';
+import ListItemVue from '@/components/history-sql/ListItem.vue'
 
-import { useSqlStore } from '@/store';
+import { useSqlStore } from '@/store'
 import emptyImg from '@/assets/images/empty.svg'
 
 
@@ -21,14 +21,27 @@ const sqlList = computed(() => {
 </script>
 <template>
   <section class="history-sql-container">
-    <div v-if="!sqlList.length" class="empty-container">
+    <div
+      v-if="!sqlList.length"
+      class="empty-container"
+    >
       <div class="empty-box">
-        <img :src="emptyImg" alt="">
+        <img
+          :src="emptyImg"
+          alt=""
+        >
         <p>No data</p>
       </div>
     </div>
-    <div v-else class="list-container">
-      <ListItemVue v-for="(item, index) in sqlList" :key="index" :sql="item" />
+    <div
+      v-else
+      class="list-container"
+    >
+      <ListItemVue
+        v-for="(item, index) in sqlList"
+        :key="index"
+        :sql="item"
+      />
     </div>
   </section>
 </template>
