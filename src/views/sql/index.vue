@@ -6,7 +6,7 @@
 </route>
 <script lang='ts' setup>
 import FilterVue from '@/components/sql/Filter.vue'
-// import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
+// import SimpleEditorVue from '@/components/sql/SimpleEditor.vue'
 import EditorTabsVue from '@/components/sql/EditorTabs.vue'
 import { useSqlStore } from '@/store'
 import { ColumnCommand } from '@/components/sql/types'
