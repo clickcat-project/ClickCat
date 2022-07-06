@@ -29,7 +29,9 @@ const changeValue = (val: string) => {
 }
 
 const queryTableData = (rows = 100) => {
-  const sql = props.tab.sql + ` limit ${rows} FORMAT JSON`
+  const originSql = props.tab.sql
+  const sql = originSql + ` limit ${rows} FORMAT JSON`
+  originSql && sqlStore.addHistorySql(originSql)
   query(sql)
     .then(res => {
       columns.value = res.meta
@@ -40,7 +42,6 @@ const queryTableData = (rows = 100) => {
         elapsed: elapsed.toFixed(2),
         rows_read
       }
-      console.log(statistics.value)
     })
 }
 const exportDataFunc = (command: string) => {
@@ -65,6 +66,7 @@ const fullScreen = async () => {
         :columns="columns"
         :table-data="tableData"
         :statistics="statistics"
+        :dragEle="editorContainerRef"
         @change-rows="queryTableData"
         @export="exportDataFunc"
         @full-screen="fullScreen"

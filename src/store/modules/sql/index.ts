@@ -21,17 +21,22 @@ export const useSqlStore = defineStore(
         }
       ],
       activeTabs: firstDate,
-      addSqlIsCommand: false
+      addSqlIsCommand: false,
+      historySqls: [] as string[]
     }),
     persist: {
       enabled: true,
       strategies: [
         { key: 'tabs', storage: localStorage, paths: ['tabs'] },
         { key: 'activeTabs', storage: localStorage, paths: ['activeTabs'] },
+        { key: 'hitorySqls', storage: localStorage, paths: ['historySqls'] }
       ],
     },
     getters: {},
     actions: {
+      addHistorySql (sql: string | undefined) {
+        sql && this.historySqls.push(sql)
+      },
       setColumns (columns: any[]) {
         this.columns = columns as never[]
       },
@@ -54,13 +59,14 @@ export const useSqlStore = defineStore(
         })
         this.activeTabs = currentKey
       },
-      addEditorTabs () {
+      addEditorTabs (tab: TabItem = {}) {
         this.tabs.push({
           name: +new Date() + '',
           title: `SQL_${this.tabs.length + 1}`,
           sql: '',
           type: TabsType.Editor,
-          node: ''
+          node: '',
+          ...tab
         })
       },
       removeTabs(index: number) {

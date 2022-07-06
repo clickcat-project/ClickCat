@@ -7,7 +7,8 @@ const props = defineProps<{
   columns: any[],
   tableData: any[],
   statistics?: Statistics,
-  notTitle?: boolean
+  notTitle?: boolean,
+  dragEle?: HTMLElement
 }>()
 
 const emit = defineEmits(['changeRows', 'export', 'fullScreen'])
@@ -29,6 +30,7 @@ const fullScreen = () => {
 <template>
   <section ref="containerRef" class="editor-table-container">
     <div class="content-container">
+      <div class="drag-box" ></div>
       <h3 class="table-title">
         <span v-if="!notTitle" class="title-content">Data / Table</span>
       </h3>
@@ -132,7 +134,15 @@ const fullScreen = () => {
   width: 100%;
   height: 100%;
 
+  .drag-box {
+    height: 36px;
+    background-color: #F0F0F0;
+  }
+
   .table-title {
+    position: absolute;
+    left: 0;
+    top: 0;
     height: 36px;
     border-top: 1px solid #E2E2E2;
     border-bottom: 1px solid #E2E2E2;
