@@ -1,6 +1,6 @@
 import { useLioginOutsideStore } from '@/store/modules/login'
 
-function getRequestInit(query?: string, isLogin: boolean = false): RequestInit {
+function getRequestInit(query?: string, isLogin = false): RequestInit {
   const init: RequestInit = {
     mode: 'cors',
     method: isLogin ? 'get' : 'post',
@@ -36,11 +36,9 @@ function request(request: Request | string, init?: RequestInit) {
         response.status >= 200 &&
         response.status < 300
       ) {
-        // return Promise.resolve(response);
         return response.json()
       }
       return response.text().then(Promise.reject.bind(Promise)) // refactor ???
-      // return response.text();
     })
     .then(
       (response) => {
@@ -65,17 +63,10 @@ function getRequestUrl(connection?: Connection, settings?: string): string {
     throw new Error('No Connection')
   }
   const httpProto = connection.connectionUrl.indexOf('//') === -1 ? 'http://' : ''
-  // this.connection.connectionUrl.indexOf('/') > 0
 
   let url = `${httpProto}${connection.connectionUrl}`
   // add /?
   url = `${url}/?output_format_json_quote_denormals=1&output_format_json_quote_64bit_integers=1&log_queries=1&enable_http_compression=1&add_http_cors_header=1&result_overflow_mode=throw&timeout_overflow_mode=throw&max_execution_time=10&max_result_rows=90000&max_result_bytes=10000000`
-  // output_format_json_quote_denormals=1&output_format_json_quote_64bit_integers=1&log_queries=1&enable_http_compression=1&add_http_cors_header=1&result_overflow_mode=throw&timeout_overflow_mode=throw&max_execution_time=10&max_result_rows=90000&max_result_bytes=10000000
-  // const settings: object = this.getPresetSettings(extendSettings, this.connection.params);
-
-  // url += Object.entries(settings)
-  //   .map(([key, val]) => `${key}=${val}`)
-  //   .join('&');
   if (connection.password) {
     url += `&user=${encodeURIComponent(connection.username)}&password=${encodeURIComponent(
       connection.password
@@ -88,14 +79,10 @@ function getRequestUrl(connection?: Connection, settings?: string): string {
     url += settings
   }
 
-  // if (withDatabase) {
-  //   url += `&database=${encodeURIComponent(withDatabase)}`;
-  // }
-
   return url
 }
 
-export function query(sql?: string, settings?: string, connection?: Connection, isLogin: boolean = false): Promise<any> {
+export function query(sql?: string, settings?: string, connection?: Connection, isLogin = false): Promise<any> {
   const sqlStr = sql ? (sql.includes('FORMAT JSON') ? sql : sql + '\n\n FORMAT JSON') : undefined
 
   const init = getRequestInit(sqlStr, isLogin)
@@ -107,6 +94,6 @@ export function query(sql?: string, settings?: string, connection?: Connection, 
       return r
     })
     .catch((e) => {
-      // return { response: null, query: q as Query, error: e, isError: true } as QueryResponse;
+      console.log(e)
     })
 }
