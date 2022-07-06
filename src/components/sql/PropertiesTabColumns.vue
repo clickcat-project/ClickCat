@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import { ref, onBeforeMount } from 'vue'
-import { TabItem } from '@/store/modules/sql/types';
+import { TabItem } from '@/store/modules/sql/types'
 import { queryPropertiesColumns } from './query'
 
 const tableData = ref<any[]>([])
@@ -24,7 +24,10 @@ const queryData = () => {
 }
 </script>
 <template>
-  <section ref="containerRef" class="properties-tab-columns">
+  <section
+    ref="containerRef"
+    class="properties-tab-columns"
+  >
     <el-table
       :data="tableData"
       style="width: 100%;"

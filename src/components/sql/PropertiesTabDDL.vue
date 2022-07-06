@@ -1,9 +1,9 @@
 <script lang='ts' setup>
 import { ref, onBeforeMount } from 'vue'
 
-import EditorOnlyShowVue from './EditorOnlyShow.vue';
+import EditorOnlyShowVue from './EditorOnlyShow.vue'
 
-import { TabItem } from '@/store/modules/sql/types';
+import { TabItem } from '@/store/modules/sql/types'
 import { getSqlDescribe } from './utils'
 
 const props = defineProps<{
@@ -24,7 +24,10 @@ const queryData = () => {
 }
 </script>
 <template>
-  <section ref="containerRef" class="properties-tab-ddl">
+  <section
+    ref="containerRef"
+    class="properties-tab-ddl"
+  >
     <EditorOnlyShowVue :value="sql" />
   </section>
 </template>
