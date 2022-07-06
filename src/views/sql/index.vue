@@ -5,12 +5,12 @@
 }
 </route>
 <script lang='ts' setup>
-import FilterVue from '@/components/sql/Filter.vue';
+import FilterVue from '@/components/sql/Filter.vue'
 // import SimpleEditorVue from '@/components/sql/SimpleEditor.vue';
-import EditorTabsVue from '@/components/sql/EditorTabs.vue';
-import { useSqlStore } from '@/store';
-import { ColumnCommand } from '@/components/sql/types';
-import { getSqlDescribe, getMakeSelectSql } from '@/components/sql/utils';
+import EditorTabsVue from '@/components/sql/EditorTabs.vue'
+import { useSqlStore } from '@/store'
+import { ColumnCommand } from '@/components/sql/types'
+import { getSqlDescribe, getMakeSelectSql } from '@/components/sql/utils'
 
 const sqlStore = useSqlStore()
 
@@ -25,10 +25,10 @@ const tableCommand = ({node, command}: any) => {
       newSql = getMakeSelectSql(node.data)
       current && (current.sql = oldSql + newSql)
       setTimeout(() => sqlStore.toggleAddSqlIsCommand())
-      break;
+      break
     case ColumnCommand.OpenTable:
       sqlStore.addTableTabs(node.data)
-      break;
+      break
     case ColumnCommand.MakeSqlDescribe:
       getSqlDescribe(node.data)
         .then(data => {
@@ -36,7 +36,7 @@ const tableCommand = ({node, command}: any) => {
           current && (current.sql = oldSql + newSql)
           setTimeout(() => sqlStore.toggleAddSqlIsCommand())
         })
-      break;  
+      break  
   }
 }
 </script>

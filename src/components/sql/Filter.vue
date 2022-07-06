@@ -15,9 +15,11 @@ const defaultExpandKeys = ref<string[]>([])
 const seletedColumn = ref<string>()
 const selectedColumnObj = ref<any>()
 const treeInstance = ref<any>()
+const dataloading = ref<boolean>(false)
 const br = '\n'
 
 onBeforeMount(() => {
+  dataloading.value = true
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {
       const dataArr = res.map(item => item.data)
@@ -28,6 +30,9 @@ onBeforeMount(() => {
         dataArr[2]
       )
       defaultExpandKeys.value = [tree.value[0].name]
+    })
+    .finally(() => {
+      dataloading.value = false
     })
 })
 
@@ -62,6 +67,11 @@ const changeSelected = (val: string) => {
 
 <template>
   <section class="siderbar-content">
+    <div
+      v-if="dataloading"
+      v-loading="true"
+      class="loading"
+    ></div>
     <div class="search-box">
       <el-select
         v-model="seletedColumn"
@@ -86,6 +96,7 @@ const changeSelected = (val: string) => {
       </div>
     </div>
     <div class="tree-content">
+      <!-- , class: () => 'no-back' -->
       <el-tree
         ref="treeInstance"
         :data="tree"
@@ -93,7 +104,7 @@ const changeSelected = (val: string) => {
         :default-expanded-keys="defaultExpandKeys"
         render-after-expand
         auto-expand-parent
-        :props="{children: 'children', label: 'name', class: () => 'no-back'}"
+        :props="{children: 'children', label: 'name'}"
         :expand-on-click-node="false"
       >
         <template #default="{ node }">
@@ -161,6 +172,19 @@ const changeSelected = (val: string) => {
   height: 100%;
   padding: 30px 10px;
   box-sizing: border-box;
+  .loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .6);
+    z-index: 10;
+
+    :deep(.el-loading-mask) {
+      background-color: unset;
+    }
+  }
   .el-tree {
     background-color: unset;
   }
