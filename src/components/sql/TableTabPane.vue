@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { TabItem } from '@/store/modules/sql/types';
+import { TabItem } from '@/store/modules/sql/types'
 import { ref } from 'vue'
 
 import TablePaneData from './TablePaneData.vue'
@@ -18,11 +18,17 @@ const activeName = ref<string>('Data')
       type="card"
       class="table-pane-inner-tab"
     >
-      <el-tab-pane label="Properties" name="Properties">
+      <el-tab-pane
+        label="Properties"
+        name="Properties"
+      >
         <TablePaneProperties :tab="tab" />
       </el-tab-pane>
-      <el-tab-pane label="Data" name="Data">
-        <TablePaneData :tab="tab"  />
+      <el-tab-pane
+        label="Data"
+        name="Data"
+      >
+        <TablePaneData :tab="tab" />
       </el-tab-pane>
     </el-tabs>
   </section>
