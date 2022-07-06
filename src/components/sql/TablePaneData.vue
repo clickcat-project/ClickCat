@@ -1,12 +1,12 @@
 <script lang='ts' setup>
-import { TabItem } from '@/store/modules/sql/types';
+import { TabItem } from '@/store/modules/sql/types'
 import { onBeforeMount, ref } from 'vue'
 
-import EditorTabPaneTableVue from './EditorTabPaneTable.vue';
-import { ExportData } from './ExportData';
+import EditorTabPaneTableVue from './EditorTabPaneTable.vue'
+import { ExportData } from './ExportData'
 
 import { queryTableDataPaneData } from './query'
-import { Statistics } from './types';
+import { Statistics } from './types'
 
 const props = defineProps<{
   tab: TabItem
@@ -23,7 +23,7 @@ onBeforeMount(() => {
   queryData()
 })
 
-const queryData = (rows: number = 100) => {
+const queryData = (rows = 100) => {
   loading.value = true
   queryTableDataPaneData(props.tab.node, rows)
     .then(res => {
@@ -55,13 +55,16 @@ const fullScreen = async () => {
 }
 </script>
 <template>
-  <section ref="editorContainerRef" class="table-pane-data-container">
+  <section
+    ref="editorContainerRef"
+    class="table-pane-data-container"
+  >
     <EditorTabPaneTableVue
+      v-loading="loading"
       :columns="columns"
       :table-data="tableData"
       :statistics="statistics"
       :not-title="true"
-      v-loading="loading"
       @change-rows="queryData"
       @export="exportDataFunc"
       @full-screen="fullScreen"
