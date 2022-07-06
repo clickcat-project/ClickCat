@@ -1,11 +1,11 @@
 <script lang='ts' setup>
 import { ref } from 'vue'
 
-import PropertiesTabColumnsVue from './PropertiesTabColumns.vue';
-import PropertiesTabDDLVue from './PropertiesTabDDL.vue';
-import PropertiesTabStatisticsVue from './PropertiesTabStatistics.vue';
+import PropertiesTabColumnsVue from './PropertiesTabColumns.vue'
+import PropertiesTabDDLVue from './PropertiesTabDDL.vue'
+import PropertiesTabStatisticsVue from './PropertiesTabStatistics.vue'
 
-import { TabItem } from '@/store/modules/sql/types';
+import { TabItem } from '@/store/modules/sql/types'
 
 defineProps<{
   tab: TabItem
@@ -21,13 +21,25 @@ const activeName = ref<string>('Columns')
       class="table-pane-properties-inner-tab"
       :tab-position="'left'"
     >
-      <el-tab-pane lazy label="Columns" name="Columns">
+      <el-tab-pane
+        lazy
+        label="Columns"
+        name="Columns"
+      >
         <PropertiesTabColumnsVue :tab="tab" />
       </el-tab-pane>
-      <el-tab-pane lazy label="Statistics" name="Statistics">
+      <el-tab-pane
+        lazy
+        label="Statistics"
+        name="Statistics"
+      >
         <PropertiesTabStatisticsVue :tab="tab" />
       </el-tab-pane>
-      <el-tab-pane lazy label="DDL" name="DDL">
+      <el-tab-pane
+        lazy
+        label="DDL"
+        name="DDL"
+      >
         <PropertiesTabDDLVue :tab="tab" />
       </el-tab-pane>
     </el-tabs>
