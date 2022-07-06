@@ -16,6 +16,7 @@ const columns = ref<any[]>([])
 const tableData = ref<any[]>([])
 const statistics = ref<Statistics>()
 const reloadSomeElement = ref<boolean>(true)
+const loading = ref<boolean>(false)
 const editorContainerRef = ref<HTMLElement>()
 
 onBeforeMount(() => {
@@ -23,9 +24,9 @@ onBeforeMount(() => {
 })
 
 const queryData = (rows: number = 100) => {
+  loading.value = true
   queryTableDataPaneData(props.tab.node, rows)
     .then(res => {
-      console.log(res)
       const { bytes_read, elapsed, rows_read } = res.statistics
       columns.value = res.meta
       tableData.value = res.data
@@ -34,6 +35,9 @@ const queryData = (rows: number = 100) => {
         elapsed: elapsed.toFixed(2),
         rows_read
       }
+    })
+    .finally(() => {
+      loading.value = false
     })
 }
 const exportDataFunc = (command: string) => {
@@ -57,6 +61,7 @@ const fullScreen = async () => {
       :table-data="tableData"
       :statistics="statistics"
       :not-title="true"
+      v-loading="loading"
       @change-rows="queryData"
       @export="exportDataFunc"
       @full-screen="fullScreen"

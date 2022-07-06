@@ -13,6 +13,7 @@ const emit = defineEmits(['tableCommand'])
 
 const columns = ref<any[]>([])
 const tree = ref<any[]>([])
+const defaultExpandKeys = ref<string[]>([])
 const br = '\n';
 
 onBeforeMount(() => {
@@ -25,18 +26,21 @@ onBeforeMount(() => {
         dataArr[1],
         dataArr[2]
       )
-      console.log(tree.value, 'tree.value')
+      defaultExpandKeys.value = [tree.value[0].name]
     })
 })
-const clickNode = (node: any, data: any) => {
-  console.log(node, data, '00000000')
-}
 
 const clickCommand = (node: any, command: string) => {
   emit('tableCommand', {
     node,
     command
   })
+}
+
+const loadChildren = (node: any, resolve: (val: any) => void) => {
+  if (node.data.children) {
+    resolve(node.data.children)
+  }
 }
 </script>
 
@@ -63,7 +67,10 @@ const clickCommand = (node: any, command: string) => {
       <el-tree
         :data="tree"
         node-key="name"
+        :default-expanded-keys="defaultExpandKeys"
         render-after-expand
+        lazy
+        :load="loadChildren"
         auto-expand-parent
         :props="{children: 'children', label: 'name', class: () => 'no-back'}"
         :expand-on-click-node="false"
