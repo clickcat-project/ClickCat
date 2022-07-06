@@ -1,9 +1,9 @@
 <script lang='ts' setup>
 import { computed, onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-import { useLoginStore } from '@/store';
+import { useLoginStore } from '@/store'
 
-import ListItemVue from './ListItem.vue';
+import ListItemVue from './ListItem.vue'
 
 import { queryList } from '../query'
 
@@ -28,21 +28,32 @@ const toResult = (item: any) => {
 }
 </script>
 <template>
-  <section class="ml-list-container" :style="listLengthLess ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}">
-    <section class="list-box add-btn" @click="add">
+  <section
+    class="ml-list-container"
+    :style="listLengthLess ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}"
+  >
+    <section
+      class="list-box add-btn"
+      @click="add"
+    >
       <el-icon :size="18">
         <Plus />
       </el-icon>
       <span class="add-text">NEW</span>
     </section>
-    <ListItemVue v-for="(item, i) in list" :item="item" :key="i" @to-result="toResult"></ListItemVue>
+    <ListItemVue
+      v-for="(item, i) in list"
+      :key="i"
+      :item="item"
+      @to-result="toResult"
+    ></ListItemVue>
   </section>
 </template>
 <style lang='scss' scoped>
 .ml-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-rows: 162px;;
+  grid-auto-rows: 162px;
   grid-gap: 20px;
   width: 100%;
 }

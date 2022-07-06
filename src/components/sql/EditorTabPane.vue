@@ -1,13 +1,13 @@
 <script lang='ts' setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
-import SimpleEditorVue from './SimpleEditor.vue';
-import EditorTabPaneTableVue from './EditorTabPaneTable.vue';
-import { TabItem } from '@/store/modules/sql/types';
-import { useSqlStore } from '@/store';
-import { query } from '@/utils/http';
-import { Statistics } from './types';
-import { ExportData } from './ExportData';
+import SimpleEditorVue from './SimpleEditor.vue'
+import EditorTabPaneTableVue from './EditorTabPaneTable.vue'
+import { TabItem } from '@/store/modules/sql/types'
+import { useSqlStore } from '@/store'
+import { query } from '@/utils/http'
+import { Statistics } from './types'
+import { ExportData } from './ExportData'
 
 const sqlStore = useSqlStore()
 
@@ -20,6 +20,26 @@ const tableData = ref<any[]>([])
 const statistics = ref<Statistics>()
 const editorContainerRef = ref<HTMLElement>()
 const reloadSomeElement = ref<boolean>(true)
+const editorTabPaneTableInstance = ref<any>()
+const simpleEditorInstance = ref<any>()
+
+onMounted(() => {
+  const dragElement = editorTabPaneTableInstance.value.getDragElement() as HTMLElement
+  const editorContainer = simpleEditorInstance.value.getEditorContainer() as HTMLElement
+  const container = editorContainerRef.value as HTMLElement
+  dragElement.onmousedown = (e) => {
+    const oldY = e.clientY
+    const editorHight = editorContainer.getBoundingClientRect().height
+    document.onmousemove = (e) => {
+      const currentY = e.clientY
+      const result = currentY - oldY
+      container.style.cssText = `grid-template-rows: ${editorHight + result}px 1fr;`
+    }
+    document.onmouseup = () => {
+      document.onmousemove = null
+    }
+  }
+})
 
 const changeValue = (val: string) => {
   sqlStore.setCurrentTab({
@@ -59,14 +79,23 @@ const fullScreen = async () => {
 }
 </script>
 <template>
-  <section ref="editorContainerRef" class="editor-tab-pane-container">
+  <section
+    ref="editorContainerRef"
+    class="editor-tab-pane-container"
+  >
     <template v-if="reloadSomeElement">
-      <SimpleEditorVue :tab="tab" @change="changeValue" @query-action="queryTableData" />
+      <SimpleEditorVue
+        ref="simpleEditorInstance"
+        :tab="tab"
+        @change="changeValue"
+        @query-action="queryTableData"
+      />
       <EditorTabPaneTableVue
+        ref="editorTabPaneTableInstance"
         :columns="columns"
         :table-data="tableData"
         :statistics="statistics"
-        :dragEle="editorContainerRef"
+        :drag-ele="editorContainerRef"
         @change-rows="queryTableData"
         @export="exportDataFunc"
         @full-screen="fullScreen"

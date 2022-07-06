@@ -1,7 +1,7 @@
 <script lang='ts' setup>
 import { Edit } from '@element-plus/icons-vue'
-import { useSqlStore } from '@/store';
-import { useGoTo } from '@/layout/hooks';
+import { useSqlStore } from '@/store'
+import { useGoTo } from '@/layout/hooks'
 
 const sqlStore = useSqlStore()
 const goto = useGoTo()
@@ -22,7 +22,10 @@ const addEditorTabs = () => {
 <template>
   <section class="list-item-container">
     <div>{{ sql }}</div>
-    <div class="btn-box" @click="addEditorTabs">
+    <div
+      class="btn-box"
+      @click="addEditorTabs"
+    >
       <el-icon>
         <Edit />
       </el-icon>

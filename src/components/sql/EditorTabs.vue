@@ -1,11 +1,11 @@
 <script lang='ts' setup>
 import { computed, onBeforeMount, ref } from 'vue'
-import { useSqlStore } from '@/store';
+import { useSqlStore } from '@/store'
 
 import { TabsType } from './types'
 
 import EditorTabPane from './EditorTabPane.vue'
-import TableTabPane from './TableTabPane.vue';
+import TableTabPane from './TableTabPane.vue'
 
 const sqlStore = useSqlStore()
 
@@ -68,8 +68,14 @@ const removeTabs = (val: any) => {
         :class="`tabs-${item.name}`"
         lazy
       >
-        <EditorTabPane :tab="item" v-if="item.type === tabType.Editor" />
-        <TableTabPane v-else :tab="item" />
+        <EditorTabPane
+          v-if="item.type === tabType.Editor"
+          :tab="item"
+        />
+        <TableTabPane
+          v-else
+          :tab="item"
+        />
       </el-tab-pane>
     </el-tabs>
   </section>

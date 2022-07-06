@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, reactive, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-
-import { useSqlStore } from '@/store/modules/sql';
 
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
 import { ColumnCommand } from './types'
 
-const sqlStore = useSqlStore()
+// const sqlStore = useSqlStore()
 const emit = defineEmits(['tableCommand'])
 
 const columns = ref<any[]>([])
 const tree = ref<any[]>([])
 const defaultExpandKeys = ref<string[]>([])
-const br = '\n';
+const seletedColumn = ref<string>()
+const selectedColumnObj = ref<any>()
+const treeInstance = ref<any>()
+const br = '\n'
 
 onBeforeMount(() => {
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
@@ -37,24 +38,45 @@ const clickCommand = (node: any, command: string) => {
   })
 }
 
-const loadChildren = (node: any, resolve: (val: any) => void) => {
-  if (node.data.children) {
-    resolve(node.data.children)
+const changeSelected = (val: string) => {
+  if (selectedColumnObj.value) {
+    selectedColumnObj.value.selected = false
   }
+  // console.log(rest, 'changeSelected')
+  const selectedColumn = columns.value.find((item: any) => item.name ===val)
+  selectedColumnObj.value = selectedColumn
+  // console.log(selectedColumn, 'selectedColumn')
+  // const database = tree.value[0].children.find((item: any) => item.name === selectedColumn.database)
+  // const table = database.children.find((item: any) => item.name === selectedColumn.table)
+  // const treeColumn = table.children.find((item: any) => item.name === selectedColumn.name)
+  // selectedColumn.selected = true
+  // console.log(treeColumn, '000000')
+  // console.log(treeColumn === selectedColumn, '1111111')
+  selectedColumn.selected = true
+  // defaultExpandKeys.value.push(selectedColumn.database, selectedColumn.table)
+  treeInstance.value.store.nodesMap[selectedColumn.database].expanded = true
+  treeInstance.value.store.nodesMap[selectedColumn.table].expanded = true
+  // console.log(treeInstance.value.store.nodesMap, 'treeInstance.value.store.nodesMap')
 }
 </script>
 
 <template>
   <section class="siderbar-content">
     <div class="search-box">
-      <el-select filterable placeholder="Select" class="filter-select">
+      <el-select
+        v-model="seletedColumn"
+        filterable
+        placeholder="Select"
+        class="filter-select"
+        @change="changeSelected"
+      >
         <el-option
           v-for="item in columns"
           :key="item.name"
           :label="item.name"
           :value="item.name"
         >
-        <span>{{ item.name }}</span>
+          <span>{{ item.name }}</span>
         </el-option>
       </el-select>
       <div class="search-btn">
@@ -65,17 +87,16 @@ const loadChildren = (node: any, resolve: (val: any) => void) => {
     </div>
     <div class="tree-content">
       <el-tree
+        ref="treeInstance"
         :data="tree"
         node-key="name"
         :default-expanded-keys="defaultExpandKeys"
         render-after-expand
-        lazy
-        :load="loadChildren"
         auto-expand-parent
         :props="{children: 'children', label: 'name', class: () => 'no-back'}"
         :expand-on-click-node="false"
       >
-        <template #default="{ node, data }">
+        <template #default="{ node }">
           <template v-if="node.data.database && !node.data.table">
             <el-tooltip
               class="box-item"
@@ -84,22 +105,32 @@ const loadChildren = (node: any, resolve: (val: any) => void) => {
               :content="`${node.data.engine}${br}${node.data.size}`"
               placement="right"
             >
-              <el-dropdown trigger="contextmenu" @command="(command) => clickCommand(node, command)" popper-class="dark">
+              <el-dropdown
+                trigger="contextmenu"
+                popper-class="dark"
+                @command="(command) => clickCommand(node, command)"
+              >
                 <span class="custom-tree-node has-dropdown">
                   <span>{{ node.label }}</span>
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item :command="ColumnCommand.OpenTable">Open table</el-dropdown-item>
-                    <el-dropdown-item :command="ColumnCommand.MakeSelect">Make SELECT</el-dropdown-item>
-                    <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">Make SQL Describe</el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.OpenTable">
+                      Open table
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.MakeSelect">
+                      Make SELECT
+                    </el-dropdown-item>
+                    <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">
+                      Make SQL Describe
+                    </el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
             </el-tooltip>
           </template>
           <template v-else-if="node.data.database && node.data.table">
-             <el-tooltip
+            <el-tooltip
               class="box-item"
               effect="dark"
               popper-class="click-cat-dark"
@@ -110,10 +141,15 @@ const loadChildren = (node: any, resolve: (val: any) => void) => {
                 <span>{{ node.label }}</span>
               </span>
             </el-tooltip>
+            <span class="suffix">{{ node.data.type }}</span>
+            <div :class="`absolute-back ${node.data.selected ? 'active' : ''}`"></div>
           </template>
-          <span v-else class="custom-tree-node">
-            <span>{{ node.label }}</span>
-          </span>
+          <template v-else>
+            <span class="custom-tree-node">
+              <span>{{ node.label }}</span>
+            </span>
+            <span class="suffix">{{ node.data.children.length }}</span>
+          </template>
         </template>
       </el-tree>
     </div>
@@ -131,10 +167,10 @@ const loadChildren = (node: any, resolve: (val: any) => void) => {
   .custom-tree-node {
     color: rgba(255, 255, 255, .85);
   }
-  :deep(.no-back > .el-tree-node__content){
-    height: 56px;
-    background-color: unset;
-  }
+  // :deep(.no-back > .el-tree-node__content){
+  //   height: 56px;
+  //   background-color: unset;
+  // }
 }
 .filter-select :deep(.el-input__wrapper) {
   border-radius: unset;
@@ -170,11 +206,41 @@ const loadChildren = (node: any, resolve: (val: any) => void) => {
   border-top-right-radius: 4px;
 }
 .custom-tree-node {
+  position: relative;
   font-size: 14px;
   line-height: 56px;
+  z-index: 2;
 }
 .tree-content {
   height: calc(100% - 32px);
   overflow-y: auto;
+
+  :deep(.el-tree-node__content) {
+    position: relative;
+    height: 56px;
+    background-color: unset;
+  }
+  .suffix {
+    position: absolute;
+    top: 17px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.45);
+    z-index: 2;
+  }
+  .absolute-back {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .absolute-back.active{
+    background: rgba(255, 179, 0, 0.1);
+  }
+  :deep(.el-tree-node__content i) {
+    position: relative;
+    z-index: 2;
+  }
 }
 </style>

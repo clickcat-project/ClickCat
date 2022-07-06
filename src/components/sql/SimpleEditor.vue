@@ -4,27 +4,27 @@ import { CaretRight } from '@element-plus/icons-vue'
 import * as monaco from 'monaco-editor'
 
 import { defaultOptions } from './editorConfig'
-import { themeCobalt } from './theme/Cobalt';
+import { themeCobalt } from './theme/Cobalt'
 import createSqlCompleter from './utils/sql-completion'
-import { TabItem } from '@/store/modules/sql/types';
-import { useSqlStore } from '@/store';
+import { TabItem } from '@/store/modules/sql/types'
+import { useSqlStore } from '@/store'
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
 
 monaco.editor.defineTheme('cobalt', themeCobalt)
 
-const global: any = {};
+const global: any = {}
 let timer: any = null
 
 const getHints = (model: any) => {
-  let id = model.id.substring(6);
-  return (global[id] && global[id].hints) || [];
+  let id = model.id.substring(6)
+  return (global[id] && global[id].hints) || []
 }
 
 monaco.languages.registerCompletionItemProvider(
-  "sql",
+  'sql',
   createSqlCompleter(getHints) as any
-);
+)
 
 const sqlStore = useSqlStore()
 const props = defineProps<{
@@ -34,6 +34,7 @@ const props = defineProps<{
 const emit = defineEmits(['change', 'queryAction'])
 
 const editorRenderer = ref<HTMLElement>()
+const simpleEditorContainer = ref<HTMLElement>()
 
 watch(() => props.tab.sql, (newVal) => {
   sqlStore.addSqlIsCommand && editorInstance.setValue(newVal as string)
@@ -47,7 +48,7 @@ const initEditor = () => {
     ...defaultOptions,
     language: 'sql',
     theme: 'vs'
-  });
+  })
   editorInstance.setValue(props.tab.sql as string)
   editorInstance.focus()
   editorInstance.onDidChangeModelContent(() => {
@@ -58,29 +59,46 @@ const initEditor = () => {
     timer = setTimeout(() => {
       emit('change', editorInstance.getValue())
     }, 300)
-  });
+  })
 }
 
 const emitQueryAction = () => {
   emit('queryAction')
 }
+
+const getEditorContainer = () => {
+  return simpleEditorContainer.value
+}
+
+defineExpose({
+  getEditorContainer
+})
 </script>
 <template>
-  <section class="simple-editor-container">
+  <section
+    ref="simpleEditorContainer"
+    class="simple-editor-container"
+  >
     <div class="run-sidebar">
-      <span class="run-btn" @click="emitQueryAction">
+      <span
+        class="run-btn"
+        @click="emitQueryAction"
+      >
         <el-icon>
           <CaretRight />
         </el-icon>
       </span>
     </div>
-    <div ref="editorRenderer" :class="`editor-container-${tab.name} editor-container`"></div>
+    <div
+      ref="editorRenderer"
+      :class="`editor-container-${tab.name} editor-container`"
+    ></div>
   </section>
 </template>
 <style lang='scss' scoped>
 .simple-editor-container {
   position: relative;
-  width: 100%;
+  width: calc(100% - 1px);
   height: 100%;
   padding-top: 10px;
   padding-left: 36px;

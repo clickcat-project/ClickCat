@@ -4,7 +4,7 @@ import { generateBarInstance, formatBarOptions } from './useBar'
 import { generateLineInstance, formatLineOptions } from './useLine'
 import { CommonObj, CommonResType } from '../types'
 
-type chartsType = 'pie' | 'bar' | 'line';
+type chartsType = 'pie' | 'bar' | 'line'
 
 export function getCurrentChart(type: chartsType, renderer: HTMLElement) {
   let chartInstance: echarts.ECharts | null = null

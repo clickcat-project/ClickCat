@@ -3,24 +3,24 @@ import { onMounted, ref, watch } from 'vue'
 import * as monaco from 'monaco-editor'
 
 import { defaultOptions } from './editorConfig'
-import { themeCobalt } from './theme/Cobalt';
+import { themeCobalt } from './theme/Cobalt'
 import createSqlCompleter from './utils/sql-completion'
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
 
 monaco.editor.defineTheme('cobalt', themeCobalt)
 
-const global: any = {};
+const global: any = {}
 
 const getHints = (model: any) => {
-  let id = model.id.substring(6);
-  return (global[id] && global[id].hints) || [];
+  let id = model.id.substring(6)
+  return (global[id] && global[id].hints) || []
 }
 
 monaco.languages.registerCompletionItemProvider(
-  "sql",
+  'sql',
   createSqlCompleter(getHints) as any
-);
+)
 
 const props = defineProps<{
   value: string,
@@ -28,7 +28,7 @@ const props = defineProps<{
 
 const editorRenderer = ref<HTMLElement>()
 
-watch(() => props.value, (newVal) => {
+watch(() => props.value, () => {
   editorInstance.setValue(props.value)
 })
 
@@ -41,13 +41,16 @@ const initEditor = () => {
     ...defaultOptions,
     language: 'sql',
     theme: 'vs'
-  });
+  })
   editorInstance.setValue(props.value)
 }
 </script>
 <template>
   <section class="simple-editor-container">
-    <div ref="editorRenderer" :class="`editor-container`"></div>
+    <div
+      ref="editorRenderer"
+      :class="`editor-container`"
+    ></div>
   </section>
 </template>
 <style lang='scss' scoped>

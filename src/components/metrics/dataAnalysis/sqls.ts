@@ -1,6 +1,6 @@
 interface QueryWhereType {
-  key?: 'database' | 'table' | 'name' | 'type' | 'initial_user' | 'query_kind' | 'normalized_query_hash' | 'user';
-  value?: string;
+  key?: 'database' | 'table' | 'name' | 'type' | 'initial_user' | 'query_kind' | 'normalized_query_hash' | 'user'
+  value?: string
 }
 const JSON_SUFFIX = ' FORMAT JSON;'
 /**

@@ -1,9 +1,9 @@
 <script lang='ts' setup>
 import { ref } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
-import { Statistics } from './types';
+import { Statistics } from './types'
 
-const props = defineProps<{
+defineProps<{
   columns: any[],
   tableData: any[],
   statistics?: Statistics,
@@ -15,6 +15,7 @@ const emit = defineEmits(['changeRows', 'export', 'fullScreen'])
 
 const rows = ref<string>('100')
 const containerRef = ref<HTMLElement>()
+const dragEle = ref<HTMLElement>()
 
 const handleChangeRows = (command: string) => {
   rows.value = command
@@ -26,13 +27,30 @@ const handleDownload = (command: string) => {
 const fullScreen = () => {
   emit('fullScreen')
 }
+
+const getDragElement = () => {
+  return dragEle.value
+}
+
+defineExpose({
+  getDragElement
+})
 </script>
 <template>
-  <section ref="containerRef" class="editor-table-container">
+  <section
+    ref="containerRef"
+    class="editor-table-container"
+  >
     <div class="content-container">
-      <div class="drag-box" ></div>
+      <div
+        ref="dragEle"
+        class="drag-box"
+      ></div>
       <h3 class="table-title">
-        <span v-if="!notTitle" class="title-content">Data / Table</span>
+        <span
+          v-if="!notTitle"
+          class="title-content"
+        >Data / Table</span>
       </h3>
       <div class="table-container">
         <el-table
@@ -72,9 +90,15 @@ const fullScreen = () => {
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="100">100 rows</el-dropdown-item>
-            <el-dropdown-item command="300">300 rows</el-dropdown-item>
-            <el-dropdown-item command="500">500 rows</el-dropdown-item>
+            <el-dropdown-item command="100">
+              100 rows
+            </el-dropdown-item>
+            <el-dropdown-item command="300">
+              300 rows
+            </el-dropdown-item>
+            <el-dropdown-item command="500">
+              500 rows
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -85,15 +109,28 @@ const fullScreen = () => {
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="CSVHeaders">CSV with headers</el-dropdown-item>
-            <el-dropdown-item command="CSV">CSV without headers</el-dropdown-item>
-            <el-dropdown-item command="TSVHeaders">TSV with headers</el-dropdown-item>
-            <el-dropdown-item command="TSV">TSV without headers</el-dropdown-item>
+            <el-dropdown-item command="CSVHeaders">
+              CSV with headers
+            </el-dropdown-item>
+            <el-dropdown-item command="CSV">
+              CSV without headers
+            </el-dropdown-item>
+            <el-dropdown-item command="TSVHeaders">
+              TSV with headers
+            </el-dropdown-item>
+            <el-dropdown-item command="TSV">
+              TSV without headers
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <el-divider direction="vertical" />
-      <el-icon class="el-icon--right" @click="fullScreen"><FullScreen /></el-icon>
+      <el-icon
+        class="el-icon--right"
+        @click="fullScreen"
+      >
+        <FullScreen />
+      </el-icon>
     </div>
   </section>
 </template>

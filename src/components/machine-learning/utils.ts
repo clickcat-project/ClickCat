@@ -1,4 +1,4 @@
-import echarts from "echarts";
+import echarts from 'echarts'
 import dayjs from 'dayjs'
 
 export function formatResultLineOption (realData: number[], forecastData: number[], realKey: string[], diff: number[]): echarts.EChartsCoreOption {
@@ -60,7 +60,7 @@ export function formatResultLineOption (realData: number[], forecastData: number
         }
       },
     ],
-  };
+  }
 }
 
 export const formatData = (data: { '0': { '0': any, '1': any } }) => {
@@ -70,7 +70,7 @@ export const formatData = (data: { '0': { '0': any, '1': any } }) => {
   const forecastData = realKey.map((key, i) => {
     return forecast[i]
   })
-  let diff: any[] = []
+  const diff: any[] = []
   Object.keys(forecast).forEach((key: any) => {
     const effectNum = forecast[key] * 0.1
     const less = forecast[key] - effectNum
