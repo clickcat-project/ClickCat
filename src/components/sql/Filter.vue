@@ -6,6 +6,8 @@ import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
 import { ColumnCommand } from './types'
 // import { useLoginStore } from '@/store'
+import tableImg from '@/assets/images/sql/table.svg'
+import databaseImg from '@/assets/images/sql/database.svg'
 
 const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
@@ -148,6 +150,10 @@ defineExpose({
                 @command="(command) => clickCommand(node, command)"
               >
                 <span class="custom-tree-node has-dropdown">
+                  <img
+                    :src="tableImg"
+                    alt=""
+                  >
                   <span>{{ node.label }}</span>
                 </span>
                 <template #dropdown>
@@ -183,9 +189,16 @@ defineExpose({
           </template>
           <template v-else>
             <span class="custom-tree-node">
+              <img
+                :src="databaseImg"
+                alt=""
+              >
               <span>{{ node.label }}</span>
             </span>
-            <span class="suffix">{{ node.data.children.length }}</span>
+            <span
+              v-if="!node.data.isRoot"
+              class="suffix"
+            >{{ node.data.children.length }}</span>
           </template>
         </template>
       </el-tree>
@@ -227,7 +240,11 @@ defineExpose({
     background-color: unset;
   }
   .custom-tree-node {
+    display: flex;
     color: rgba(255, 255, 255, .85);
+    img {
+      margin-right: 3px;
+    }
   }
   // :deep(.no-back > .el-tree-node__content){
   //   height: 56px;

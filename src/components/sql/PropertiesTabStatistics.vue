@@ -5,6 +5,7 @@ import { queryPropertiesStatistics } from './query'
 
 const tableData = ref<any[]>([])
 const columns = ref<any[]>([])
+const loading = ref<boolean>(false)
 
 const props = defineProps<{
   tab: TabItem
@@ -15,10 +16,14 @@ onBeforeMount(() => {
 })
 
 const queryData = () => {
+  loading.value = true
   queryPropertiesStatistics(props.tab.node)
     .then(res => {
       columns.value = res.columns
       tableData.value = res.tableData
+    })
+    .finally(() => {
+      loading.value = false
     })
 }
 </script>
@@ -28,6 +33,7 @@ const queryData = () => {
     class="properties-tab-statistice"
   >
     <el-table
+      v-loading="loading"
       :data="tableData"
       style="width: 100%;"
       height="100%"
