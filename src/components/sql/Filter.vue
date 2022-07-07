@@ -73,21 +73,11 @@ const changeSelected = (val: string) => {
   if (selectedColumnObj.value) {
     selectedColumnObj.value.selected = false
   }
-  // console.log(rest, 'changeSelected')
   const selectedColumn = columns.value.find((item: any) => item.name ===val)
   selectedColumnObj.value = selectedColumn
-  // console.log(selectedColumn, 'selectedColumn')
-  // const database = tree.value[0].children.find((item: any) => item.name === selectedColumn.database)
-  // const table = database.children.find((item: any) => item.name === selectedColumn.table)
-  // const treeColumn = table.children.find((item: any) => item.name === selectedColumn.name)
-  // selectedColumn.selected = true
-  // console.log(treeColumn, '000000')
-  // console.log(treeColumn === selectedColumn, '1111111')
   selectedColumn.selected = true
-  // defaultExpandKeys.value.push(selectedColumn.database, selectedColumn.table)
   treeInstance.value.store.nodesMap[selectedColumn.database].expanded = true
   treeInstance.value.store.nodesMap[selectedColumn.table].expanded = true
-  // console.log(treeInstance.value.store.nodesMap, 'treeInstance.value.store.nodesMap')
 }
 
 const getDragEle = () => {
