@@ -1,14 +1,14 @@
 <script lang='ts' setup>
-import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue';
-import dayjs from 'dayjs';
+import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import dayjs from 'dayjs'
 import * as echarts from 'echarts/core'
 import type { FormInstance, FormRules } from 'element-plus'
 
-import sqls from '@/components/metrics/dataAnalysis/sqls';
-import { query } from '@/utils/http';
-import { formatBarOptions, generateBarInstance } from '@/components/metrics/charts/useBar';
+import sqls from '@/components/metrics/dataAnalysis/sqls'
+import { query } from '@/utils/http'
+import { formatBarOptions, generateBarInstance } from '@/components/metrics/charts/useBar'
 import { addTraining as addTrainingQuery } from '../query'
-import { useLoginStore } from '@/store';
+import { useLoginStore } from '@/store'
 
 type List = {name: string}[]
 
@@ -103,7 +103,7 @@ onBeforeMount(() => {
 onMounted(() => {
   if (renderer.value) {
     chartInstance = generateBarInstance(renderer.value)
-    chartInstance.setOption(formatBarOptions());
+    chartInstance.setOption(formatBarOptions())
   }
 })
 
@@ -227,11 +227,13 @@ const changeTimeRange = () => {
 </script>
 <template>
   <section class="ml-add-container">
-    <h3 class="title">{{ title }}</h3>
+    <h3 class="title">
+      {{ title }}
+    </h3>
     <el-form
+      ref="ruleFormRef"
       label-position="right"
       label-width="100px"
-      ref="ruleFormRef"
       :rules="rules"
       :model="formLabelAlign"
       class="ml-add-form"
@@ -239,12 +241,15 @@ const changeTimeRange = () => {
       status-icon
     >
       <template v-if="step === 1">
-        <el-form-item label="Database" prop="database">
+        <el-form-item
+          label="Database"
+          prop="database"
+        >
           <el-select
             v-model="formLabelAlign.database"
-            @change="changeDatabase"
             popper-class="primary-select-dropdown"
             placeholder="Select Database"
+            @change="changeDatabase"
           >
             <el-option
               v-for="item in database"
@@ -254,14 +259,17 @@ const changeTimeRange = () => {
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="Tables" prop="table">
+        <el-form-item
+          label="Tables"
+          prop="table"
+        >
           <el-select
             v-model="formLabelAlign.table"
             popper-class="primary-select-dropdown" 
             placeholder="Select Table"
             filterable
-            @change="changeTable"
             style="width: 600px"
+            @change="changeTable"
           >
             <el-option
               v-for="item in tables"
@@ -274,14 +282,17 @@ const changeTimeRange = () => {
       </template>
       
       <template v-if="step === 2">
-        <el-form-item label="Time  Field" prop="timeField">
+        <el-form-item
+          label="Time  Field"
+          prop="timeField"
+        >
           <el-select
             v-model="formLabelAlign.timeField"
             popper-class="primary-select-dropdown" 
             placeholder="Select Time Field"
             filterable
-            @change="changeField"
             style="width: 600px"
+            @change="changeField"
           >
             <el-option
               v-for="item in timeField"
@@ -291,7 +302,10 @@ const changeTimeRange = () => {
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="Time  Range" prop="timeRange">
+        <el-form-item
+          label="Time  Range"
+          prop="timeRange"
+        >
           <!-- <el-date-picker
             v-model="formLabelAlign.timeRange"
             type="daterange"
@@ -324,18 +338,37 @@ const changeTimeRange = () => {
         </el-form-item>
       </template>
       <template v-if="step === 3">
-        <el-form-item label="Job Name" prop="jobName">
-          <el-input v-model="formLabelAlign.jobName" placeholder="Please input" />
+        <el-form-item
+          label="Job Name"
+          prop="jobName"
+        >
+          <el-input
+            v-model="formLabelAlign.jobName"
+            placeholder="Please input"
+          />
         </el-form-item>
       </template>
     </el-form>
 
-    <section v-if="step === 2" ref="renderer" class="charts-renderer-box"></section>
+    <section
+      v-if="step === 2"
+      ref="renderer"
+      class="charts-renderer-box"
+    ></section>
 
     <section class="btn">
-      <el-button class="custom-default-btn" @click="previousStep">Previous</el-button>
-      <el-button class="custom-primary-btn" type="primary" @click="nextStep">
-        {{step !== 3 ? 'Next' : 'End'}}
+      <el-button
+        class="custom-default-btn"
+        @click="previousStep"
+      >
+        Previous
+      </el-button>
+      <el-button
+        class="custom-primary-btn"
+        type="primary"
+        @click="nextStep"
+      >
+        {{ step !== 3 ? 'Next' : 'End' }}
       </el-button>
     </section>
   </section>

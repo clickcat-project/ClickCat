@@ -6,6 +6,7 @@ import VitePages from 'vite-plugin-pages'
 import proxy from './config/vite/proxy'
 import { APP_TITLE, VITE_PORT } from './config/constant'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -32,6 +33,7 @@ export default defineConfig({
   },
   plugins: [
     vue(), 
+    monacoEditorPlugin(),
     VitePages({
       dirs: 'src/views',
       exclude: ['**/components/*.vue', '**/views/**/login.vue']

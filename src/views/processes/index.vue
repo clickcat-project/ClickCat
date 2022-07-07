@@ -5,13 +5,13 @@
 }
 </route>
 <script lang='ts' setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { Close, Refresh } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus'
 
-import CommonTableVue from '@/components/CommonTable.vue';
-import { queryProcesses, queryMutations } from '@/components/processes/query';
-import { query } from '@/utils/http';
+import CommonTableVue from '@/components/CommonTable.vue'
+import { queryProcesses, queryMutations } from '@/components/processes/query'
+import { query } from '@/utils/http'
 
 type ListItem = {
   name: string,
@@ -92,26 +92,56 @@ const refresh = () => {
 <template>
   <section class="processes-container">
     <section class="table-btn">
-      <div class="btn" @click="kill">
-        <el-icon color="#FF4D4F" style="margin-right: 8px;">
+      <div
+        class="btn"
+        @click="kill"
+      >
+        <el-icon
+          color="#FF4D4F"
+          style="margin-right: 8px;"
+        >
           <Close />
         </el-icon>
         <span>Kill</span>
       </div>
       <el-divider direction="vertical" />
-      <div class="btn" @click="refresh">
-        <el-icon color="#59595F" style="margin-right: 8px;">
+      <div
+        class="btn"
+        @click="refresh"
+      >
+        <el-icon
+          color="#59595F"
+          style="margin-right: 8px;"
+        >
           <Refresh />
         </el-icon>
         <span>Refresh</span>
       </div>
     </section>
-    <el-tabs type="border-card" v-model="defaultCard">
-      <el-tab-pane label="Processes" name="Processes">
-        <CommonTableVue ref="processesRef" :query-func="queryProcesses" @selection-change="changeProcesses"></CommonTableVue>
+    <el-tabs
+      v-model="defaultCard"
+      type="border-card"
+    >
+      <el-tab-pane
+        label="Processes"
+        name="Processes"
+      >
+        <CommonTableVue
+          ref="processesRef"
+          :query-func="queryProcesses"
+          @selection-change="changeProcesses"
+        ></CommonTableVue>
       </el-tab-pane>
-      <el-tab-pane label="Mutations" :lazy="true" name="Mutations">
-        <CommonTableVue ref="mutationsRef" :query-func="queryMutations" @selection-change="changeMutations"></CommonTableVue>
+      <el-tab-pane
+        label="Mutations"
+        :lazy="true"
+        name="Mutations"
+      >
+        <CommonTableVue
+          ref="mutationsRef"
+          :query-func="queryMutations"
+          @selection-change="changeMutations"
+        ></CommonTableVue>
       </el-tab-pane>
     </el-tabs>
   </section>

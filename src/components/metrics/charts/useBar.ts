@@ -5,8 +5,8 @@ import { CanvasRenderer } from 'echarts/renderers'
 
 echarts.use([BarChart, GridComponent, TooltipComponent, CanvasRenderer])
 export interface dataItem {
-  name: string;
-  value: number;
+  name: string
+  value: number
 }
 
 export function generateBarInstance(root: HTMLElement): echarts.ECharts {
