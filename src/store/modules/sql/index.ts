@@ -17,8 +17,8 @@ export const useSqlStore = defineStore(
           name:  firstDate,
           sql: '',
           type: TabsType.Editor,
-          node: {} as TabItem
-        }
+          node: {} as TableItem
+        } as TabItem
       ],
       activeTabs: firstDate,
       addSqlIsCommand: false,
@@ -72,8 +72,8 @@ export const useSqlStore = defineStore(
       removeTabs(index: number) {
         this.tabs.splice(index, 1)
       },
-      setActiveTabs (val: string) {
-        this.activeTabs = val
+      setActiveTabs (val?: string) {
+        val && (this.activeTabs = val)
       },
       toggleAddSqlIsCommand () {
         this.addSqlIsCommand = !this.addSqlIsCommand
