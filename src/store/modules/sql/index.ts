@@ -17,7 +17,7 @@ export const useSqlStore = defineStore(
           name:  firstDate,
           sql: '',
           type: TabsType.Editor,
-          node: ''
+          node: {} as TabItem
         }
       ],
       activeTabs: firstDate,
@@ -65,7 +65,7 @@ export const useSqlStore = defineStore(
           title: `SQL_${this.tabs.length + 1}`,
           sql: '',
           type: TabsType.Editor,
-          node: '',
+          node: {} as TableItem,
           ...tab
         })
       },
