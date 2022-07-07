@@ -58,6 +58,7 @@ export const useSqlStore = defineStore(
           node: node as any
         })
         this.activeTabs = currentKey
+        return currentKey
       },
       addEditorTabs (tab: TabItem = {}) {
         this.tabs.push({

@@ -44,7 +44,7 @@ const activeName = ref<string>('Data')
   & > :deep(.el-tabs__header) {
     margin-bottom: 0;
     background-color: #f0f0f0;
-    border-bottom: 0;
+    // border-bottom: 0;
   }
   & > :deep(.el-tabs__header .el-tabs__item.is-active) {
     color: #fff;

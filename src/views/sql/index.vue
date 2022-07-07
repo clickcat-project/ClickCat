@@ -19,6 +19,7 @@ const sqlStore = useSqlStore()
 const filterInstance = ref<any>()
 const filterContainer = ref<HTMLElement>()
 const sqlContainer = ref<HTMLElement>()
+const EditorTabsInstance = ref<any>()
 
 onMounted(() => {
   const dragElement = filterInstance.value.getDragEle() as HTMLElement
@@ -51,7 +52,8 @@ const tableCommand = ({node, command}: any) => {
       setTimeout(() => sqlStore.toggleAddSqlIsCommand())
       break
     case ColumnCommand.OpenTable:
-      sqlStore.addTableTabs(node.data)
+      const key = sqlStore.addTableTabs(node.data)
+      EditorTabsInstance.value.setEditableTabsValue(key)
       break
     case ColumnCommand.MakeSqlDescribe:
       getSqlDescribe(node.data)
@@ -79,7 +81,7 @@ const tableCommand = ({node, command}: any) => {
       />
     </aside>
     <section class="content">
-      <EditorTabsVue />
+      <EditorTabsVue ref="EditorTabsInstance" />
     </section>
   </section>
 </template>

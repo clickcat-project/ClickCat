@@ -48,6 +48,14 @@ const removeTabs = (val: any) => {
     sqlStore.removeTabs(index)
   }
 }
+
+const setEditableTabsValue = (val: string) => {
+  editableTabsValue.value = val
+}
+
+defineExpose({
+  setEditableTabsValue
+})
 </script>
 <template>
   <section class="editor-tabs-container">
