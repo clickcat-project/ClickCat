@@ -5,9 +5,10 @@ import { Search } from '@element-plus/icons-vue'
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
 import { ColumnCommand } from './types'
+// import { useLoginStore } from '@/store'
 
-// const sqlStore = useSqlStore()
 const emit = defineEmits(['tableCommand'])
+// const loginStore = useLoginStore()
 
 const columns = ref<any[]>([])
 const tree = ref<any[]>([])
@@ -16,10 +17,23 @@ const seletedColumn = ref<string>()
 const selectedColumnObj = ref<any>()
 const treeInstance = ref<any>()
 const dataloading = ref<boolean>(false)
+const dragEle = ref<HTMLElement>()
 const br = '\n'
 
 onBeforeMount(() => {
+  // dataloading.value = true
+  // var worker = new Worker('worker.js');
+  // worker.onmessage = (e) => {
+  //   const realData = JSON.parse(e.data)
+  //   columns.value = realData.columns
+  //   tree.value = realData.tree
+  //   defaultExpandKeys.value = [tree.value[0].name]
+  //   dataloading.value = false
+  // }
+  // worker.postMessage(JSON.stringify(loginStore.connection))
+  
   dataloading.value = true
+  
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {
       const dataArr = res.map(item => item.data)
@@ -63,10 +77,22 @@ const changeSelected = (val: string) => {
   treeInstance.value.store.nodesMap[selectedColumn.table].expanded = true
   // console.log(treeInstance.value.store.nodesMap, 'treeInstance.value.store.nodesMap')
 }
+
+const getDragEle = () => {
+  return dragEle.value
+}
+
+defineExpose({
+  getDragEle
+})
 </script>
 
 <template>
   <section class="siderbar-content">
+    <div
+      ref="dragEle"
+      class="drag-box"
+    ></div>
     <div
       v-if="dataloading"
       v-loading="true"
@@ -169,9 +195,21 @@ const changeSelected = (val: string) => {
 
 <style lang="scss" scoped>
 .siderbar-content {
+  position: relative;
   height: 100%;
   padding: 30px 10px;
   box-sizing: border-box;
+  .drag-box {
+    position: absolute;
+    right: 4px;
+    top: calc(50% - 15px);
+    width: 8px;
+    height: 30px;
+    border-left: 3px solid rgba(255, 255, 255, 0.2);
+    border-right: 3px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box;
+    cursor: ew-resize;
+  }
   .loading {
     position: fixed;
     top: 0;

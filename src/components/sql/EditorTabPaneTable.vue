@@ -174,6 +174,7 @@ defineExpose({
   .drag-box {
     height: 36px;
     background-color: #F0F0F0;
+    cursor: ns-resize;
   }
 
   .table-title {
