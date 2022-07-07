@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
+import { Search, Refresh } from '@element-plus/icons-vue'
 
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
@@ -8,6 +8,7 @@ import { ColumnCommand } from './types'
 // import { useLoginStore } from '@/store'
 import tableImg from '@/assets/images/sql/table.svg'
 import databaseImg from '@/assets/images/sql/database.svg'
+import SvgIcon from '../SvgIcon/index.vue'
 
 const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
@@ -20,6 +21,7 @@ const selectedColumnObj = ref<any>()
 const treeInstance = ref<any>()
 const dataloading = ref<boolean>(false)
 const dragEle = ref<HTMLElement>()
+const treeContainerHeight = ref<number>()
 const br = '\n'
 
 onBeforeMount(() => {
@@ -50,6 +52,10 @@ onBeforeMount(() => {
     .finally(() => {
       dataloading.value = false
     })
+})
+
+onMounted(() => {
+  treeContainerHeight.value = document.querySelector('.tree-content')?.getBoundingClientRect().height
 })
 
 const clickCommand = (node: any, command: string) => {
@@ -125,6 +131,8 @@ defineExpose({
     </div>
     <div class="tree-content">
       <!-- , class: () => 'no-back' -->
+      <!-- :height="treeContainerHeight" -->
+      <!-- <el-tree-v2 -->
       <el-tree
         ref="treeInstance"
         :data="tree"
@@ -199,8 +207,23 @@ defineExpose({
               v-if="!node.data.isRoot"
               class="suffix"
             >{{ node.data.children.length }}</span>
+            <span
+              v-else
+              class="root-btn"
+            >
+              <el-icon
+                color="#C4C4C4"
+                :size="16"
+              ><Refresh /></el-icon>
+              <SvgIcon
+                name="svg-shrink"
+                color="#C4C4C4"
+                size="smaller"
+              ></SvgIcon>
+            </span>
           </template>
         </template>
+      <!-- </el-tree-v2> -->
       </el-tree>
     </div>
   </section>
@@ -286,7 +309,7 @@ defineExpose({
 }
 .custom-tree-node {
   position: relative;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 56px;
   z-index: 2;
 }
@@ -305,6 +328,18 @@ defineExpose({
     right: 10px;
     color: rgba(255, 255, 255, 0.45);
     z-index: 2;
+  }
+
+  .root-btn {
+    position: absolute;
+    top: 17px;
+    right: 10px;
+    display: flex;
+    z-index: 2;
+
+    *:hover {
+      color: var(--el-color-primary) !important;
+    }
   }
   .absolute-back {
     position: absolute;

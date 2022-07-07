@@ -88,7 +88,7 @@ const tableCommand = ({node, command}: any) => {
 <style lang='scss' scoped>
 .SQL-container {
   display: grid;
-  grid-template-columns: 290px 1fr;
+  grid-template-columns: 320px 1fr;
   grid-template-rows: 1fr;
   width: 100%;
   height: 100%;

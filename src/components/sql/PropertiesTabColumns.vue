@@ -17,7 +17,6 @@ onBeforeMount(() => {
 const queryData = () => {
   queryPropertiesColumns(props.tab.node)
     .then(res => {
-      console.log(res, '11111111')
       columns.value = res.meta
       tableData.value = res.data
     })

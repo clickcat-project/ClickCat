@@ -174,7 +174,6 @@ const queryTimeField = () => {
 const queryDataForMlSecondStep = () => {
   const isCorrect = isCorrectTime(formLabelAlign.timeRange as any)
   if (!formLabelAlign.timeField || !isCorrect) {
-    console.log(!formLabelAlign.timeField, !isCorrect, '1111111111')
     return
   }
   query(sqls.queryDataForMlSecondStep(

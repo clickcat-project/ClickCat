@@ -38,7 +38,7 @@
       [`sdms-size-${props.size}`]: props.size,
     }
   })
-  const fontSize = reactive({ default: '32px', small: '20px', large: '48px' })
+  const fontSize = reactive({ default: '32px', small: '20px', large: '48px', smaller: '16px' })
 </script>
 <style lang="scss" scoped>
   .svg-icon-spin {
@@ -51,6 +51,11 @@
     &.sdms-size-small {
       font-size: v-bind('fontSize.small');
       height: v-bind('fontSize.small');
+    }
+
+    &.sdms-size-smaller {
+      font-size: v-bind('fontSize.smaller');
+      height: v-bind('fontSize.smaller');
     }
 
     &.sdms-size-large {

@@ -55,7 +55,6 @@ const initEditor = () => {
     if (timer) {
       clearTimeout(timer)
     }
-    console.log('11111111')
     timer = setTimeout(() => {
       emit('change', editorInstance.getValue())
     }, 300)
