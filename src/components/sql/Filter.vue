@@ -36,6 +36,14 @@ onBeforeMount(() => {
   // }
   // worker.postMessage(JSON.stringify(loginStore.connection))
   
+  getTreeData()
+})
+
+onMounted(() => {
+  treeContainerHeight.value = document.querySelector('.tree-content')?.getBoundingClientRect().height
+})
+
+const getTreeData = () => {
   dataloading.value = true
   
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
@@ -52,11 +60,7 @@ onBeforeMount(() => {
     .finally(() => {
       dataloading.value = false
     })
-})
-
-onMounted(() => {
-  treeContainerHeight.value = document.querySelector('.tree-content')?.getBoundingClientRect().height
-})
+}
 
 const clickCommand = (node: any, command: string) => {
   emit('tableCommand', {
@@ -88,6 +92,18 @@ const changeSelected = (val: string) => {
 
 const getDragEle = () => {
   return dragEle.value
+}
+
+const refreshTree = () => {
+  getTreeData()
+}
+
+const shrinkAll = () => {
+  Object.keys(treeInstance.value.store.nodesMap).forEach(key => {
+    if (treeInstance.value.store.nodesMap[key].expanded) {
+      treeInstance.value.store.nodesMap[key].expanded = false
+    }
+  })
 }
 
 defineExpose({
@@ -214,11 +230,13 @@ defineExpose({
               <el-icon
                 color="#C4C4C4"
                 :size="16"
+                @click="refreshTree"
               ><Refresh /></el-icon>
               <SvgIcon
                 name="svg-shrink"
                 color="#C4C4C4"
                 size="smaller"
+                @click="shrinkAll"
               ></SvgIcon>
             </span>
           </template>
