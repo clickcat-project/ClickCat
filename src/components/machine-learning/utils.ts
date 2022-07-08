@@ -172,7 +172,6 @@ export const formatData = (data: { '0': { '0': any, '1': any } }) => {
   const realKeyFormat = realKey.map(item => {
     return dayjs(+item).format('YYYY-MM-DD HH:mm:ss')
   })
-  console.log(lessForecast, biggerForecast, '11111111')
   return {
     realData, forecastData, realKeyFormat, diff,
     lessForecast,

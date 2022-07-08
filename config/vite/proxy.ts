@@ -6,7 +6,6 @@ const init: ProxyTargetList = {
     target: 'http://172.16.1.192:8080/',
     changeOrigin: true,
     rewrite: (path) => {
-      console.log(path, 'path')
       return path.replace(/^\/ml/, '')
     }
   },

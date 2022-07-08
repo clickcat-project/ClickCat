@@ -45,8 +45,6 @@ const getData = () => {
         }
       })
       tableData.value = res.data
-      console.log(columns.value, 'columns.value')
-      console.log(tableData.value, 'tableData.value')
     })
 }
 

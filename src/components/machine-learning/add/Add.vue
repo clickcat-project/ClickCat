@@ -148,10 +148,8 @@ const addTraining = (queryData: any) => {
 
 const nextStep = async () => {
   if (step.value < 3) {
-    console.log(ruleFormRef.value, 'ruleFormRef.value')
     await ruleFormRef.value?.validate((valid, fields) => {
       if (valid) {
-        console.log('submit!')
         ++step.value
       } else {
         console.log('error submit!', fields)
