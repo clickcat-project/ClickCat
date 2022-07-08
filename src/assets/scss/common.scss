@@ -66,3 +66,35 @@
 .el-dropdown-menu__item:not(.is-disabled):focus {
   background-color: rgba(255, 187, 51, .1);
 }
+
+.input-with-select-with-gap.el-input-group--append > .el-input__wrapper {
+  margin-right: 10px;
+}
+
+.input-with-select-with-gap.el-input-group--append .el-input__wrapper {
+  border-radius: 4px;
+}
+.el-input-group--append.input-with-select-with-gap .el-input-group__append .el-select .el-input .el-input__wrapper {
+  border-radius: 4px;
+  
+}
+
+.el-input-group--append.input-with-select-with-gap .el-input-group__append {
+  border-left: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
+
+.change-title-css.el-dialog {
+  border-radius: 6px;
+}
+
+.change-title-css .el-dialog__header {
+  padding: 16px 30px;
+  margin-right: 0;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.change-title-css .el-dialog__headerbtn {
+  top: 4px;
+}

@@ -21,24 +21,40 @@ const database = ref<List>([])
 const tables = ref<List>([])
 const timeField = ref<List>([])
 const step = ref<number>(1)
+const timeIntervalUnit = ref<string>('day')
+const timeInterval = ref<string>('1')
 const formLabelAlign = reactive<{
   database: string,
   table: string,
   timeField: string,
   timeRange: any,
-  jobName: string
+  jobName: string,
+  timeInterval?: string,
 }>({
   database: '',
   table: '',
   timeField: '',
   timeRange: '',
-  jobName: ''
+  jobName: '',
+  timeInterval: '1 day'
 })
 
 const validateTimeRange = (rule: any, value: any, callback: any) => {
   const isCorrect = isCorrectTime(value)
   if (!isCorrect) {
     callback(new Error('Start date cannot be later than end date'))
+  } else {
+    callback()
+  }
+}
+
+const validateTimeInterval = (rule: any, value: any, callback: any) => {
+  const timeInterval = value.replace(` ${timeIntervalUnit.value}`, '')
+  if (!timeInterval) {
+    return callback(new Error('please input time interval'))
+  }
+  if (!(/^[0-9]*$/.test(timeInterval))) {
+    callback(new Error('please use number'))
   } else {
     callback()
   }
@@ -74,6 +90,13 @@ const rules = reactive<FormRules>({
       required: true,
       message: 'Please input job name',
       trigger: 'blur',
+    }
+  ],
+  timeInterval: [
+    {
+      required: true,
+      validator: validateTimeInterval,
+      trigger: 'change',
     }
   ]
 })
@@ -223,6 +246,14 @@ const isCorrectTime = (times: Date[]) => {
 const changeTimeRange = () => {
   queryDataForMlSecondStep()
 }
+
+const chnageInterval = (val: string) => {
+  formLabelAlign.timeInterval = val + ' ' + timeIntervalUnit.value
+}
+
+const changeIntervalUnit = (val: string) => {
+  formLabelAlign.timeInterval = timeInterval.value + ' ' + val
+}
 </script>
 <template>
   <section class="ml-add-container">
@@ -232,7 +263,7 @@ const changeTimeRange = () => {
     <el-form
       ref="ruleFormRef"
       label-position="right"
-      label-width="100px"
+      label-width="110px"
       :rules="rules"
       :model="formLabelAlign"
       class="ml-add-form"
@@ -335,6 +366,37 @@ const changeTimeRange = () => {
             @change="changeTimeRange"
           />
         </el-form-item>
+        <el-form-item
+          label="Time  Interval"
+          prop="timeInterval"
+        >
+          <el-input
+            v-model="timeInterval"
+            placeholder="Please input"
+            class="input-with-select-with-gap width100"
+            :disabled="true"
+            @input="chnageInterval"
+          >
+            <template #append>
+              <el-select
+                v-model="timeIntervalUnit"
+                placeholder="Select"
+                style="width: 100px"
+                :disabled="true"
+                @change="changeIntervalUnit"
+              >
+                <el-option
+                  label="day"
+                  value="day"
+                />
+                <el-option
+                  label="hours"
+                  value="hours"
+                />
+              </el-select>
+            </template>
+          </el-input>
+        </el-form-item>
       </template>
       <template v-if="step === 3">
         <el-form-item
@@ -412,6 +474,10 @@ const changeTimeRange = () => {
     display: inline-block;
     margin: 0 10px;
     color: #C9C9C9;
+  }
+
+  .width100>:deep(.el-input__wrapper) {
+    max-width: 82px;
   }
 }
 </style>
