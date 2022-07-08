@@ -1,7 +1,23 @@
 import echarts from 'echarts'
 import dayjs from 'dayjs'
 
-export function formatResultLineOption (realData: number[], forecastData: number[], realKey: string[], diff: number[]): echarts.EChartsCoreOption {
+type DataType = {
+  realData?: number[],
+  forecastData?: number[],
+  realKey?: string[],
+  diff?: number[],
+  lessForecast?: number[],
+  biggerForecast?: number[]
+}
+
+export function formatResultLineOption ({
+  realData,
+  lessForecast,
+  biggerForecast,
+  realKey,
+  forecastData,
+  diff
+}: DataType): echarts.EChartsCoreOption {
   return {
     tooltip: {
       trigger: 'axis',
@@ -26,11 +42,15 @@ export function formatResultLineOption (realData: number[], forecastData: number
     ],
     yAxis: [
       {
+        splitLine: {
+          show: false
+        },
         type: 'value',
       },
     ],
     series: [
       {
+        name: 'diff with forecast',
         data: diff,
         type: 'scatter',
         z: 10,
@@ -40,6 +60,7 @@ export function formatResultLineOption (realData: number[], forecastData: number
         }
       },
       {
+        name: 'real',
         data: realData,
         type: 'line',
         symbol: 'none',
@@ -49,30 +70,98 @@ export function formatResultLineOption (realData: number[], forecastData: number
         },
         z: 9
       },
+      // {
+      //   name: 'forcast',
+      //   data: forecastData,
+      //   type: 'line',
+      //   symbol: 'none',
+      //   // lineStyle: {
+      //   //   opacity: 0
+      //   // }, // 隐藏线
+      //   // areaStyle: {
+      //   //   color: 'rgba(78, 203, 180, 0.3)'
+      //   // },
+      //   lineStyle: {
+      //     color: 'rgba(78, 203, 180, 0.3)',
+      //     width: 0
+      //   },
+      //   markArea: {
+      //     data: lessForecast?.map((item, i) => {
+      //       if (!item) {
+      //         return undefined
+      //       }
+      //       return [
+      //         {
+      //           type: 'min',
+      //           x: (realKey as string[])[i],
+      //           y: item
+      //         },
+      //         {
+      //           type: 'max',
+      //           x: (realKey as string[])[i],
+      //           y: (biggerForecast as number[])[i]
+      //         }
+      //       ]
+      //     })
+      //   }
+      // },
       {
-        data: forecastData,
+        name: 'forcast max',
+        data: biggerForecast,
         type: 'line',
         symbol: 'none',
-        z: 8,
         lineStyle: {
-          color: 'rgba(78, 203, 180, 0.3)',
-          width: 30
-        }
+          opacity: 0
+        }, // 隐藏线
+        areaStyle: {
+          color: 'rgba(78, 203, 180, 0.3)'
+        },
+        // lineStyle: {
+        //   color: 'rgba(78, 203, 180, 0.3)',
+        //   width: 30
+        // }
+      },
+      {
+        name: 'forcast min',
+        data: lessForecast,
+        type: 'line',
+        symbol: 'none',
+        lineStyle: {
+          opacity: 0
+        }, // 隐藏线
+        areaStyle: {
+          opacity: 1,
+          color: '#fff'
+        },
+        // lineStyle: {
+        //   color: 'rgba(78, 203, 180, 0.3)',
+        //   width: 30
+        // }
       },
     ],
   }
 }
 
 export const formatData = (data: { '0': { '0': any, '1': any } }) => {
+  const effect = 0.4
   const {0: {count: real}, 1: {pred: forecast}} = data['0']
   const realKey = Object.keys(real).sort()
   const realData = realKey.map(key => real[key])
-  const forecastData = realKey.map((key, i) => {
-    return forecast[i]
+  const forecastData: number[] = []
+  const lessForecast: number[] = []
+  const biggerForecast: number[] = []
+  realKey.forEach((key, i) => {
+    const effectNum = forecast[i] * effect
+    const less = Math.round(forecast[i] - effectNum)
+    const bigger = Math.round(forecast[i] + effectNum)
+    forecastData.push(forecast[i])
+    lessForecast.push(less)
+    biggerForecast.push(bigger)
   })
   const diff: any[] = []
+  
   Object.keys(forecast).forEach((key: any) => {
-    const effectNum = forecast[key] * 0.1
+    const effectNum = forecast[key] * effect
     const less = forecast[key] - effectNum
     const bigger = forecast[key] + effectNum
     const realVal = real[realKey[key]]
@@ -83,5 +172,10 @@ export const formatData = (data: { '0': { '0': any, '1': any } }) => {
   const realKeyFormat = realKey.map(item => {
     return dayjs(+item).format('YYYY-MM-DD HH:mm:ss')
   })
-  return [realData, forecastData, realKeyFormat, diff]
+  console.log(lessForecast, biggerForecast, '11111111')
+  return {
+    realData, forecastData, realKeyFormat, diff,
+    lessForecast,
+    biggerForecast,
+  }
 }

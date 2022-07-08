@@ -33,9 +33,16 @@ onMounted(() => {
 const queryDataAndShowCharts = async () => {
   loading.value = true
   try {
-    const {realData, forecastData, realKey, diff} = await queryResultForMl(loginStore.connection, props.selectedItem)
+    const {
+      realData,
+      lessForecast,
+      biggerForecast,
+      forecastData,
+      realKey,
+      diff
+    } = await queryResultForMl(loginStore.connection, props.selectedItem)
     const echartsInstance = echarts.init(renderer.value as HTMLElement)
-    echartsInstance.setOption(formatResultLineOption(realData, forecastData, realKey, diff))
+    echartsInstance.setOption(formatResultLineOption({realData, forecastData, realKey, diff, lessForecast, biggerForecast}))
     loading.value = false
   } catch (error) {
     loading.value = false
