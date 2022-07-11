@@ -137,7 +137,7 @@ const queryFunction = (
             :user="userReal"
             :query-kind="queryKindReal"
             :time-duration="timeDuration"
-            unit="milliseconds"
+            unit="ms"
           ></count>
         </el-col>
       </el-row>
@@ -249,7 +249,10 @@ const queryFunction = (
           ></ChartsVue>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="margin-bottom: 0;">
+      <el-row
+        :gutter="10"
+        style="margin-bottom: 0;"
+      >
         <el-col :span="24">
           <!-- <VirtualizedTableVue
             title="Query overview"
