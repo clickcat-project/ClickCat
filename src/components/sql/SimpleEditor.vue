@@ -37,6 +37,7 @@ const editorRenderer = ref<HTMLElement>()
 const simpleEditorContainer = ref<HTMLElement>()
 
 watch(() => props.tab.sql, (newVal) => {
+  console.log(sqlStore.addSqlIsCommand, '11111111111')
   sqlStore.addSqlIsCommand && editorInstance.setValue(newVal as string)
 })
 onMounted(() => {

@@ -136,103 +136,108 @@ defineExpose({
       </div>
     </div>
     <div class="tree-content">
-      <!-- , class: () => 'no-back' -->
-      <!-- :height="treeContainerHeight" -->
-      <!-- <el-tree-v2 -->
-      <el-tree
-        ref="treeInstance"
-        :data="tree"
-        node-key="name"
-        :default-expanded-keys="defaultExpandKeys"
-        render-after-expand
-        auto-expand-parent
-        :props="{children: 'children', label: 'name'}"
-        :expand-on-click-node="false"
-      >
-        <template #default="{ node }">
-          <template v-if="node.data.database && !node.data.table">
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              popper-class="click-cat-dark"
-              :content="`${node.data.engine}${br}${node.data.size}`"
-              placement="right"
-            >
-              <el-dropdown
-                trigger="contextmenu"
-                popper-class="dark"
-                @command="(command) => clickCommand(node, command)"
+      <el-scrollbar>
+        <!-- , class: () => 'no-back' -->
+        <!-- :height="treeContainerHeight" -->
+        <!-- <el-tree-v2 -->
+        <el-tree
+          ref="treeInstance"
+          :data="tree"
+          node-key="name"
+          :default-expanded-keys="defaultExpandKeys"
+          render-after-expand
+          auto-expand-parent
+          :props="{children: 'children', label: 'name'}"
+          :expand-on-click-node="false"
+        >
+          <template #default="{ node }">
+            <template v-if="node.data.database && !node.data.table">
+              <el-tooltip
+                class="box-item"
+                effect="dark"
+                popper-class="click-cat-dark"
+                :content="`${node.data.engine}${br}${node.data.size}`"
+                placement="right"
+              >
+                <el-dropdown
+                  trigger="contextmenu"
+                  popper-class="dark"
+                  @command="(command) => clickCommand(node, command)"
+                >
+                  <span
+                    class="custom-tree-node has-dropdown"
+                    @dblclick="() => clickCommand(node, ColumnCommand.OpenTable)"
+                  >
+                    <img
+                      :src="tableImg"
+                      alt=""
+                    >
+                    <span>{{ node.label }}</span>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item :command="ColumnCommand.OpenTable">
+                        Open table
+                      </el-dropdown-item>
+                      <el-dropdown-item :command="ColumnCommand.MakeSelect">
+                        Make SELECT
+                      </el-dropdown-item>
+                      <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">
+                        Make SQL Describe
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </el-tooltip>
+            </template>
+            <template v-else-if="node.data.database && node.data.table">
+              <el-tooltip
+                class="box-item"
+                effect="dark"
+                popper-class="click-cat-dark"
+                :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
+                placement="right"
               >
                 <span class="custom-tree-node has-dropdown">
-                  <img
-                    :src="tableImg"
-                    alt=""
-                  >
                   <span>{{ node.label }}</span>
                 </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item :command="ColumnCommand.OpenTable">
-                      Open table
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="ColumnCommand.MakeSelect">
-                      Make SELECT
-                    </el-dropdown-item>
-                    <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">
-                      Make SQL Describe
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </el-tooltip>
-          </template>
-          <template v-else-if="node.data.database && node.data.table">
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              popper-class="click-cat-dark"
-              :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
-              placement="right"
-            >
-              <span class="custom-tree-node has-dropdown">
+              </el-tooltip>
+              <!-- <span class="suffix">{{ node.data.type }}</span> -->
+              <div :class="`absolute-back ${node.data.selected ? 'active' : ''}`"></div>
+            </template>
+            <template v-else>
+              <span class="custom-tree-node">
+                <img
+                  :src="databaseImg"
+                  alt=""
+                >
                 <span>{{ node.label }}</span>
               </span>
-            </el-tooltip>
-            <span class="suffix">{{ node.data.type }}</span>
-            <div :class="`absolute-back ${node.data.selected ? 'active' : ''}`"></div>
-          </template>
-          <template v-else>
-            <span class="custom-tree-node">
-              <img
-                :src="databaseImg"
-                alt=""
+              <span
+                v-if="!node.data.isRoot"
+                class="suffix"
+              >{{ node.data.children.length }}</span>
+              <span
+                v-else
+                class="root-btn"
               >
-              <span>{{ node.label }}</span>
-            </span>
-            <span
-              v-if="!node.data.isRoot"
-              class="suffix"
-            >{{ node.data.children.length }}</span>
-            <span
-              v-else
-              class="root-btn"
-            >
-              <el-icon
-                color="#C4C4C4"
-                :size="16"
-                @click="refreshTree"
-              ><Refresh /></el-icon>
-              <SvgIcon
-                name="svg-shrink"
-                color="#C4C4C4"
-                size="smaller"
-                @click="shrinkAll"
-              ></SvgIcon>
-            </span>
+                <el-icon
+                  color="#C4C4C4"
+                  :size="16"
+                  @click="refreshTree"
+                ><Refresh /></el-icon>
+                <SvgIcon
+                  name="svg-shrink"
+                  color="#C4C4C4"
+                  size="smaller"
+                  @click="shrinkAll"
+                ></SvgIcon>
+              </span>
+            </template>
           </template>
-        </template>
-      <!-- </el-tree-v2> -->
-      </el-tree>
+        <!-- </el-tree-v2> -->
+        </el-tree>
+      </el-scrollbar>
     </div>
   </section>
 </template>

@@ -50,7 +50,7 @@ const kill = async () => {
     // KILL QUERY WHERE query_id='2-857d-4a57-9ee0-327da5d60a90' or  query_id='2-857d-4a57-9ee0-327da5d60a90'
     sql = `KILL QUERY WHERE ${idArr?.join(' or ')}`
   } else if (defaultCard.value === 'Mutations') {
-    if (!selectedProcesses.length) {
+    if (!selectedMutations.length) {
       return ElMessage({
         message: 'Please select at least one piece of "Mutations" data.',
         grouping: true,

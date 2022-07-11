@@ -41,12 +41,12 @@ onMounted(() => {
 
 const tableCommand = ({node, command}: any) => {
   const current = sqlStore.tabs.find(tab => tab.name === sqlStore.activeTabs)
-  sqlStore.toggleAddSqlIsCommand()
   // current && (current.sql = '123')
   const oldSql = current?.sql || ''
   let newSql = ''
   switch (command) {
     case ColumnCommand.MakeSelect:
+      sqlStore.toggleAddSqlIsCommand()
       newSql = getMakeSelectSql(node.data)
       current && (current.sql = oldSql + newSql)
       setTimeout(() => sqlStore.toggleAddSqlIsCommand())
@@ -56,6 +56,7 @@ const tableCommand = ({node, command}: any) => {
       EditorTabsInstance.value.setEditableTabsValue(key)
       break
     case ColumnCommand.MakeSqlDescribe:
+      sqlStore.toggleAddSqlIsCommand()
       getSqlDescribe(node.data)
         .then(data => {
           newSql = data
