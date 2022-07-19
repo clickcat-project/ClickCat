@@ -14,6 +14,7 @@ const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
 
 const columns = ref<any[]>([])
+const selectV2Columns = ref<any[]>([])
 const tree = ref<any[]>([])
 const defaultExpandKeys = ref<string[]>([])
 const seletedColumn = ref<string>()
@@ -50,6 +51,7 @@ const getTreeData = () => {
     .then(res => {
       const dataArr = res.map(item => item.data)
       columns.value = dataArr[0]
+      selectV2Columns.value = dataArr[0].map((item: any) => ({ label: item.name, value: `${item.database}.${item.table}.${item.name}`}))
       tree.value = createTree(
         dataArr[0],
         dataArr[1],
@@ -73,11 +75,12 @@ const changeSelected = (val: string) => {
   if (selectedColumnObj.value) {
     selectedColumnObj.value.selected = false
   }
-  const selectedColumn = columns.value.find((item: any) => item.name ===val)
+  const [database, table, currentCol] = val.split('.')
+  const selectedColumn = columns.value.find((item: any) => item.name === currentCol)
   selectedColumnObj.value = selectedColumn
   selectedColumn.selected = true
-  treeInstance.value.store.nodesMap[selectedColumn.database].expanded = true
-  treeInstance.value.store.nodesMap[selectedColumn.table].expanded = true
+  treeInstance.value.store.nodesMap[database].expanded = true
+  treeInstance.value.store.nodesMap[table].expanded = true
 }
 
 const getDragEle = () => {
@@ -113,7 +116,15 @@ defineExpose({
       class="loading"
     ></div>
     <div class="search-box">
-      <el-select
+      <el-select-v2
+        v-model="seletedColumn"
+        filterable
+        :options="selectV2Columns"
+        placeholder="Please select"
+        class="filter-select"
+        @change="changeSelected"
+      />
+      <!-- <el-select
         v-model="seletedColumn"
         filterable
         placeholder="Select"
@@ -128,7 +139,7 @@ defineExpose({
         >
           <span>{{ item.name }}</span>
         </el-option>
-      </el-select>
+      </el-select> -->
       <div class="search-btn">
         <el-icon color="#fff">
           <Search />
@@ -287,17 +298,18 @@ defineExpose({
   //   background-color: unset;
   // }
 }
-.filter-select :deep(.el-input__wrapper) {
+.filter-select :deep(.el-select-v2__wrapper) {
   border-radius: unset;
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
   background-color: rgba(255, 255, 255, .2);
   box-shadow: unset;
+  border-color: rgba(255, 255, 255, 0.2);
 }
-.filter-select :deep(.el-input__suffix) {
+.filter-select :deep(.el-select-v2__suffix) {
   display: none;
 }
-.filter-select :deep(.el-input__inner) {
+.filter-select :deep(.el-select-v2__combobox-input) {
   color: #fff;
 }
 .search-box {

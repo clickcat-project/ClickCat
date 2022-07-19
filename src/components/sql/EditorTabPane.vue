@@ -72,8 +72,11 @@ const fullScreen = async () => {
   reloadSomeElement.value = false
   if (document.fullscreenElement) {
     await document.exitFullscreen()
+    editorContainerRef.value?.classList.remove('editor-tab-pane-container-fullscreen')
   } else {
-    await editorContainerRef.value?.requestFullscreen()
+    // await editorContainerRef.value?.requestFullscreen()
+    await document.body.requestFullscreen()
+    editorContainerRef.value?.classList.add('editor-tab-pane-container-fullscreen')
   }
   reloadSomeElement.value = true
 }
@@ -110,5 +113,13 @@ const fullScreen = async () => {
   grid-template-rows: 330px 1fr;
   height: 100%;
   width: 100%;
+}
+.editor-tab-pane-container-fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
 }
 </style>

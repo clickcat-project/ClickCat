@@ -36,11 +36,11 @@ const addTabs = () => {
   editableTabsValue.value = name
 }
 const removeTabs = (val: any) => {
-  if (tabs.value.length === 1) return
+  // if (tabs.value.length === 1) return
   const index = tabs.value.findIndex(item => item.name === val)
-  if (index > 0) {
+  if (index >= 0) {
     const activetabIndex = tabs.value.findIndex(item => item.name === sqlStore.activeTabs)
-    if (activetabIndex === index) {
+    if (activetabIndex === index && index > 0) {
       const activeTab = tabs.value[index - 1]
       editableTabsValue.value = activeTab.name
       sqlStore.setActiveTabs(activeTab.name)

@@ -2,6 +2,11 @@
   <div class="layout-container">
     <Header></Header>
     <div class="route-container">
+      <!-- <router-view v-slot="{ Component, route }" id="pageWrapper">
+        <keep-alive :include="['SQL']">
+          <component :is="Component" />
+        </keep-alive>
+      </router-view> -->
       <router-view />
     </div>
   </div>

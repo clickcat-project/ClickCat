@@ -48,8 +48,10 @@ const fullScreen = async () => {
   reloadSomeElement.value = false
   if (document.fullscreenElement) {
     await document.exitFullscreen()
+    editorContainerRef.value?.classList.remove('table-pane-data-container-fullscreen')
   } else {
-    await editorContainerRef.value?.requestFullscreen()
+    await document.body.requestFullscreen()
+    editorContainerRef.value?.classList.add('table-pane-data-container-fullscreen')
   }
   reloadSomeElement.value = true
 }
@@ -75,5 +77,13 @@ const fullScreen = async () => {
 .table-pane-data-container {
   width: 100%;
   height: 100%;
+}
+.table-pane-data-container-fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
 }
 </style>

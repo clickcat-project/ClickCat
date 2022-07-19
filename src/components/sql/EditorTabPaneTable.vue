@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
+import Empty from '../metrics/Empty.vue'
 
 defineProps<{
   columns: any[],
@@ -61,6 +62,7 @@ defineExpose({
           tooltip-effect="dark"
           :border="true"
         >
+          <el-table-column type="index" />
           <template
             v-for="col in columns"
             :key="col.name"
@@ -73,6 +75,7 @@ defineExpose({
             />
           </template>
         </el-table>
+        <Empty style="height: 200px"></Empty>
       </div>
     </div>
     <div class="action-box">
