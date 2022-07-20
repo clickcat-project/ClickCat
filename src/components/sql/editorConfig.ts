@@ -1,7 +1,7 @@
-import * as monaco from 'monaco-editor';
+import * as monaco from 'monaco-editor'
 
 export const defaultOptions: monaco.editor.IEditorConstructionOptions = {
-  renderLineHighlight: "none",
+  renderLineHighlight: 'none',
   // tabIndex
   minimap: { enabled: true, maxColumn: 60 },
   selectOnLineNumbers: true,
@@ -9,7 +9,6 @@ export const defaultOptions: monaco.editor.IEditorConstructionOptions = {
   formatOnPaste: true,
   fontFamily: 'Monaco,Menlo,Ubuntu Mono,Consolas,"source-code-pro","monospace"',
   fontSize: 14,
-  lineHeight: 30,
   mouseWheelZoom: true,
   // cursorSmoothCaretAnimation: true,
   fontWeight: 'lighter',
@@ -43,4 +42,4 @@ export const defaultOptions: monaco.editor.IEditorConstructionOptions = {
   fontLigatures: true,
   // Enable auto indentation adjustment. Defaults to false. '"none" | "keep" | "brackets" | "advanced" | "full" | undefined'.
   autoIndent: 'full'
-};
+}

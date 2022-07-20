@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { computed, onBeforeMount, ref } from 'vue'
+import { Plus } from '@element-plus/icons-vue' 
 import { useSqlStore } from '@/store'
 
 import { TabsType } from './types'
@@ -59,13 +60,19 @@ defineExpose({
 </script>
 <template>
   <section class="editor-tabs-container">
+    <span
+      class="add-tab-btn"
+      @click="addTabs"
+    >
+      <el-icon><Plus /></el-icon>
+      Add new tab
+    </span>
     <el-tabs
       v-model="editableTabsValue"
       type="card"
-      editable
+      closable
       class="editor-tabs"
       @tab-remove="removeTabs"
-      @tab-add="addTabs"
       @tab-change="changeTabs"
     >
       <el-tab-pane
@@ -120,6 +127,21 @@ defineExpose({
   .el-tabs--card.editor-tabs :deep(.el-tabs__new-tab) {
     margin: 10px 10px 0 10px;
     border: unset;
+  }
+
+  .add-tab-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    height: 40px;
+    padding: 0 10px;
+    color: #fff;
+    line-height: 40px;
+    text-align: center;
+    background-color: var(--el-color-primary);
+    z-index: 10;
+    cursor: pointer;
   }
 }
 

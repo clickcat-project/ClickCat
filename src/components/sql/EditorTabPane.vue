@@ -50,8 +50,15 @@ const changeValue = (val: string) => {
 
 const queryTableData = (rows = 100) => {
   const originSql = props.tab.sql
-  const sql = originSql + ` limit ${rows} FORMAT JSON`
-  originSql && sqlStore.addHistorySql(originSql)
+  let sql = ''
+  let historySql = originSql
+  if (!originSql?.includes('limit')) {
+    sql = originSql + ` limit ${rows} FORMAT JSON`
+    historySql = originSql + ` limit ${rows}`
+  } else {
+    sql = originSql + ' FORMAT JSON'
+  }
+  originSql && sqlStore.addHistorySql(historySql)
   query(sql)
     .then(res => {
       columns.value = res.meta

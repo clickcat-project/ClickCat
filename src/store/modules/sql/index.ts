@@ -35,7 +35,7 @@ export const useSqlStore = defineStore(
     getters: {},
     actions: {
       addHistorySql (sql: string | undefined) {
-        sql && this.historySqls.push(sql)
+        sql && this.historySqls.unshift(sql)
       },
       setColumns (columns: any[]) {
         this.columns = columns as never[]
