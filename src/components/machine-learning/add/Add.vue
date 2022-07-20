@@ -9,6 +9,7 @@ import { query } from '@/utils/http'
 import { formatBarOptions, generateBarInstance } from '@/components/metrics/charts/useBar'
 import { addTraining as addTrainingQuery } from '../query'
 import { useLoginStore } from '@/store'
+import { timeIntervalOps } from '../data'
 
 type List = {name: string}[]
 
@@ -29,7 +30,7 @@ const formLabelAlign = reactive<{
   timeField: string,
   timeRange: any,
   jobName: string,
-  timeInterval?: string,
+  timeInterval: string,
 }>({
   database: '',
   table: '',
@@ -130,12 +131,6 @@ onMounted(() => {
   }
 })
 
-const previousStep = () => {
-  if (step.value > 1) {
-    step.value--
-  }
-}
-
 const addTraining = (queryData: any) => {
   const { connectionUrl, username, password } = loginStore.connection
   return addTrainingQuery({
@@ -147,29 +142,25 @@ const addTraining = (queryData: any) => {
 }
 
 const nextStep = async () => {
-  if (step.value < 3) {
-    await ruleFormRef.value?.validate((valid, fields) => {
-      if (valid) {
-        ++step.value
-      } else {
-        console.log('error submit!', fields)
-      }
-    })
-  } else {
-    const { database, table, timeField, timeRange, jobName } = formLabelAlign
-
-    const queryData = {
-      database,
-      table,
-      time_filed: timeField,
-      start_time: dayjs(timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-      end_time: dayjs(timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
-      job_name: jobName
+  await ruleFormRef.value?.validate((valid, fields) => {
+    if (!valid) {
+      console.log('error submit!', fields)
     }
+  })
+  const { database, table, timeField, timeRange, jobName, timeInterval: formTimeInterval } = formLabelAlign
 
-    const addReturnData = await addTraining(queryData)
-    emit('toResult', addReturnData)
+  const queryData = {
+    database,
+    table,
+    time_filed: timeField,
+    start_time: dayjs(timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    end_time: dayjs(timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
+    job_name: jobName,
+    time_interval: formTimeInterval
   }
+
+  const addReturnData = await addTraining(queryData)
+  emit('toResult', addReturnData)
 }
 
 const queryDatabases = () => {
@@ -194,7 +185,7 @@ const queryTimeField = () => {
 
 const queryDataForMlSecondStep = () => {
   const isCorrect = isCorrectTime(formLabelAlign.timeRange as any)
-  if (!formLabelAlign.timeField || !isCorrect) {
+  if (!formLabelAlign.timeField || !isCorrect || !timeInterval.value) {
     return
   }
   query(sqls.queryDataForMlSecondStep(
@@ -202,7 +193,8 @@ const queryDataForMlSecondStep = () => {
     formLabelAlign.table,
     dayjs(formLabelAlign.timeRange[0]).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
     dayjs(formLabelAlign.timeRange[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss'),
-    formLabelAlign.timeField
+    formLabelAlign.timeField,
+    formLabelAlign.timeInterval
   ))
     .then(res => {
       const xKey = res.meta[0].name
@@ -247,10 +239,12 @@ const changeTimeRange = () => {
 
 const chnageInterval = (val: string) => {
   formLabelAlign.timeInterval = val + ' ' + timeIntervalUnit.value
+  queryDataForMlSecondStep()
 }
 
 const changeIntervalUnit = (val: string) => {
   formLabelAlign.timeInterval = timeInterval.value + ' ' + val
+  queryDataForMlSecondStep()
 }
 </script>
 <template>
@@ -268,166 +262,144 @@ const changeIntervalUnit = (val: string) => {
       style="width: 700px"
       status-icon
     >
-      <template v-if="step === 1">
-        <el-form-item
-          label="Database"
-          prop="database"
+      <el-form-item
+        label="Job Name"
+        prop="jobName"
+      >
+        <el-input
+          v-model="formLabelAlign.jobName"
+          placeholder="Please input"
+        />
+      </el-form-item>
+
+      <el-form-item
+        label="Database"
+        prop="database"
+      >
+        <el-select
+          v-model="formLabelAlign.database"
+          popper-class="primary-select-dropdown"
+          placeholder="Select Database"
+          @change="changeDatabase"
         >
-          <el-select
-            v-model="formLabelAlign.database"
-            popper-class="primary-select-dropdown"
-            placeholder="Select Database"
-            @change="changeDatabase"
-          >
-            <el-option
-              v-for="item in database"
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="Tables"
-          prop="table"
+          <el-option
+            v-for="item in database"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item
+        label="Tables"
+        prop="table"
+      >
+        <el-select
+          v-model="formLabelAlign.table"
+          popper-class="primary-select-dropdown" 
+          placeholder="Select Table"
+          filterable
+          style="width: 600px"
+          @change="changeTable"
         >
-          <el-select
-            v-model="formLabelAlign.table"
-            popper-class="primary-select-dropdown" 
-            placeholder="Select Table"
-            filterable
-            style="width: 600px"
-            @change="changeTable"
-          >
-            <el-option
-              v-for="item in tables"
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
-            />
-          </el-select>
-        </el-form-item>
-      </template>
+          <el-option
+            v-for="item in tables"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+      </el-form-item>
       
-      <template v-if="step === 2">
-        <el-form-item
-          label="Time  Field"
-          prop="timeField"
+      <el-form-item
+        label="Time  Field"
+        prop="timeField"
+      >
+        <el-select
+          v-model="formLabelAlign.timeField"
+          popper-class="primary-select-dropdown" 
+          placeholder="Select Time Field"
+          filterable
+          style="width: 600px"
+          @change="changeField"
         >
-          <el-select
-            v-model="formLabelAlign.timeField"
-            popper-class="primary-select-dropdown" 
-            placeholder="Select Time Field"
-            filterable
-            style="width: 600px"
-            @change="changeField"
-          >
-            <el-option
-              v-for="item in timeField"
-              :key="item.name"
-              :label="item.name"
-              :value="item.name"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="Time  Range"
-          prop="timeRange"
-        >
-          <!-- <el-date-picker
-            v-model="formLabelAlign.timeRange"
-            type="daterange"
-            :clearable="false"
-            range-separator="-"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            :size="'default'"
-            @change="changeTimeRange"
-          /> -->
-          <!-- v-model="formLabelAlign.timeRange[0]" -->
-          <el-date-picker
-            v-model="formLabelAlign.timeRange[0]"
-            type="date"
-            :clearable="false"
-            placeholder="Pick a day"
-            size="default"
-            @change="changeTimeRange"
+          <el-option
+            v-for="item in timeField"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
           />
-          <span class="time-range-divider">--</span>
-          <!-- v-model="formLabelAlign.timeRange[1]" -->
-          <el-date-picker
-            v-model="formLabelAlign.timeRange[1]"
-            type="date"
-            :clearable="false"
-            placeholder="Pick a day"
-            size="default"
-            @change="changeTimeRange"
-          />
-        </el-form-item>
-        <el-form-item
-          label="Time  Interval"
-          prop="timeInterval"
+        </el-select>
+      </el-form-item>
+      <el-form-item
+        label="Time  Range"
+        prop="timeRange"
+      >
+        <el-date-picker
+          v-model="formLabelAlign.timeRange[0]"
+          type="date"
+          :clearable="false"
+          placeholder="Pick a day"
+          size="default"
+          @change="changeTimeRange"
+        />
+        <span class="time-range-divider">--</span>
+        <el-date-picker
+          v-model="formLabelAlign.timeRange[1]"
+          type="date"
+          :clearable="false"
+          placeholder="Pick a day"
+          size="default"
+          @change="changeTimeRange"
+        />
+      </el-form-item>
+      <el-form-item
+        label="Time  Interval"
+        prop="timeInterval"
+      >
+        <el-input
+          v-model="timeInterval"
+          placeholder="Please input"
+          class="input-with-select-with-gap width100"
+          @input="chnageInterval"
         >
-          <el-input
-            v-model="timeInterval"
-            placeholder="Please input"
-            class="input-with-select-with-gap width100"
-            :disabled="true"
-            @input="chnageInterval"
-          >
-            <template #append>
-              <el-select
-                v-model="timeIntervalUnit"
-                placeholder="Select"
-                style="width: 100px"
-                :disabled="true"
-                @change="changeIntervalUnit"
-              >
-                <el-option
-                  label="day"
-                  value="day"
-                />
-                <el-option
-                  label="hours"
-                  value="hours"
-                />
-              </el-select>
-            </template>
-          </el-input>
-        </el-form-item>
-      </template>
-      <template v-if="step === 3">
-        <el-form-item
-          label="Job Name"
-          prop="jobName"
-        >
-          <el-input
-            v-model="formLabelAlign.jobName"
-            placeholder="Please input"
-          />
-        </el-form-item>
-      </template>
+          <template #append>
+            <el-select
+              v-model="timeIntervalUnit"
+              placeholder="Select"
+              style="width: 100px"
+              @change="changeIntervalUnit"
+            >
+              <el-option
+                v-for="item in timeIntervalOps"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </template>
+        </el-input>
+      </el-form-item>
     </el-form>
 
     <section
-      v-if="step === 2"
       ref="renderer"
       class="charts-renderer-box"
     ></section>
 
     <section class="btn">
-      <el-button
+      <!-- <el-button
         class="custom-default-btn"
         @click="previousStep"
       >
         Previous
-      </el-button>
+      </el-button> -->
       <el-button
         class="custom-primary-btn"
         type="primary"
         @click="nextStep"
       >
-        {{ step !== 3 ? 'Next' : 'End' }}
+        End
       </el-button>
     </section>
   </section>

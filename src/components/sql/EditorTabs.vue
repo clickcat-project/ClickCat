@@ -70,7 +70,7 @@ defineExpose({
     <el-tabs
       v-model="editableTabsValue"
       type="card"
-      closable
+      editable
       class="editor-tabs"
       @tab-remove="removeTabs"
       @tab-change="changeTabs"
@@ -125,7 +125,7 @@ defineExpose({
     height: 100%;
   }
   .el-tabs--card.editor-tabs :deep(.el-tabs__new-tab) {
-    margin: 10px 10px 0 10px;
+    margin: 10px 10px 0 110px;
     border: unset;
   }
 
@@ -135,7 +135,7 @@ defineExpose({
     top: 0;
     display: block;
     height: 40px;
-    padding: 0 10px;
+    width: 140px;
     color: #fff;
     line-height: 40px;
     text-align: center;

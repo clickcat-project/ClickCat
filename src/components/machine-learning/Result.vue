@@ -8,8 +8,9 @@ import { LineChart, ScatterChart } from 'echarts/charts'
 
 import { useLoginStore } from '@/store'
 
-import { queryResultForMl } from './query'
+import { queryResultForMl, queryResultForMlUsePredict } from './query'
 import { formatResultLineOption } from './utils'
+import { timeIntervalOps } from './data'
 
 echarts.use([LineChart, ScatterChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer])
 
@@ -23,8 +24,17 @@ const emit = defineEmits(['toList'])
 const renderer = ref<HTMLElement>()
 const loading = ref<boolean>(false)
 const dialogVisible = ref<boolean>(false)
-const timeIntervalUnit = ref<string>('day')
-const timeInterval = ref<string>('1')
+
+const intervalArr = (props.selectedItem.time_interval || '1 day').split(' ')
+
+const timeIntervalUnit = ref<string>(intervalArr[1])
+const timeInterval = ref<string>(intervalArr[0])
+
+const lessForecastOuter = ref<number[]>([])
+const biggerForecastOuter = ref<number[]>([])
+const realKeyOuter = ref<string[]>([])
+const realDataOuter = ref<string[]>([])
+const diffOuter = ref<number[]>([])
 
 onMounted(() => {
   queryDataAndShowCharts()
@@ -41,8 +51,47 @@ const queryDataAndShowCharts = async () => {
       realKey,
       diff
     } = await queryResultForMl(loginStore.connection, props.selectedItem)
+    lessForecastOuter.value = lessForecast
+    biggerForecastOuter.value = biggerForecast
+    realKeyOuter.value = realKey
+    realDataOuter.value = realData
+    diffOuter.value = diff
     const echartsInstance = echarts.init(renderer.value as HTMLElement)
-    echartsInstance.setOption(formatResultLineOption({realData, forecastData, realKey, diff, lessForecast, biggerForecast}))
+    echartsInstance.setOption(formatResultLineOption({
+      realData,
+      forecastData,
+      realKey,
+      diff,
+      lessForecast,
+      biggerForecast
+    }))
+    loading.value = false
+  } catch (error) {
+    loading.value = false
+  }
+}
+
+const queryDataAndShowChartsByPredict = async () => {
+  loading.value = true
+  try {
+    const {
+      realData,
+      lessForecast,
+      biggerForecast,
+      realKey,
+      diff
+    } = await queryResultForMlUsePredict({
+      model_path: props.selectedItem.model_path,
+      steps: +timeInterval.value,
+      realData: realDataOuter.value,
+      lessForecast: lessForecastOuter.value,
+      biggerForecast: biggerForecastOuter.value,
+      realKey: realKeyOuter.value,
+      diff: diffOuter.value,
+      unit: timeIntervalUnit.value
+    })
+    const echartsInstance = echarts.init(renderer.value as HTMLElement)
+    echartsInstance.setOption(formatResultLineOption({realData, realKey, diff, lessForecast, biggerForecast}))
     loading.value = false
   } catch (error) {
     loading.value = false
@@ -58,11 +107,14 @@ const changeDialogVisible = () => {
 }
 
 const runForecast = () => {
-  queryDataAndShowCharts()
+  queryDataAndShowChartsByPredict()
 }
 </script>
 <template>
-  <section class="result-container">
+  <section
+    v-loading="loading"
+    class="result-container"
+  >
     <div class="line-charts">
       <div class="header-btn-box">
         <div
@@ -80,7 +132,6 @@ const runForecast = () => {
         >Forecast</span>
       </div>
       <div
-        v-loading="loading"
         class="charts-box"
       >
         <div
@@ -101,7 +152,6 @@ const runForecast = () => {
           v-model="timeInterval"
           placeholder="Please input"
           class="input-with-select-with-gap width100"
-          :disabled="true"
         >
           <template #append>
             <el-select
@@ -111,12 +161,10 @@ const runForecast = () => {
               :disabled="true"
             >
               <el-option
-                label="day"
-                value="day"
-              />
-              <el-option
-                label="hours"
-                value="hours"
+                v-for="item in timeIntervalOps"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               />
             </el-select>
           </template>

@@ -890,10 +890,15 @@ function queryDataForMlSecondStep (
   table: string,
   startTime: string,
   endTime: string,
-  timeField: string
+  timeField: string,
+  timeInterval = '1 day'
 ) {
   return formatJson(
-      `select toDate(${timeField}) as date,count() as count from ${database}.${table} where ${timeField} >=  '${startTime}' and ${timeField} <= '${endTime}' group by toDate(${timeField}) order by toDate(${timeField}) with fill`
+      `select toStartOfInterval(${timeField}, INTERVAL ${timeInterval}) as date,
+        count() as count from ${database}.${table}
+        where ${timeField} >=  '${startTime}' and ${timeField} <= '${endTime}' 
+        group by toStartOfInterval(${timeField}, INTERVAL ${timeInterval}) 
+        order by toStartOfInterval(${timeField}, INTERVAL ${timeInterval})`
     )
 }
 

@@ -1,5 +1,6 @@
 import echarts from 'echarts'
 import dayjs from 'dayjs'
+import { effect } from './data'
 
 type DataType = {
   realData?: number[],
@@ -15,7 +16,6 @@ export function formatResultLineOption ({
   lessForecast,
   biggerForecast,
   realKey,
-  forecastData,
   diff
 }: DataType): echarts.EChartsCoreOption {
   return {
@@ -143,7 +143,6 @@ export function formatResultLineOption ({
 }
 
 export const formatData = (data: { '0': { '0': any, '1': any } }) => {
-  const effect = 0.4
   const {0: {count: real}, 1: {pred: forecast}} = data['0']
   const realKey = Object.keys(real).sort()
   const realData = realKey.map(key => real[key])
@@ -176,5 +175,34 @@ export const formatData = (data: { '0': { '0': any, '1': any } }) => {
     realData, forecastData, realKeyFormat, diff,
     lessForecast,
     biggerForecast,
+  }
+}
+
+export const formatDataPredict = ({
+  realData: realDataOrigin,
+  lessForecast: lessForecastOrigin,
+  biggerForecast: biggerForecastOrigin,
+  realKey: realKeyOrigin,
+  diff: diffOrigin,
+  data,
+  unit
+}: any) => {
+  const lastDay = realKeyOrigin[realKeyOrigin.length - 1]
+  const lastDayMoment = dayjs(lastDay)
+  Object.keys(data).forEach((key: string, index) => {
+    const effectNum = data[key] * effect
+    const less = Math.round(data[key] - effectNum)
+    const bigger = Math.round(data[key] + effectNum)
+    const next = lastDayMoment.add(index + 1, unit).format('YYYY-MM-DD HH:mm:ss')
+    realKeyOrigin[+key] = next
+    lessForecastOrigin[+key] = less
+    biggerForecastOrigin[+key] = bigger
+  })
+  return {
+    realData: realDataOrigin,
+    lessForecast: lessForecastOrigin,
+    biggerForecast: biggerForecastOrigin,
+    realKey: realKeyOrigin,
+    diff: diffOrigin,
   }
 }
