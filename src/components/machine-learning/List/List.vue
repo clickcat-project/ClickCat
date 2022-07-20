@@ -2,6 +2,7 @@
 import { computed, onBeforeMount, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useLoginStore } from '@/store'
+import { deleteOne as deleteOneOrigin } from '@/components/machine-learning/query'
 
 import ListItemVue from './ListItem.vue'
 
@@ -10,25 +11,38 @@ import { queryList } from '../query'
 const loginStore = useLoginStore()
 const emit = defineEmits(['add', 'toResult'])
 const list = ref<{job_name: string}[]>([])
+const loading = ref<boolean>(false)
 
 const listLengthLess = computed(() => {
   return !list.value.length || list.value.length < 3
 })
 
 onBeforeMount(async () => {
+  loading.value = true
   const data = await queryList(loginStore.connection)
   list.value = data
+  loading.value = false
 })
 
 const add = () => {
   emit('add')
 }
+
 const toResult = (item: any) => {
   emit('toResult', item)
+}
+
+const deleteOne = async (item: any) => {
+  loading.value = true
+  await deleteOneOrigin(loginStore.connection, item)
+  const data = await queryList(loginStore.connection)
+  list.value = data
+  loading.value = false
 }
 </script>
 <template>
   <section
+    v-loading="loading"
     class="ml-list-container"
     :style="listLengthLess ? {gridTemplateColumns: 'repeat(auto-fit, 300px)'} : {}"
   >
@@ -46,6 +60,7 @@ const toResult = (item: any) => {
       :key="i"
       :item="item"
       @to-result="toResult"
+      @delete="deleteOne"
     ></ListItemVue>
   </section>
 </template>
@@ -53,7 +68,7 @@ const toResult = (item: any) => {
 .ml-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-rows: 162px;
+  grid-auto-rows: 160px;
   grid-gap: 20px;
   width: 100%;
 }

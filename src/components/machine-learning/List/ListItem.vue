@@ -3,31 +3,36 @@ defineProps<{
   item: {job_name: string}
 }>()
 
-const emit = defineEmits(['toResult'])
+const emit = defineEmits(['toResult', 'delete'])
 
 const toResult = (item: any) => {
   emit('toResult', item)
 }
+
+const deleteOne = (item: any) => {
+  emit('delete', item)
+}
+
 </script>
 <template>
-  <section key={i} class="list-box">
+  <section
+    key="{i}"
+    class="list-box"
+  >
     <div class="list-title-box">
-      <p class="list-title">{{item.job_name}}</p>
+      <p class="list-title">
+        {{ item.job_name }}
+      </p>
     </div>
     <div class="list-btn-box">
-        <!-- onClick={() => {
-        const { database, table, time_field, start_time, end_time, job_name, model_path } = item
-        setIsWhich(3)
-        setFinalValue({
-          database,
-          table,
-          timeFiled: time_field,
-          timeRange: [start_time, end_time],
-          jobName: job_name,
-          model_path
-        })
-      }} -->
-      <span class="list-btn" @click="toResult(item)">view result</span>
+      <span
+        class="list-btn"
+        @click="toResult(item)"
+      >Turn on</span>
+      <span
+        class="list-btn"
+        @click="deleteOne(item)"
+      >Delete</span>
     </div>
   </section>
 </template>
@@ -56,7 +61,7 @@ const toResult = (item: any) => {
   border-top: 1px solid #F0F0F0;
 }
 .list-btn {
-  width: 276px;
+  width: 129px;
   height: 32px;
   color: var(--el-color-primary);
   line-height: 30px;
@@ -64,6 +69,9 @@ const toResult = (item: any) => {
   border-radius: 2px;
   text-align: center;
   cursor: pointer;
+}
+.list-btn + .list-btn {
+  margin-left: 17px;
 }
 .list-btn:hover {
   color: #fff;
