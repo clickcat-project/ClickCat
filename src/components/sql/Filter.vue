@@ -166,9 +166,10 @@ defineExpose({
               <el-tooltip
                 class="box-item"
                 effect="dark"
+                append-to=".tree-content .el-scrollbar"
                 popper-class="click-cat-dark"
                 :content="`${node.data.engine}${br}${node.data.size}`"
-                placement="right"
+                placement="top"
               >
                 <el-dropdown
                   trigger="contextmenu"
