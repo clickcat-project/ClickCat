@@ -207,8 +207,9 @@ defineExpose({
                 class="box-item"
                 effect="dark"
                 popper-class="click-cat-dark"
+                append-to=".tree-content .el-scrollbar"
                 :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
-                placement="right"
+                placement="top"
               >
                 <span class="custom-tree-node has-dropdown">
                   <span>{{ node.label }}</span>
