@@ -1,0 +1,44 @@
+.dagreLayout-page {
+  .relation-node {
+    position: absolute;
+    width: 140px;
+    height: 36px;
+    padding: 0;
+    cursor: pointer;
+    &.active{
+      border: 1px dotted #cccccc;
+    }
+    &:hover {
+      .datac-icon {
+        line-height: 52px;
+      }
+    }
+    .logo-container {
+      width: 100%;
+      height: 100%;
+      border: none;
+      text-align: center;
+      margin: auto;
+      display: inherit;
+      background: none;
+    }
+  }
+
+  .datac-icon {
+    font-size: 35px;
+    line-height: 60px;
+  }
+  .long-text {
+    text-align: center;
+  }
+  .butterflies-link {
+    stroke: #404554;
+    stroke-width: 3px;
+    &.purple {
+      stroke: #404554
+    }
+  }
+  .butterflies-link:hover {
+    stroke: #404554
+  }
+}

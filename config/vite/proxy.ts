@@ -9,6 +9,13 @@ const init: ProxyTargetList = {
       return path.replace(/^\/ml/, '')
     }
   },
+  '/datahubServer': {
+    target: 'http://172.16.1.190:9002', // 公司开发
+    changeOrigin: true,
+    rewrite: (path) => {
+      return path.replace(/^\/datahubServer/, '')
+    }
+  },
 }
 
 export default init
