@@ -118,15 +118,13 @@ defineExpose({
 #butterFly{
   height: 100%;
   width: 100%;
+  background-color: #f0f0f0;
   .butterflies-link {
-    stroke: #404554;
-    stroke-width: 2px;
+    stroke: #D8D8D8;
+    stroke-width: 1px;
     &.purple {
       stroke: #404554;
     }
-  }
-  .butterflies-link:hover {
-    stroke: #404554
   }
 }
 </style>

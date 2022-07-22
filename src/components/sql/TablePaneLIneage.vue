@@ -57,6 +57,7 @@ async function datahubChange () {
     nodes: nodes,
     edges: edges
   })
+  console.log(edges, 'edges')
   loading.value = false
 }
 
@@ -167,6 +168,7 @@ function genTopoData (node: any, streamNode: any, type: string) {
 </script>
 <template>
   <section
+    v-loading="loading"
     class="table-pane-lineage-container"
   >
     <ButterFlyVue

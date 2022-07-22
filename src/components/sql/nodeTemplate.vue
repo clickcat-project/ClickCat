@@ -1,11 +1,22 @@
 <template>
   <div class="nodeBox">
+    <el-tooltip
+      class="box-item"
+      effect="dark"
+      :content="opts.name"
+      placement="top"
+    >
+      <div>
+        {{ opts.name }}
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
 <script lang='ts' setup>
 // import $ from 'jquery'
 // const props = 
+import { ElTooltip } from 'element-plus'
 
 withDefaults(defineProps<{
   opts: any
@@ -54,17 +65,24 @@ withDefaults(defineProps<{
 <style lang="scss" scoped>
 .nodeBox{
   position:relative;
-  text-align: center;
   font-size:14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
   width: 260px;
   height: 76px;
+  padding-left: 58px;
+  padding-right: 18px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 76px;
+  text-align: left;
   background-color: #fff;
-  border: 1px solid #dfdfdf;
   box-shadow: 0px 0px 6px 0px rgba(223, 223, 223, 0.3);
   border-radius: 4px;
+  box-sizing: border-box;
+  div {
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
   .rate{
     color:#474AE1;
     margin-top:10px;
