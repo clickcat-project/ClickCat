@@ -62,7 +62,10 @@ defineExpose({
           tooltip-effect="dark"
           :border="true"
         >
-          <el-table-column type="index" />
+          <el-table-column
+            type="index"
+            width="60"
+          />
           <template
             v-for="col in columns"
             :key="col.name"
