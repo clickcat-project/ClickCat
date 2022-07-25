@@ -81,6 +81,13 @@ const changeSelected = (val: string) => {
   selectedColumn.selected = true
   treeInstance.value.store.nodesMap[database].expanded = true
   treeInstance.value.store.nodesMap[table].expanded = true
+  
+  // setTimeout(() => {
+  //   console.log(`#${database}-${table}-${currentCol}`)
+  //   const nodeEle = document.querySelector(`#${database}-${table}-${currentCol}`)
+  //   console.log(nodeEle, 'nodeEle')
+  //   nodeEle?.scrollIntoView()
+  // }, 100)
 }
 
 const getDragEle = () => {
@@ -211,7 +218,10 @@ defineExpose({
                 :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
                 placement="top"
               >
-                <span class="custom-tree-node has-dropdown">
+                <span
+                  :id="`${node.data.database}-${node.data.table}-${node.label}`"
+                  class="custom-tree-node has-dropdown"
+                >
                   <span>{{ node.label }}</span>
                 </span>
               </el-tooltip>

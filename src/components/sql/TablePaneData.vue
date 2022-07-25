@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 import { TabItem } from '@/store/modules/sql/types'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
 
 import EditorTabPaneTableVue from './EditorTabPaneTable.vue'
 import { ExportData } from './ExportData'
@@ -22,6 +22,18 @@ const editorContainerRef = ref<HTMLElement>()
 onBeforeMount(() => {
   queryData()
 })
+onMounted(() => {
+  document.addEventListener('fullscreenchange', exitFullScreenFunc)
+})
+onUnmounted(() => {
+  document.removeEventListener('fullscreenchange', exitFullScreenFunc)
+})
+
+function exitFullScreenFunc (e: any) {
+  if (!document.fullscreenElement) {
+    editorContainerRef.value?.classList.remove('table-pane-data-container-fullscreen')
+  }
+}
 
 const queryData = (rows = 100) => {
   loading.value = true

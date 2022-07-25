@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 import SimpleEditorVue from './SimpleEditor.vue'
 import EditorTabPaneTableVue from './EditorTabPaneTable.vue'
@@ -40,7 +40,18 @@ onMounted(() => {
       document.onmousemove = null
     }
   }
+  document.addEventListener('fullscreenchange', exitFullScreenFunc)
 })
+
+onUnmounted(() => {
+  document.removeEventListener('fullscreenchange', exitFullScreenFunc)
+})
+
+function exitFullScreenFunc (e: any) {
+  if (!document.fullscreenElement) {
+    addFullScreenClass.value = false
+  }
+}
 
 const changeValue = (val: string) => {
   sqlStore.setCurrentTab({
