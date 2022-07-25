@@ -20,6 +20,7 @@ const tableData = ref<any[]>([])
 const statistics = ref<Statistics>()
 const editorContainerRef = ref<HTMLElement>()
 const reloadSomeElement = ref<boolean>(true)
+const addFullScreenClass = ref<boolean>(false)
 const editorTabPaneTableInstance = ref<any>()
 const simpleEditorInstance = ref<any>()
 
@@ -79,11 +80,13 @@ const fullScreen = async () => {
   reloadSomeElement.value = false
   if (document.fullscreenElement) {
     await document.exitFullscreen()
-    editorContainerRef.value?.classList.remove('editor-tab-pane-container-fullscreen')
+    addFullScreenClass.value = false
+    // editorContainerRef.value?.classList.remove('editor-tab-pane-container-fullscreen')
   } else {
     // await editorContainerRef.value?.requestFullscreen()
     await document.body.requestFullscreen()
-    editorContainerRef.value?.classList.add('editor-tab-pane-container-fullscreen')
+    addFullScreenClass.value = true
+    // editorContainerRef.value?.classList.add('editor-tab-pane-container-fullscreen')
   }
   reloadSomeElement.value = true
 }
@@ -92,6 +95,7 @@ const fullScreen = async () => {
   <section
     ref="editorContainerRef"
     class="editor-tab-pane-container"
+    :class="{'editor-tab-pane-container-fullscreen': addFullScreenClass}"
   >
     <template v-if="reloadSomeElement">
       <SimpleEditorVue
