@@ -83,7 +83,7 @@ export const queryPropertiesStatistics = (table: any) => {
 }
 
 export function getEntityLineage (params: any) {
-  return fetch('/datahubServer/api/v2/graphql', {
+  return fetch(`${import.meta.env.VITE_BASE_DATAHUB_URL}/api/v2/graphql`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
