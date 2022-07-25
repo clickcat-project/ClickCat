@@ -86,7 +86,18 @@ onBeforeMount(() => {
             :prop="col.name"
             :label="col.name"
             min-width="150"
-          />
+          >
+            <template #header>
+              <el-tooltip
+                placement="top"
+                :content="col.name"
+              >
+                <div class="table-header ellipsis">
+                  {{ col.name }}
+                </div>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column
             v-else
             :show-overflow-tooltip="true"
