@@ -5,6 +5,7 @@
   "author": "stone",
   "scripts": {
     "dev": "vite --host",
+    "build:test": "vue-tsc --noEmit && vite build --node staging",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
