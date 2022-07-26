@@ -27,12 +27,12 @@ const deleteOne = (item: any) => {
     <div class="list-btn-box">
       <span
         class="list-btn"
-        @click="toResult(item)"
-      >Turn on</span>
-      <span
-        class="list-btn"
         @click="deleteOne(item)"
       >Delete</span>
+      <span
+        class="list-btn"
+        @click="toResult(item)"
+      >View Results</span>
     </div>
   </section>
 </template>

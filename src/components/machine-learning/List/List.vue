@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { computed, onBeforeMount, ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { useLoginStore } from '@/store'
 import { deleteOne as deleteOneOrigin } from '@/components/machine-learning/query'
@@ -33,6 +34,16 @@ const toResult = (item: any) => {
 }
 
 const deleteOne = async (item: any) => {
+  await ElMessageBox.confirm(
+    'Delete?',
+    'Kill',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+      customClass: 'show-custom-primary-color',
+    }
+  )
   loading.value = true
   await deleteOneOrigin(loginStore.connection, item)
   const data = await queryList(loginStore.connection)

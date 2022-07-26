@@ -10,6 +10,8 @@ defineProps<{
   statistics?: Statistics,
   notTitle?: boolean,
   dragEle?: HTMLElement
+  loading: boolean,
+  errorMsg?: string
 }>()
 
 const emit = defineEmits(['changeRows', 'export', 'fullScreen'])
@@ -53,7 +55,16 @@ defineExpose({
           class="title-content"
         >Data / Table</span>
       </h3>
-      <div class="table-container">
+      <div
+        v-loading="loading"
+        class="table-container"
+      >
+        <div
+          v-if="errorMsg"
+          class="error-msg"
+        >
+          {{ errorMsg }}
+        </div>
         <el-table
           v-if="tableData?.length"
           :data="tableData"
@@ -170,6 +181,12 @@ defineExpose({
     width: 100%;
     height: calc(100% - 37px);
     background: #fff;
+
+    .error-msg {
+      line-height: 30px;
+      text-align: left;
+      padding: 10px 20px;
+    }
   }
 }
 .content-container {

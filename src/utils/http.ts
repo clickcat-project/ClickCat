@@ -93,7 +93,4 @@ export function query(sql?: string, settings?: string, connection?: Connection, 
     .then((r) => {
       return r
     })
-    .catch((e) => {
-      console.log(e)
-    })
 }
