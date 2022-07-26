@@ -150,6 +150,7 @@ const queryFunction = (
     </el-row>
     <el-row :gutter="10">
       <el-col :span="24">
+        <!-- :grid="{ height: '65%' }" -->
         <ChartsVue
           index="2"
           title="Parts over time with row count"
@@ -222,7 +223,10 @@ const queryFunction = (
         ></TableBanner>
       </el-col>
     </el-row>
-    <el-row :gutter="10" style="margin-bottom: 0;">
+    <el-row
+      :gutter="10"
+      style="margin-bottom: 0;"
+    >
       <el-col :span="24">
         <TableBanner
           title="Recent part analysis"
