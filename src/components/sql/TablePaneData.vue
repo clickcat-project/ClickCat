@@ -74,7 +74,7 @@ const fullScreen = async () => {
     class="table-pane-data-container"
   >
     <EditorTabPaneTableVue
-      v-loading="loading"
+      :loading="loading"
       :columns="columns"
       :table-data="tableData"
       :statistics="statistics"
