@@ -67,23 +67,31 @@ const queryTableData = (rows = 100) => {
   const originSql = props.tab.sql
   let sql = ''
   let historySql = originSql
-  if (!originSql?.includes('limit')) {
-    sql = originSql + ` limit ${rows} FORMAT JSON`
-    historySql = originSql + ` limit ${rows}`
+  const originSqlTrim = originSql?.trim()
+  if (originSqlTrim?.includes('SELECT')) {
+    if (!originSql?.includes('limit')) {
+      sql = originSql + ` limit ${rows} FORMAT JSON`
+      historySql = originSql + ` limit ${rows}`
+    } else {
+      sql = originSql + ' FORMAT JSON'
+    }
   } else {
-    sql = originSql + ' FORMAT JSON'
+    sql = originSql as string
   }
+  
   originSql && sqlStore.addHistorySql(historySql)
   query(sql)
     .then(res => {
       queryTableDataErrorMsg.value = undefined
-      columns.value = res.meta
-      tableData.value = res.data
-      const { bytes_read, elapsed, rows_read } = res.statistics
-      statistics.value = {
-        bytes_read: +(bytes_read / 1024).toFixed(1),
-        elapsed: elapsed.toFixed(2),
-        rows_read
+      if (res !== 'OK') {
+        columns.value = res.meta
+        tableData.value = res.data
+        const { bytes_read, elapsed, rows_read } = res.statistics
+        statistics.value = {
+          bytes_read: +(bytes_read / 1024).toFixed(1),
+          elapsed: elapsed.toFixed(2),
+          rows_read
+        }
       }
     })
     .catch(e => {
