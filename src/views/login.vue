@@ -194,7 +194,7 @@
     connectionName: 'ck',
     connectionUrl: 'http://8.135.49.240:8123',
     username: 'default',
-    password: '',
+    password: '123456',
     params: ''
   }
 
