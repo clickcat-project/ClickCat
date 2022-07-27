@@ -117,11 +117,11 @@ defineExpose({
       ref="dragEle"
       class="drag-box"
     ></div>
-    <div
+    <!-- <div
       v-if="dataloading"
       v-loading="true"
       class="loading"
-    ></div>
+    ></div> -->
     <div class="search-box">
       <el-select-v2
         v-model="seletedColumn"

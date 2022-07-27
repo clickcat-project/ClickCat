@@ -23,6 +23,8 @@ const reloadSomeElement = ref<boolean>(true)
 const addFullScreenClass = ref<boolean>(false)
 const editorTabPaneTableInstance = ref<any>()
 const simpleEditorInstance = ref<any>()
+const loadingForTableData = ref<boolean>(false)
+const queryTableDataErrorMsg = ref<string>()
 
 onMounted(() => {
   const dragElement = editorTabPaneTableInstance.value.getDragElement() as HTMLElement
@@ -61,6 +63,7 @@ const changeValue = (val: string) => {
 }
 
 const queryTableData = (rows = 100) => {
+  loadingForTableData.value = true
   const originSql = props.tab.sql
   let sql = ''
   let historySql = originSql
@@ -73,6 +76,7 @@ const queryTableData = (rows = 100) => {
   originSql && sqlStore.addHistorySql(historySql)
   query(sql)
     .then(res => {
+      queryTableDataErrorMsg.value = undefined
       columns.value = res.meta
       tableData.value = res.data
       const { bytes_read, elapsed, rows_read } = res.statistics
@@ -81,6 +85,13 @@ const queryTableData = (rows = 100) => {
         elapsed: elapsed.toFixed(2),
         rows_read
       }
+    })
+    .catch(e => {
+      console.log(e)
+      queryTableDataErrorMsg.value = e
+    })
+    .finally(() => {
+      loadingForTableData.value = false
     })
 }
 const exportDataFunc = (command: string) => {
@@ -117,10 +128,12 @@ const fullScreen = async () => {
       />
       <EditorTabPaneTableVue
         ref="editorTabPaneTableInstance"
+        :loading="loadingForTableData"
         :columns="columns"
         :table-data="tableData"
         :statistics="statistics"
         :drag-ele="editorContainerRef"
+        :error-msg="queryTableDataErrorMsg"
         @change-rows="queryTableData"
         @export="exportDataFunc"
         @full-screen="fullScreen"
