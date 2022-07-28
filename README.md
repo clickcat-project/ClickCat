@@ -11,7 +11,7 @@ We provides the following features,you can access http://8.135.49.240:8080/ to t
 * A Discover module like Kibana Discover which can quickly search and filter your data, get information about the structure of the fields.
 <img src="https://user-images.githubusercontent.com/22762150/172767245-4367c1ed-e019-48c3-a980-b6bdacf3a826.png" width="500"/>
 
-* A Graph Anaylsis feature enable you to model,explore,visualize connected data hided in Clickhouse.
+* A Graph Analysis feature enable you to model,explore,visualize connected data hided in Clickhouse.
 <img src="https://user-images.githubusercontent.com/22762150/172766866-338525eb-b75a-43e4-96fb-c266b81c7457.png" width="500"/>
 
 * Time-series Prediction use time series modeling to detect anomalies in your current data and forecast trends based on historical data in Clickhouse. 
