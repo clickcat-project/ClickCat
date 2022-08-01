@@ -8,7 +8,6 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.28.0
   '@typescript-eslint/parser': ^5.28.0
   '@vitejs/plugin-vue': ^2.3.3
-  antlr4ts: ^0.5.0-alpha.4
   antlr4ts-cli: ^0.5.0-alpha.4
   axios: ^0.27.2
   butterfly-dag: ^4.3.6
@@ -44,7 +43,6 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': 2.0.6_vue@3.2.37
-  antlr4ts: 0.5.0-alpha.4
   antlr4ts-cli: 0.5.0-alpha.4
   axios: 0.27.2
   butterfly-dag: 4.3.6_jquery@3.6.0+lodash@4.17.21
@@ -862,10 +860,6 @@ packages:
   /antlr4ts-cli/0.5.0-alpha.4:
     resolution: {integrity: sha512-lVPVBTA2CVHRYILSKilL6Jd4hAumhSZZWA7UbQNQrmaSSj7dPmmYaN4bOmZG79cOy0lS00i4LY68JZZjZMWVrw==}
     hasBin: true
-    dev: false
-
-  /antlr4ts/0.5.0-alpha.4:
-    resolution: {integrity: sha512-WPQDt1B74OfPv/IMS2ekXAKkTZIHl88uMetg6q3OTqgFxZ/dxDXI0EWLyZid/1Pe6hTftyg5N7gel5wNAGxXyQ==}
     dev: false
 
   /anymatch/3.1.2:
