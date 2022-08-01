@@ -3,7 +3,7 @@ export default {
   'Machine Learning': '机器学习',
   'Metrics': '分析总览',
   'SQL': 'SQL语句',
-  Processes: '进程',
+  'Processes': '进程',
   'History SQL': '历史SQL',
 
   // 机器学习
@@ -16,9 +16,9 @@ export default {
   'Edit': '编辑',
 
   // 进程
-  Mutations: '突变',
-  Kill: '关闭',
-  Refresh: '刷新',
+  'Mutations': '突变',
+  'Kill': '关闭',
+  'Refresh': '刷新',
 
   // 分析总览
   'Data Analysis': '数据分析',
