@@ -89,7 +89,7 @@ const queryFunction = (
 </script>
 <template>
   <el-collapse-item
-    title="Query Analysis"
+    :title="$t('Query Analysis')"
     name="3"
   >
     <FiltersVue

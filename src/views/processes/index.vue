@@ -6,7 +6,7 @@
 </route>
 <script lang='ts' setup>
 import { ref } from 'vue'
-import { Close, Refresh } from '@element-plus/icons-vue'
+import { Close, Refresh, ArrowLeft, ArrowRight, ArrowDown } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 import CommonTableVue from '@/components/CommonTable.vue'
@@ -24,6 +24,8 @@ type ListItem = {
 const processesRef = ref<any>(null)
 const mutationsRef = ref<any>(null)
 const defaultCard = ref('Processes')
+const rows = ref<string>('100')
+const page = ref<number>(0)
 let selectedProcesses: ListItem[] = []
 let selectedMutations: ListItem[] = []
 
@@ -85,8 +87,26 @@ const refresh = () => {
   if (defaultCard.value === 'Processes') {
     processesRef.value.refresh()
   } else {
+    page.value = 0
     mutationsRef.value.refresh()
   }
+}
+
+const handleChangeRows = (command: string) => {
+  page.value = 0
+  mutationsRef.value.getData(command, (+command) * page.value)
+}
+
+const previousPage = () => {
+  if (page.value > 0) {
+    page.value --
+  }
+  mutationsRef.value.getData(rows.value, (+rows.value) * page.value)
+}
+
+const nextPage = () => {
+  page.value ++
+  mutationsRef.value.getData(rows.value, (+rows.value) * page.value)
 }
 </script>
 <template>
@@ -102,11 +122,12 @@ const refresh = () => {
         >
           <Close />
         </el-icon>
-        <span>Kill</span>
+        <span>{{ $t('Kill') }}</span>
       </div>
       <el-divider direction="vertical" />
       <div
         class="btn"
+        style="margin-right: 60px"
         @click="refresh"
       >
         <el-icon
@@ -115,7 +136,35 @@ const refresh = () => {
         >
           <Refresh />
         </el-icon>
-        <span>Refresh</span>
+        <span>{{ $t('Refresh') }}</span>
+      </div>
+      <el-dropdown @command="handleChangeRows">
+        <span class="el-dropdown-link">
+          {{ rows }} Rows
+          <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="100">
+              100 rows
+            </el-dropdown-item>
+            <el-dropdown-item command="300">
+              300 rows
+            </el-dropdown-item>
+            <el-dropdown-item command="500">
+              500 rows
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <el-divider direction="vertical" />
+      <div class="pagenigetion-box">
+        <el-icon @click="previousPage">
+          <ArrowLeft />
+        </el-icon>
+        <el-icon @click="nextPage">
+          <ArrowRight />
+        </el-icon>
       </div>
     </section>
     <el-tabs
@@ -123,7 +172,7 @@ const refresh = () => {
       type="border-card"
     >
       <el-tab-pane
-        label="Processes"
+        :label="$t('Processes')"
         name="Processes"
       >
         <CommonTableVue
@@ -133,7 +182,7 @@ const refresh = () => {
         ></CommonTableVue>
       </el-tab-pane>
       <el-tab-pane
-        label="Mutations"
+        :label="$t('Mutations')"
         :lazy="true"
         name="Mutations"
       >
@@ -213,6 +262,28 @@ const refresh = () => {
   }
   :deep(.el-table th.el-table__cell) {
     background-color: #fbfbfb;
+  }
+
+  .el-dropdown-link {
+    display: flex;
+    align-items: center;
+    line-height: 20px;
+  }
+
+  .pagenigetion-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 44px;
+
+    i {
+      cursor: pointer;
+      color: rgba(62, 62, 69, 0.65);
+    }
+
+    i:hover {
+      color: var(--el-color-primary);
+    }
   }
 }
 </style>

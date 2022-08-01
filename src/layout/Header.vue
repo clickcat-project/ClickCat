@@ -4,6 +4,9 @@ import logout from '@/assets/images/login/logout.svg'
 import { useRoute, useRouter } from 'vue-router'
 import { useGoTo } from './hooks'
 import { RouteName } from './types'
+import i18n from '@/i18n'
+
+i18n.global.locale = 'zh'
 
 const router = useRouter()
 const route = useRoute()
@@ -28,7 +31,10 @@ const goMetrics = () => {
 
 <template>
   <div class="header">
-    <div class="logo-container" @click="goMetrics">
+    <div
+      class="logo-container"
+      @click="goMetrics"
+    >
       <img
         :src="logo"
         alt="ClickCat"
@@ -44,7 +50,7 @@ const goMetrics = () => {
           :class="{active: route.name === item}"
           @click="goTo(item)"
         >
-          {{ item }}
+          {{ $t(item) }}
         </span>
       </nav>
       <div
@@ -56,7 +62,7 @@ const goMetrics = () => {
           alt="logout"
           title="logout"
         />
-        <span>Sign out</span>
+        <span>{{ $t('Sign out') }}</span>
       </div>
     </div>
   </div>

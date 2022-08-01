@@ -171,6 +171,7 @@
 </template>
 <script lang='ts' setup>
   import SvgIcon from '@/components/SvgIcon/index.vue'
+  import { ElNotification } from 'element-plus'
   import { query } from '@/utils/http'
   import { ref, reactive } from 'vue'
   import { useLoginStore } from '@/store'
@@ -205,6 +206,14 @@
         loginStore.setConnection(connection)
         localStorage.setItem('connection', JSON.stringify({ connection }))
         goTo('Metrics')
+      })
+      .catch((err) => {
+        console.log(err, '1')
+        ElNotification({
+          title: 'Login',
+          message: 'Login failed, please check your user name or password!',
+          type: 'error',
+        })
       })
   }
 </script>

@@ -58,7 +58,7 @@ const queryFunction = (
 </script>
 <template>
   <el-collapse-item
-    title="Data Analysis"
+    :title="$t('Data Analysis')"
     name="1"
   >
     <FiltersVue @change="selectChangeData"></FiltersVue>

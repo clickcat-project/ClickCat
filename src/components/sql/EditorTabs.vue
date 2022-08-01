@@ -65,7 +65,7 @@ defineExpose({
       @click="addTabs"
     >
       <el-icon><Plus /></el-icon>
-      Add new tab
+      {{ $t('Add new tab') }}
     </span>
     <el-tabs
       v-model="editableTabsValue"

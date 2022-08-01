@@ -28,11 +28,11 @@ const deleteOne = (item: any) => {
       <span
         class="list-btn"
         @click="deleteOne(item)"
-      >Delete</span>
+      >{{ $t('Delete') }}</span>
       <span
         class="list-btn"
         @click="toResult(item)"
-      >View Results</span>
+      >{{ $t('View Results') }}</span>
     </div>
   </section>
 </template>

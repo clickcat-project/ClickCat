@@ -69,7 +69,7 @@ const queryFunction = (
 </script>
 <template>
   <el-collapse-item
-    title="Cluster Analysis"
+    :title="$t('Cluster Analysis')"
     name="2"
   >
     <FiltersVue @change="selectChangeData"></FiltersVue>
@@ -191,7 +191,10 @@ const queryFunction = (
           ></TableBanner>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="margin-bottom: 0;">
+      <el-row
+        :gutter="10"
+        style="margin-bottom: 0;"
+      >
         <el-col :span="8">
           <Progress
             title="Replicated tables by delay"

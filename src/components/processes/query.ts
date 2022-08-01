@@ -1,4 +1,4 @@
-import { query } from "@/utils/http"
+import { query } from '@/utils/http'
 
 export const queryProcesses = () => {
   const sql = `SELECT
@@ -32,7 +32,7 @@ export const queryProcesses = () => {
   return query(sql)
 }
 
-export const queryMutations = () => {
+export const queryMutations = (limit = 100, offset = 0) => {
   const sql = `
     SELECT
           database,
@@ -48,6 +48,7 @@ export const queryMutations = () => {
           latest_fail_reason
       FROM system.mutations
       ORDER BY create_time DESC
+      LIMIT ${limit} OFFSET ${offset}
     FORMAT JSON`
   return query(sql)
 }

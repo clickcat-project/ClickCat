@@ -77,13 +77,13 @@ onBeforeMount(() => {
 <template>
   <section class="filter-container">
     <template v-if="selectType.includes('database')">
-      <span class="filter-tip">Database</span>
+      <span class="filter-tip">{{ $t('Database') }}</span>
       <el-select
         v-model="defaultValue.database"
         class="m-2"
         placeholder="Select"
         size="small"
-        @change="(val) => {
+        @change="(val: string) => {
           getTablesByDatabase(val)
           emit('change', { database: val })
         }"
@@ -98,13 +98,13 @@ onBeforeMount(() => {
       <el-divider direction="vertical" />
     </template>
     <template v-if="selectType.includes('table')">
-      <span class="filter-tip">Table</span>
+      <span class="filter-tip">{{ $t('Table') }}</span>
       <el-select
         v-model="defaultValue.table"
         class="m-2"
         placeholder="Select"
         size="small"
-        @change="(val) => {
+        @change="(val: string) => {
           emit('change', { table: val })
         }"
       >
@@ -118,13 +118,13 @@ onBeforeMount(() => {
       <el-divider direction="vertical" />
     </template>
     <template v-if="selectType.includes('queryKind')">
-      <span class="filter-tip">Query kind</span>
+      <span class="filter-tip">{{ $t('Query kind') }}</span>
       <el-select
         v-model="defaultValue.queryKind"
         class="m-2"
         placeholder="Select"
         size="small"
-        @change="(val) => {
+        @change="(val: string) => {
           emit('change', { queryKind: val })
         }"
       >
@@ -138,13 +138,13 @@ onBeforeMount(() => {
       <el-divider direction="vertical" />
     </template>
     <template v-if="selectType.includes('type')">
-      <span class="filter-tip">Query status</span>
+      <span class="filter-tip">{{ $t('Query status') }}</span>
       <el-select
         v-model="defaultValue.type"
         class="m-2"
         placeholder="Select"
         size="small"
-        @change="(val) => {
+        @change="(val: string) => {
           emit('change', { type: val })
         }"
       >
@@ -158,13 +158,13 @@ onBeforeMount(() => {
       <el-divider direction="vertical" />
     </template>
     <template v-if="selectType.includes('user')">
-      <span class="filter-tip">User</span>
+      <span class="filter-tip">{{ $t('User') }}</span>
       <el-select
         v-model="defaultValue.user"
         class="m-2"
         placeholder="Select"
         size="small"
-        @change="(val) => {
+        @change="(val: string) => {
           emit('change', { user: val })
         }"
       >
@@ -183,7 +183,7 @@ onBeforeMount(() => {
       class="m-2"
       placeholder="Select"
       size="small"
-      @change="(val) => {
+      @change="(val: string | number) => {
         emit('change', {
           time: val,
           option: timeFilterList.find(item => item.value === val)

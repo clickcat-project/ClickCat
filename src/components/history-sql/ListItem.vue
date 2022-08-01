@@ -29,7 +29,7 @@ const addEditorTabs = () => {
       <el-icon>
         <Edit />
       </el-icon>
-      <span>编辑</span>
+      <span>{{ $t('Edit') }}</span>
     </div>
   </section>
 </template>

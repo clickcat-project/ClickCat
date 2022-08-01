@@ -64,7 +64,7 @@ const deleteOne = async (item: any) => {
       <el-icon :size="18">
         <Plus />
       </el-icon>
-      <span class="add-text">NEW</span>
+      <span class="add-text">{{ $t('NEW') }}</span>
     </section>
     <ListItemVue
       v-for="(item, i) in list"
