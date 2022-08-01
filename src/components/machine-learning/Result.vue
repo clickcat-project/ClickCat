@@ -124,12 +124,12 @@ const runForecast = () => {
           <el-icon>
             <ArrowLeft />
           </el-icon>
-          Back
+          {{ $t('Back') }}
         </div>
         <span
           class="forecast-btn"
           @click="changeDialogVisible"
-        >Forecast</span>
+        >{{ $t('Forecast') }}</span>
       </div>
       <div
         class="charts-box"
@@ -143,7 +143,7 @@ const runForecast = () => {
     </div>
     <el-dialog
       v-model="dialogVisible"
-      title="Run a new forecast"
+      :title="$t('Run a new forecast')"
       width="600px"
       custom-class="change-title-css"
     >
@@ -173,7 +173,7 @@ const runForecast = () => {
           class="forecast-btn"
           style="margin-left: 20px;"
           @click="runForecast"
-        >Run</span>
+        >{{ $t('Run') }}</span>
       </div>
       <!-- <template #footer>
         <span class="dialog-footer">

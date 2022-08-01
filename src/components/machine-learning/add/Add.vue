@@ -1,8 +1,9 @@
 <script lang='ts' setup>
-import { computed, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import * as echarts from 'echarts/core'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ArrowLeft } from '@element-plus/icons-vue'
 
 import sqls from '@/components/metrics/dataAnalysis/sqls'
 import { query } from '@/utils/http'
@@ -10,12 +11,14 @@ import { formatBarOptions, generateBarInstance } from '@/components/metrics/char
 import { addTraining as addTrainingQuery } from '../query'
 import { useLoginStore } from '@/store'
 import { timeIntervalOps } from '../data'
+import i18n from '@/i18n'
 
 type List = {name: string}[]
 
-const emit = defineEmits(['toResult'])
+const emit = defineEmits(['toResult', 'toList'])
 const loginStore = useLoginStore()
 
+const t = i18n.global.t
 const renderer = ref<HTMLElement>()
 const ruleFormRef = ref<FormInstance>()
 const database = ref<List>([])
@@ -43,7 +46,7 @@ const formLabelAlign = reactive<{
 const validateTimeRange = (rule: any, value: any, callback: any) => {
   const isCorrect = isCorrectTime(value)
   if (!isCorrect) {
-    callback(new Error('Start date cannot be later than end date'))
+    callback(new Error(t('Start date cannot be later than end date')))
   } else {
     callback()
   }
@@ -52,10 +55,10 @@ const validateTimeRange = (rule: any, value: any, callback: any) => {
 const validateTimeInterval = (rule: any, value: any, callback: any) => {
   const timeInterval = value.replace(` ${timeIntervalUnit.value}`, '')
   if (!timeInterval) {
-    return callback(new Error('please input time interval'))
+    return callback(new Error(t('please input time interval')))
   }
   if (!(/^[0-9]*$/.test(timeInterval))) {
-    callback(new Error('please use number'))
+    callback(new Error(t('please use number')))
   } else {
     callback()
   }
@@ -63,12 +66,12 @@ const validateTimeInterval = (rule: any, value: any, callback: any) => {
 
 const rules = reactive<FormRules>({
   database: [
-    { required: true, message: 'Please select database', trigger: 'change' }
+    { required: true, message: t('Please select database'), trigger: 'change' }
   ],
   table: [
     {
       required: true,
-      message: 'Please select table',
+      message: t('Please select table'),
       trigger: 'change',
     },
   ],
@@ -82,14 +85,14 @@ const rules = reactive<FormRules>({
   timeField: [
     {
       required: true,
-      message: 'Please select time field',
+      message: t('Please select time field'),
       trigger: 'change',
     },
   ],
   jobName: [
     {
       required: true,
-      message: 'Please input job name',
+      message: t('Please input job name'),
       trigger: 'blur',
     }
   ],
@@ -100,15 +103,6 @@ const rules = reactive<FormRules>({
       trigger: 'change',
     }
   ]
-})
-const title = computed(() => {
-  if (step.value === 1) {
-    return 'Select Table'
-  }
-  if (step.value === 2) {
-    return 'Time Range'
-  }
-  return 'Job Name'
 })
 
 watch(step, (newVal) => {
@@ -246,11 +240,21 @@ const changeIntervalUnit = (val: string) => {
   formLabelAlign.timeInterval = timeInterval.value + ' ' + val
   queryDataForMlSecondStep()
 }
+
+const toList = () => {
+  emit('toList')
+}
 </script>
 <template>
   <section class="ml-add-container">
     <h3 class="title">
-      {{ title }}
+      <el-icon
+        style="margin-right: 10px"
+        @click="toList"
+      >
+        <ArrowLeft />
+      </el-icon>
+      {{ $t('Add') }}
     </h3>
     <el-form
       ref="ruleFormRef"
@@ -263,7 +267,7 @@ const changeIntervalUnit = (val: string) => {
       status-icon
     >
       <el-form-item
-        label="Job Name"
+        :label="$t('Job Name')"
         prop="jobName"
       >
         <el-input
@@ -273,7 +277,7 @@ const changeIntervalUnit = (val: string) => {
       </el-form-item>
 
       <el-form-item
-        label="Database"
+        :label="$t('Database')"
         prop="database"
       >
         <el-select
@@ -291,7 +295,7 @@ const changeIntervalUnit = (val: string) => {
         </el-select>
       </el-form-item>
       <el-form-item
-        label="Tables"
+        :label="$t('Tables')"
         prop="table"
       >
         <el-select
@@ -312,7 +316,7 @@ const changeIntervalUnit = (val: string) => {
       </el-form-item>
       
       <el-form-item
-        label="Time  Field"
+        :label="$t('Time  Field')"
         prop="timeField"
       >
         <el-select
@@ -332,7 +336,7 @@ const changeIntervalUnit = (val: string) => {
         </el-select>
       </el-form-item>
       <el-form-item
-        label="Time  Range"
+        :label="$t('Time  Range')"
         prop="timeRange"
       >
         <el-date-picker
@@ -354,7 +358,7 @@ const changeIntervalUnit = (val: string) => {
         />
       </el-form-item>
       <el-form-item
-        label="Time  Interval"
+        :label="$t('Time  Interval')"
         prop="timeInterval"
       >
         <el-input
@@ -399,7 +403,7 @@ const changeIntervalUnit = (val: string) => {
         type="primary"
         @click="nextStep"
       >
-        End
+        {{ ('End') }}
       </el-button>
     </section>
   </section>
@@ -421,6 +425,8 @@ const changeIntervalUnit = (val: string) => {
   }
 
   .title {
+    display: flex;
+    align-items: center;
     height: 60px;
     font-size: 20px;
     font-weight: normal;

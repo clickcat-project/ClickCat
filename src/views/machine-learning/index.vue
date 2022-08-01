@@ -5,10 +5,10 @@
 }
 </route>
 <script lang='ts' setup>
-import { ref } from 'vue';
-import ListVue from '@/components/machine-learning/List/List.vue';
+import { ref } from 'vue'
+import ListVue from '@/components/machine-learning/List/List.vue'
 import Add from '@/components/machine-learning/add/Add.vue'
-import ResultVue from '@/components/machine-learning/Result.vue';
+import ResultVue from '@/components/machine-learning/Result.vue'
 
 enum PageType {
   List = 'list',
@@ -34,9 +34,21 @@ const toList = () => {
 </script>
 <template>
   <section class="ml-container">
-    <ListVue v-if="current === PageType.List" @add="add" @to-result="toResult" />
-    <Add v-if="current === PageType.Add" @toResult="toResult" />
-    <ResultVue v-if="current === PageType.Result" :selectedItem="selectedItem" @toList="toList" />
+    <ListVue
+      v-if="current === PageType.List"
+      @add="add"
+      @to-result="toResult"
+    />
+    <Add
+      v-if="current === PageType.Add"
+      @toResult="toResult"
+      @toList="toList"
+    />
+    <ResultVue
+      v-if="current === PageType.Result"
+      :selected-item="selectedItem"
+      @toList="toList"
+    />
   </section>
 </template>
 <style lang='scss' scoped>
