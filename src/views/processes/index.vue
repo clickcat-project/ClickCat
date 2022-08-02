@@ -26,6 +26,7 @@ const mutationsRef = ref<any>(null)
 const defaultCard = ref('Processes')
 const rows = ref<string>('100')
 const page = ref<number>(0)
+const pageTotal = ref<number>(0)
 let selectedProcesses: ListItem[] = []
 let selectedMutations: ListItem[] = []
 
@@ -98,15 +99,26 @@ const handleChangeRows = (command: string) => {
 }
 
 const previousPage = () => {
-  if (page.value > 0) {
-    page.value --
+  if (page.value <= 0) {
+    return
   }
+  page.value --
   mutationsRef.value.getData(rows.value, (+rows.value) * page.value)
 }
 
 const nextPage = () => {
+  if (page.value >= pageTotal.value) {
+    return
+  }
   page.value ++
   mutationsRef.value.getData(rows.value, (+rows.value) * page.value)
+    .then((res: any) => {
+      res.rows_before_limit_at_least
+    })
+}
+
+const getTotal2Computed = (total: number) => {
+  pageTotal.value = Math.floor(total / (+rows.value))
 }
 </script>
 <template>
@@ -159,10 +171,16 @@ const nextPage = () => {
       </el-dropdown>
       <el-divider direction="vertical" />
       <div class="pagenigetion-box">
-        <el-icon @click="previousPage">
+        <el-icon
+          :class="{disable: page <= 0}"
+          @click="previousPage"
+        >
           <ArrowLeft />
         </el-icon>
-        <el-icon @click="nextPage">
+        <el-icon
+          :class="{disable: page >= pageTotal}"
+          @click="nextPage"
+        >
           <ArrowRight />
         </el-icon>
       </div>
@@ -189,6 +207,8 @@ const nextPage = () => {
         <CommonTableVue
           ref="mutationsRef"
           :query-func="queryMutations"
+          :show-index="true"
+          @firstGetData="getTotal2Computed"
           @selection-change="changeMutations"
         ></CommonTableVue>
       </el-tab-pane>
@@ -279,6 +299,14 @@ const nextPage = () => {
     i {
       cursor: pointer;
       color: rgba(62, 62, 69, 0.65);
+    }
+
+    i.disable {
+      color: rgba(62, 62, 69, 0.45);
+      cursor: not-allowed;
+    }
+    i.disable:hover {
+      color: rgba(62, 62, 69, 0.45);
     }
 
     i:hover {

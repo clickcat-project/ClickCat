@@ -4,7 +4,9 @@ import { CommonObj } from './metrics/types'
 
 const props = defineProps<{
   queryFunc: (limit: number, offset: number) => Promise<any>,
+  showIndex?: boolean
 }>()
+const emit = defineEmits(['selectionChange', 'firstGetData'])
 
 const columns = ref<{name: string}[]>([])
 const tableData = ref<CommonObj[]>([])
@@ -12,7 +14,7 @@ const loading = ref<boolean>(true)
 
 const getData = (limit = 100, offset = 0) => {
   loading.value = true
-  props.queryFunc(limit, offset)
+  return props.queryFunc(limit, offset)
     .then((res) => {
       columns.value = res.meta.map((item: { name: string; }) => {
         return {
@@ -20,6 +22,7 @@ const getData = (limit = 100, offset = 0) => {
         }
       })
       tableData.value = res.data
+      return res
     })
     .finally(() => {
       loading.value = false
@@ -28,9 +31,10 @@ const getData = (limit = 100, offset = 0) => {
 
 onBeforeMount(() => {
   getData()
+    .then((res: any) => {
+      emit('firstGetData', res.rows_before_limit_at_least)
+    })
 })
-
-const emit = defineEmits(['selectionChange'])
 
 const handleSelectionChange = (val: any[]) => {
   emit('selectionChange', val)
@@ -63,6 +67,11 @@ defineExpose({
         fixed="left"
         type="selection"
         width="55"
+      />
+      <el-table-column
+        v-if="showIndex"
+        type="index"
+        width="50"
       />
       <template
         v-for="col in columns"
