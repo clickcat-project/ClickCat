@@ -40,7 +40,7 @@ watch(() => activeName.value, () => {
         <TablePaneData :tab="tab" />
       </el-tab-pane>
       <el-tab-pane
-        label="LIneage"
+        label="Lineage"
         name="LIneage"
       >
         <TablePaneLIneage

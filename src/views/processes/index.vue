@@ -139,7 +139,6 @@ const getTotal2Computed = (total: number) => {
       <el-divider direction="vertical" />
       <div
         class="btn"
-        style="margin-right: 60px"
         @click="refresh"
       >
         <el-icon
@@ -150,47 +149,54 @@ const getTotal2Computed = (total: number) => {
         </el-icon>
         <span>{{ $t('Refresh') }}</span>
       </div>
-      <el-dropdown @command="handleChangeRows">
-        <span class="el-dropdown-link">
-          {{ rows }} Rows
-          <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-        </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item command="100">
-              100 rows
-            </el-dropdown-item>
-            <el-dropdown-item command="300">
-              300 rows
-            </el-dropdown-item>
-            <el-dropdown-item command="500">
-              500 rows
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <el-divider direction="vertical" />
-      <div class="pagenigetion-box">
-        <el-icon
-          :class="{disable: page <= 0}"
-          @click="previousPage"
-        >
-          <ArrowLeft />
-        </el-icon>
-        <el-icon
-          :class="{disable: page >= pageTotal}"
-          @click="nextPage"
-        >
-          <ArrowRight />
-        </el-icon>
+      <div
+        v-if="defaultCard === 'Mutations'"
+        style="margin-left: 60px"
+        class="page-box"
+      >
+        <el-dropdown @command="handleChangeRows">
+          <span class="el-dropdown-link">
+            {{ rows }} Rows
+            <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="100">
+                100 rows
+              </el-dropdown-item>
+              <el-dropdown-item command="300">
+                300 rows
+              </el-dropdown-item>
+              <el-dropdown-item command="500">
+                500 rows
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <el-divider direction="vertical" />
+        <div class="pagenigetion-box">
+          <el-icon
+            :class="{disable: page <= 0}"
+            @click="previousPage"
+          >
+            <ArrowLeft />
+          </el-icon>
+          <el-icon
+            :class="{disable: page >= pageTotal}"
+            @click="nextPage"
+          >
+            <ArrowRight />
+          </el-icon>
+        </div>
       </div>
     </section>
     <el-tabs
       v-model="defaultCard"
       type="border-card"
     >
+      <!-- :label="$t('Processes')" -->
       <el-tab-pane
-        :label="$t('Processes')"
+        label="Processes"
         name="Processes"
       >
         <CommonTableVue
@@ -199,8 +205,9 @@ const getTotal2Computed = (total: number) => {
           @selection-change="changeProcesses"
         ></CommonTableVue>
       </el-tab-pane>
+      <!-- :label="$t('Mutations')" -->
       <el-tab-pane
-        :label="$t('Mutations')"
+        label="Mutations"
         :lazy="true"
         name="Mutations"
       >
@@ -312,6 +319,10 @@ const getTotal2Computed = (total: number) => {
     i:hover {
       color: var(--el-color-primary);
     }
+  }
+  .page-box {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
