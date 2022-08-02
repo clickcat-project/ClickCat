@@ -108,7 +108,7 @@ const deleteOne = async (item: any) => {
   width: 276px;
   height: 32px;
   color: var(--color-yellow-text);
-  line-height: 30px;
+  line-height: 32px;
   border: 1px solid var(--tab-bg);
   border-radius: 2px;
   text-align: center;
