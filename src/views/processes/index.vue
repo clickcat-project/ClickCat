@@ -95,6 +95,7 @@ const refresh = () => {
 
 const handleChangeRows = (command: string) => {
   page.value = 0
+  rows.value = command
   mutationsRef.value.getData(command, (+command) * page.value)
 }
 
