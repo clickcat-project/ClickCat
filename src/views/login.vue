@@ -1,10 +1,11 @@
 <template>
   <div class="login">
     <div class="login-title">
-      <SvgIcon
-        name="svg-logo"
+      <img
+        :src="logo"
+        alt="ClickCat"
         class="logo"
-      ></SvgIcon>
+      />
       <text class="title">
         ClickCat
       </text>
@@ -171,6 +172,7 @@
 </template>
 <script lang='ts' setup>
   import SvgIcon from '@/components/SvgIcon/index.vue'
+  import logo from '@/assets/images/logo.svg'
   import { ElNotification } from 'element-plus'
   import { query } from '@/utils/http'
   import { ref, reactive } from 'vue'
