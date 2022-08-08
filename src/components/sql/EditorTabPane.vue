@@ -68,8 +68,8 @@ const queryTableData = (rows = 100) => {
   let sql = ''
   let historySql = originSql
   const originSqlTrim = originSql?.trim()
-  if (originSqlTrim?.includes('SELECT')) {
-    if (!originSql?.includes('limit')) {
+  if (originSqlTrim?.toLowerCase()?.includes('select')) {
+    if (!originSql?.toLowerCase()?.includes('limit')) {
       sql = originSql + ` limit ${rows} FORMAT JSON`
       historySql = originSql + ` limit ${rows}`
     } else {
