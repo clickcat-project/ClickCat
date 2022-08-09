@@ -97,6 +97,7 @@ const queryTableData = (rows = 100) => {
     .catch(e => {
       console.log(e)
       queryTableDataErrorMsg.value = e
+      tableData.value = []
     })
     .finally(() => {
       loadingForTableData.value = false

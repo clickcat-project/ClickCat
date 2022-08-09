@@ -205,6 +205,7 @@
     const connection = activeName.value === 'direct' ? loginForm : demoLoginForm
     query(undefined, `&query=SELECT version() as version${loginForm.params ? `&${loginForm.params}` : ''}`, connection, true)
       .then(() => {
+        ElNotification.closeAll()
         loginStore.setConnection(connection)
         localStorage.setItem('connection', JSON.stringify({ connection }))
         goTo('Metrics')

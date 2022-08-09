@@ -89,11 +89,14 @@ defineExpose({
             />
           </template>
         </el-table>
-        <Empty style="height: 200px"></Empty>
+        <Empty
+          v-if="!errorMsg"
+          style="height: 200px"
+        ></Empty>
       </div>
     </div>
     <div class="action-box">
-      <template v-if="!!statistics">
+      <template v-if="!errorMsg && !!statistics">
         <span>{{ statistics?.elapsed }} sec</span>
         <el-divider direction="vertical" />
         <span>{{ statistics?.rows_read }} rows</span>
