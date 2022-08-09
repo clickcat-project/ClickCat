@@ -14,6 +14,7 @@ const nvaList = [
   RouteName.Metrics,
   RouteName.SQL,
   RouteName.Processes,
+  RouteName.Graph,
   RouteName.Ml,
   RouteName.HistorySQL
 ]
