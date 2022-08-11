@@ -41,7 +41,6 @@ onMounted(async () => {
   const database = res.data.map((item: any) => item.database)
   const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
   const realdata = sqlStore.visitNumber !== 1 ? [] : [...database, ...databaseDotTable]
-  console.log(realdata, '1111111')
   await registerTable(realdata)
   initEditor()
 })
