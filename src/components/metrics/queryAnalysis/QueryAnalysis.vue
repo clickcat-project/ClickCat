@@ -236,6 +236,7 @@ const queryFunction = (
             :query-func="queryFunction"
             type="line"
             :height="310"
+            y-axis-axis-label-unit="MB"
           ></ChartsVue>
         </el-col>
         <el-col :span="12">

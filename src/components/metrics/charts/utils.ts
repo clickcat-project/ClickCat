@@ -147,3 +147,9 @@ export const dealCustomBarData = (data: number[]) => {
     interval: xAxis
   }
 }
+
+export const formatHasUnit = (value: number, unit: string) => {
+  if (unit === 'MB') {
+    return (value / 1024 / 1024).toFixed(2) + 'MB'
+  }
+}

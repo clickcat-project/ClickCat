@@ -22,6 +22,7 @@ const props = defineProps<{
   sqltype?: string,
   queryKind?: string,
   timeDuration?: string,
+  yAxisAxisLabelUnit?: string
 }>()
 
 // Vue3 下 echarts 的 tooltip 不显示
@@ -29,7 +30,9 @@ const props = defineProps<{
 // 处理办法1：对Proxy对象进行拆箱。见 https://blog.csdn.net/xy109/article/details/113869790
 // 处理办法2：如下，不使用响应式 ，直接赋值，由于没有使用响应式，‘===’ 成立，tooltip成功显示
 let chartInstanceOuter: echarts.ECharts | null = null
-const formatOptionouter = ref<(data: CommonData, grid?: CommonObj, legend?: CommonObj) => echarts.EChartsOption>()
+const formatOptionouter = ref<
+  (data: CommonData, grid?: CommonObj, legend?: CommonObj, unit?: string) => echarts.EChartsOption
+>()
 
 watch([
   () => props.database,
@@ -44,7 +47,10 @@ watch([
 })
 
 onMounted(() => {//需要获取到element,所以是onMounted的Hook
-  const {chartInstance, formatOption} = getCurrentChart(props.type, document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement)
+  const {chartInstance, formatOption} = getCurrentChart(
+    props.type,
+    document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement
+  )
   chartInstanceOuter = chartInstance as unknown as echarts.ECharts
   formatOptionouter.value = formatOption as any
   getData()
@@ -102,9 +108,17 @@ const getData = () => {
         if (formatOptionouter.value) {
           chartInstanceOuter?.dispose()
           // if (chartInstanceOuter) {
-          const {chartInstance} = getCurrentChart(props.type, document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement)
+          const {chartInstance} = getCurrentChart(
+            props.type,
+            document.querySelector(`.chart-render-container-${props.index}`) as HTMLElement
+          )
           chartInstanceOuter = chartInstance as unknown as echarts.ECharts
-          const options = formatOptionouter.value(data, props.grid, props.legend)
+          const options = formatOptionouter.value(
+            data,
+            props.grid,
+            props.legend,
+            props.yAxisAxisLabelUnit
+          )
           chartInstance.setOption(options)
           // }
         }
