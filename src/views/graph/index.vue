@@ -13,6 +13,8 @@
     :detail-data="detailData"
     @close-detail="closeDetail"
   ></Detail>
+
+  <Relations :type-list="typeList" />
 </template>
 
 <script lang='ts' setup>
@@ -21,12 +23,23 @@ import {onMounted} from 'vue'
 import {query} from '@/utils/http'
 import SpriteText from 'three-spritetext'
 import Detail from '@/components/graph/Detail.vue'
+import Relations from '@/components/graph/Relations.vue'
 
 import { ref, reactive } from 'vue'
 const showDetail = ref(false)
 
-let detailData  = reactive({
-  nodeInfo: 1
+const detailData  = reactive({
+  nodeInfo: {}
+})
+
+interface typeListType {
+  Tables: {name: string, color?: string}[]
+  RelationShips: {name: string, color?: string}[]
+}
+
+const typeList = reactive<typeListType>({
+  Tables: [],
+  RelationShips: []
 })
 
 onMounted(async () => {
@@ -34,10 +47,35 @@ onMounted(async () => {
   const jobDetail = JSON.parse(graph.data[0].JOB_DETAIL)
   let nodes = []
   for(const item of jobDetail.nodes){
+    const displayName = item.displayFields?.split(',')[0]
+
     const node = await query('SELECT  *, \''+item.table+'\' as _label, \''+item.table+'\'||'+item.field+' as _id FROM ' + item.database+'.'+item.table + ' where ' + item.field + ' is not null')
-    nodes =  nodes.concat(node.data)
+    nodes =  nodes.concat(node.data.map(item => {
+      return {
+        ...item,
+        name: item[displayName]
+      }
+    }))
   }
-  nodes.map(item => {item.label = item._label; item.id = item._id})
+
+  console.log(nodes)
+
+  nodes.map(item => {
+    item.label = item._label
+    item.id = item._id
+  })
+
+  nodes.forEach(node => {
+    const label:string = node.label || node._label || ''
+
+    const labelIndex = typeList?.Tables?.findIndex(typeItem => typeItem?.name === label)
+
+    if( labelIndex === -1) {
+      typeList.Tables.push({
+        name: label
+      })
+    }
+  })
 
   let links = []
   for(const item of jobDetail.links){
@@ -45,12 +83,24 @@ onMounted(async () => {
     links = links.concat(link.data)
   }
 
+    links.forEach(link => {
+    const label:string = link.label || link._label || ''
+
+    const labelIndex = typeList?.RelationShips?.findIndex(typeItem => typeItem?.name === label)
+
+    if( labelIndex === -1) {
+      typeList.RelationShips.push({
+        name: label
+      })
+    }
+  })
 
   // Random tree
   const gData = {
     nodes: nodes,
     links: links
   }
+
   const Graph = ForceGraph3D({
     extraRenderers: [new THREE.CSS2DRenderer()]
   })(document.getElementById('3d-graph') as HTMLElement)
@@ -61,6 +111,10 @@ onMounted(async () => {
       .linkOpacity(1)
       .linkWidth(0.2)
       .linkLabel('label')
+      // .onNodeClick(node => {
+      //   detailData.nodeInfo = node
+      //   showDetail.value = true
+      // })
       .nodeThreeObject((node:any) => {
         const nodeEl = document.createElement('div')
         nodeEl.textContent = node.name
