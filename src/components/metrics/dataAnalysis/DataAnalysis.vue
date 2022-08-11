@@ -149,6 +149,28 @@ const queryFunction = (
       </el-col>
     </el-row>
     <el-row :gutter="10">
+      <el-col :span="12">
+        <TableBanner
+          title="Database summary"
+          :height="390"
+          :database="databaseReal"
+          :table="tableReal"
+          sql-func-name="queryDatabaseSummary"
+          :query-func="queryFunction"
+        ></TableBanner>
+      </el-col>
+      <el-col :span="12">
+        <TableBanner
+          title="Table summary"
+          :height="390"
+          :database="databaseReal"
+          :table="tableReal"
+          sql-func-name="queryTableSummary"
+          :query-func="queryFunction"
+        ></TableBanner>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10">
       <el-col :span="24">
         <!-- :grid="{ height: '65%' }" -->
         <ChartsVue
@@ -181,18 +203,6 @@ const queryFunction = (
       </el-col>
     </el-row>
     <el-row :gutter="10">
-      <el-col :span="24">
-        <TableBanner
-          title="Database summary"
-          :height="390"
-          :database="databaseReal"
-          :table="tableReal"
-          sql-func-name="queryDatabaseSummary"
-          :query-func="queryFunction"
-        ></TableBanner>
-      </el-col>
-    </el-row>
-    <el-row :gutter="10">
       <el-col :span="12">
         <TableBanner
           title="Detached partitions"
@@ -211,18 +221,9 @@ const queryFunction = (
         ></Progress>
       </el-col>
     </el-row>
-    <el-row :gutter="10">
-      <el-col :span="24">
-        <TableBanner
-          title="Table summary"
-          :height="470"
-          :database="databaseReal"
-          :table="tableReal"
-          sql-func-name="queryTableSummary"
-          :query-func="queryFunction"
-        ></TableBanner>
-      </el-col>
-    </el-row>
+    <!-- <el-row :gutter="10">
+      
+    </el-row> -->
     <el-row
       :gutter="10"
       style="margin-bottom: 0;"

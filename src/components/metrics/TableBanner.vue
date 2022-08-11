@@ -62,6 +62,16 @@ onBeforeMount(() => {
   getData()
 })
 
+const sortMethod = (a: any, b: any) => {
+  if (a < b) {
+    return -1
+  }
+  if (a > b) {
+    return 1
+  }
+  return 0
+}
+
 </script>
 <template>
   <Card
@@ -85,6 +95,8 @@ onBeforeMount(() => {
             :show-overflow-tooltip="true"
             :prop="col.name"
             :label="col.name"
+            :sortable="true"
+            :sort-method="sortMethod"
             min-width="150"
           >
             <template #header>
@@ -103,6 +115,8 @@ onBeforeMount(() => {
             :show-overflow-tooltip="true"
             :prop="col.name"
             :label="col.name"
+            :sortable="true"
+            :sort-method="sortMethod"
             min-width="150"
           >
             <template #default="scope">
@@ -137,5 +151,11 @@ onBeforeMount(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+:deep(.el-table th.el-table__cell>.cell) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>

@@ -117,11 +117,11 @@ defineExpose({
       ref="dragEle"
       class="drag-box"
     ></div>
-    <!-- <div
+    <div
       v-if="dataloading"
       v-loading="true"
       class="loading"
-    ></div> -->
+    ></div>
     <div class="search-box">
       <el-select-v2
         v-model="seletedColumn"
@@ -170,13 +170,13 @@ defineExpose({
         >
           <template #default="{ node }">
             <template v-if="node.data.database && !node.data.table">
+              <!-- append-to=".tree-content .el-scrollbar" -->
               <el-tooltip
                 class="box-item"
                 effect="dark"
-                append-to=".tree-content .el-scrollbar"
                 popper-class="click-cat-dark"
                 :content="`${node.data.engine}${br}${node.data.size}`"
-                placement="top"
+                placement="right"
               >
                 <el-dropdown
                   trigger="contextmenu"
@@ -210,13 +210,13 @@ defineExpose({
               </el-tooltip>
             </template>
             <template v-else-if="node.data.database && node.data.table">
+              <!-- append-to=".tree-content .el-scrollbar" -->
               <el-tooltip
                 class="box-item"
                 effect="dark"
                 popper-class="click-cat-dark"
-                append-to=".tree-content .el-scrollbar"
                 :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
-                placement="top"
+                placement="right"
               >
                 <span
                   :id="`${node.data.database}-${node.data.table}-${node.label}`"
@@ -288,12 +288,12 @@ defineExpose({
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0, .6);
+    // background-color: rgba(0,0,0, .6);
     z-index: 3000;
 
-    :deep(.el-loading-mask) {
-      background-color: unset;
-    }
+    // :deep(.el-loading-mask) {
+    //   background-color: unset;
+    // }
   }
   .el-tree {
     background-color: unset;
