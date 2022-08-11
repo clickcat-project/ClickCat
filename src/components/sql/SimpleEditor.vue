@@ -8,6 +8,7 @@ import { themeCobalt } from './theme/Cobalt'
 import createSqlCompleter from './utils/sql-completion'
 import { TabItem } from '@/store/modules/sql/types'
 import { useSqlStore } from '@/store'
+import { queryAllTables } from './query'
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
 
@@ -20,11 +21,6 @@ const getHints = (model: any) => {
   let id = model.id.substring(6)
   return (global[id] && global[id].hints) || []
 }
-
-monaco.languages.registerCompletionItemProvider(
-  'sql',
-  createSqlCompleter(getHints) as any
-)
 
 const sqlStore = useSqlStore()
 const props = defineProps<{
@@ -39,7 +35,12 @@ const simpleEditorContainer = ref<HTMLElement>()
 watch(() => props.tab.sql, (newVal) => {
   sqlStore.addSqlIsCommand && editorInstance.setValue(newVal as string)
 })
-onMounted(() => {
+
+onMounted(async () => {
+  const res = await queryAllTables()
+  const database = res.data.map((item: any) => item.database)
+  const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
+  await registerTable([...database, ...databaseDotTable])
   initEditor()
 })
 
@@ -67,6 +68,13 @@ const emitQueryAction = () => {
 
 const getEditorContainer = () => {
   return simpleEditorContainer.value
+}
+
+const registerTable = async (databaseHints: string[]) => {
+  monaco.languages.registerCompletionItemProvider(
+    'sql',
+    createSqlCompleter(getHints, databaseHints) as any
+  )
 }
 
 defineExpose({
