@@ -5,8 +5,14 @@ ClickCat is a firendly user interface that lets you search,explore and visualize
 We provides the following features,you can access http://www.clickcat.cloud to try directly without any installing.
 # Features
 * An online SQL editor  which can run your SQL code without any installing.
+<img src="https://user-images.githubusercontent.com/22762150/184086489-20d872a9-32b6-4773-a86f-f17e5775467f.png" width="500"/>
+
 * You can observe all processes and mutations. For those unfinished processes, you can kill them in ui.
+<img src="https://user-images.githubusercontent.com/22762150/184086629-3d848426-b463-430f-a738-609c0eff2800.png" width="500"/>
+
 * The Metrics contains Cluster Analysis,Data Analysis,Query Analysis. 
+<img src="https://user-images.githubusercontent.com/22762150/184086690-4fb86363-316c-48ac-a73f-d486c1caf56b.png" width="500"/>
+
 * Time-series Prediction use time series modeling to detect anomalies in your current data and forecast trends based on historical data in Clickhouse.
 <img src="https://user-images.githubusercontent.com/22762150/172766700-de6b755c-0f9d-47e3-b0e3-fbb72ca06f23.png" width="500" />
 
