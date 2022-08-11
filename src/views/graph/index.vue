@@ -7,13 +7,12 @@
 <template>
   <div id="3d-graph"></div>
 
-  <el-drawer
-    v-model="drawer"
-    title="I am the title"
-    :with-header="false"
-  >
-    <span>Hi there!</span>
-  </el-drawer>
+
+  <Detail
+    v-if="showDetail"
+    :detail-data="detailData"
+    @close-detail="closeDetail"
+  ></Detail>
 </template>
 
 <script lang='ts' setup>
@@ -21,9 +20,14 @@ import ForceGraph3D from '3d-force-graph'
 import {onMounted} from 'vue'
 import {query} from '@/utils/http'
 import SpriteText from 'three-spritetext'
+import Detail from '@/components/graph/Detail.vue'
 
-import { ref } from 'vue'
-const drawer = ref(false)
+import { ref, reactive } from 'vue'
+const showDetail = ref(false)
+
+let detailData  = reactive({
+  nodeInfo: 1
+})
 
 onMounted(async () => {
   const graph = await query('SELECT  * FROM clickcat.GRAPH_TASK where ID = \'1\'')
@@ -63,11 +67,13 @@ onMounted(async () => {
         nodeEl.style.color = node.color
         nodeEl.className = 'node-label'
 
-        nodeEl.onclick = (node) => {
+        nodeEl.onclick = (el) => {
+          console.log(el)
           console.log(node)
 
           // 弹出右侧窗口
-          drawer.value = true
+          detailData.nodeInfo = node
+          showDetail.value = true
         }
 
         return new THREE.CSS2DObject(nodeEl)
@@ -75,6 +81,10 @@ onMounted(async () => {
       .linkDirectionalArrowLength(3)
       .linkDirectionalArrowRelPos(1)
 })
+
+const closeDetail = () => {
+  showDetail.value = false
+}
 </script>
 <style>
 .scene-tooltip {
