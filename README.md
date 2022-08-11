@@ -24,7 +24,8 @@ pnpm install
 pnpm dev
 ```
 # Support
-You are free to open an issue if you have any question or idea.
+You are free to open an [issue](https://github.com/clickcat-project/ClickCat/issues) if you have any question or idea.
 
 # Contribute
+At present, the ClickCat project is mainly composed of a front-end project(Vue3 + TypeScript) + a Python project (time series prediction model).
 We are always open to people who want to use the system or contribute to it. Contact us if you are looking for implementation tasks that fit your skills.
