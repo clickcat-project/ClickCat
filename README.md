@@ -23,4 +23,8 @@ npm install -g pnpm
 pnpm install
 pnpm dev
 ```
+# Support
+You are free to open an issue if you have any question or idea.
 
+# Contribute
+We are always open to people who want to use the system or contribute to it. Contact us if you are looking for implementation tasks that fit your skills.
