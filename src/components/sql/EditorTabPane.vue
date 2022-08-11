@@ -64,14 +64,13 @@ const changeValue = (val: string) => {
 
 const queryTableData = (rows = 100) => {
   loadingForTableData.value = true
-  const originSql = props.tab.sql
+  const staticSql = props.tab.sql
+  const originSql = props.tab.sql?.replace(';', '')
   let sql = ''
-  let historySql = originSql
   const originSqlTrim = originSql?.trim()
   if (originSqlTrim?.toLowerCase()?.includes('select')) {
     if (!originSql?.toLowerCase()?.includes('limit')) {
       sql = originSql + ` limit ${rows} FORMAT JSON`
-      historySql = originSql + ` limit ${rows}`
     } else {
       sql = originSql + ' FORMAT JSON'
     }
@@ -79,7 +78,7 @@ const queryTableData = (rows = 100) => {
     sql = originSql as string
   }
   
-  originSql && sqlStore.addHistorySql(historySql)
+  staticSql && sqlStore.addHistorySql(staticSql)
   query(sql)
     .then(res => {
       queryTableDataErrorMsg.value = undefined
