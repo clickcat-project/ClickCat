@@ -6,6 +6,7 @@ import Count from '@/components/metrics/Count.vue'
 import ChartsVue from '../charts/Charts.vue'
 import FiltersVue from '../filter/Filters.vue'
 import TableBannerVue from '../TableBanner.vue'
+import ChartsVarCustom from '../charts/ChartsBarCustom.vue'
 
 import { query } from '@/utils/http'
 import sqls, { SqlParams } from '../dataAnalysis/sqls'
@@ -143,7 +144,7 @@ const queryFunction = (
       </el-row>
       <el-row :gutter="10">
         <el-col :span="12">
-          <ChartsVue
+          <ChartsVarCustom
             index="3"
             title="Query time distribution"
             sql-func-name="queryTimeDistributionQueryAnalysis"
@@ -154,7 +155,7 @@ const queryFunction = (
             :query-func="queryFunction"
             type="bar"
             :height="310"
-          ></ChartsVue>
+          ></ChartsVarCustom>
         </el-col>
         <el-col :span="12">
           <ChartsVue
