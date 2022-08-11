@@ -22,7 +22,8 @@ export const useSqlStore = defineStore(
       ],
       activeTabs: firstDate,
       addSqlIsCommand: false,
-      historySqls: [] as string[]
+      historySqls: [] as string[],
+      visitNumber: 0
     }),
     persist: {
       enabled: true,
@@ -34,6 +35,9 @@ export const useSqlStore = defineStore(
     },
     getters: {},
     actions: {
+      increamentVisitNumber() {
+        this.visitNumber ++
+      },
       addHistorySql (sql: string | undefined) {
         sql && this.historySqls.unshift(sql)
       },

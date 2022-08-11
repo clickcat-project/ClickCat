@@ -22,6 +22,7 @@ const sqlContainer = ref<HTMLElement>()
 const EditorTabsInstance = ref<any>()
 
 onMounted(() => {
+  sqlStore.increamentVisitNumber()
   const dragElement = filterInstance.value.getDragEle() as HTMLElement
   const editorContainer = filterContainer.value as HTMLElement
   const container = sqlContainer.value as HTMLElement
