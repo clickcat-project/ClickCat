@@ -1,7 +1,7 @@
 <script lang='ts' setup>
-import { reactive, ref, watch } from 'vue'
+import { onBeforeMount, reactive, ref, watch } from 'vue'
 import ButterFlyVue from './butterFlyVue.vue'
-import { getEntityLineage } from './query'
+import { getEntityLineage, queryBloodKinshipTable, queryBloodKinshipView, queryBloodKinshipMaterializedView } from './query'
 import nodeRender from './node'
 import { TabItem } from '@/store/modules/sql/types'
 
@@ -47,6 +47,20 @@ watch(() => props.isFirstRender, () => {
 // onMounted(() => {
 //   
 // })
+onBeforeMount(() => {
+  queryBloodKinshipTable()
+    .then(res => {
+      console.log(res, 'table')
+    })
+  queryBloodKinshipView()
+    .then(res =>{
+      console.log(res, 'view')
+    })
+  queryBloodKinshipMaterializedView()
+    .then(res => {
+      console.log(res, 'MaterializedView')
+    })
+})
 
 async function datahubChange () {
   await bfsTreeEach(`urn:li:dataset:(urn:li:dataPlatform:clickhouse,${props.tab.node?.database}.${props.tab.node?.name},PROD)`, 'downstream')

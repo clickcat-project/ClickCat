@@ -1,5 +1,73 @@
 import { query } from '@/utils/http'
 
+// get blood kinship start
+export const queryBloodKinshipTable = () => {
+  const sql = `SELECT extractAll(engine_full, '''(.*?)''')[2] AS source_schema
+      , extractAll(engine_full, '''(.*?)''')[3] AS source_table
+      , database                                AS target_schema
+      , name                                    AS target_table
+    FROM system.tables
+    WHERE engine IN ('Distributed')
+    UNION ALL
+    SELECT extract(create_table_query, 'DB ''(.*?)''')    AS source_schema
+      , extract(create_table_query, 'TABLE ''(.*?)''') AS source_table
+      , database                                       AS target_schema
+      , name                                           AS target_table
+    FROM system.tables
+    WHERE engine IN ('Dictionary')
+    AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
+    ORDER BY target_schema, target_table, source_schema, source_table
+  `
+  return query(sql, undefined, undefined, undefined, true).then(res => {
+    return res
+  })
+}
+
+export const queryBloodKinshipView = () => {
+  const sql = `SELECT extractAll(engine_full, '''(.*?)''')[2] AS source_schema
+      , extractAll(engine_full, '''(.*?)''')[3] AS source_table
+      , database                                AS target_schema
+      , name                                    AS target_table
+    FROM system.tables
+    WHERE engine IN ('Distributed')
+    UNION ALL
+    SELECT extract(create_table_query, 'DB ''(.*?)''')    AS source_schema
+      , extract(create_table_query, 'TABLE ''(.*?)''') AS source_table
+      , database                                       AS target_schema
+      , name                                           AS target_table
+    FROM system.tables
+    WHERE engine IN ('Dictionary')
+    AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
+    ORDER BY target_schema, target_table, source_schema, source_table
+  `
+  return query(sql, undefined, undefined, undefined, true).then(res => {
+    return res
+  })
+}
+
+export const queryBloodKinshipMaterializedView = () => {
+  const sql = `SELECT extractAll(engine_full, '''(.*?)''')[2] AS source_schema
+      , extractAll(engine_full, '''(.*?)''')[3] AS source_table
+      , database                                AS target_schema
+      , name                                    AS target_table
+    FROM system.tables
+    WHERE engine IN ('Distributed')
+    UNION ALL
+    SELECT extract(create_table_query, 'DB ''(.*?)''')    AS source_schema
+      , extract(create_table_query, 'TABLE ''(.*?)''') AS source_table
+      , database                                       AS target_schema
+      , name                                           AS target_table
+    FROM system.tables
+    WHERE engine IN ('Dictionary')
+    AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
+    ORDER BY target_schema, target_table, source_schema, source_table
+  `
+  return query(sql, undefined, undefined, undefined, true).then(res => {
+    return res
+  })
+}
+// get blood kinship end
+
 export const queryAllTables = () => {
   const sql = `SELECT t.database,
         t.name,
