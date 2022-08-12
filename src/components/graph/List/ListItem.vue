@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 defineProps<{
-  item: {job_name: string}
+  item: {name: string}
 }>()
 
 const emit = defineEmits(['toResult', 'delete'])
@@ -21,7 +21,7 @@ const deleteOne = (item: any) => {
   >
     <div class="list-title-box">
       <p class="list-title">
-        {{ item.job_name }}
+        {{ item.name }}
       </p>
     </div>
     <div class="list-btn-box">

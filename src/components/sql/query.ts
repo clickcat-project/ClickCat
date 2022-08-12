@@ -18,7 +18,7 @@ export const queryBloodKinshipTable = () => {
     AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
     ORDER BY target_schema, target_table, source_schema, source_table
   `
-  return query(sql, undefined, undefined, undefined, true).then(res => {
+  return query(sql).then(res => {
     return res
   })
 }
@@ -40,7 +40,7 @@ export const queryBloodKinshipView = () => {
     AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
     ORDER BY target_schema, target_table, source_schema, source_table
   `
-  return query(sql, undefined, undefined, undefined, true).then(res => {
+  return query(sql).then(res => {
     return res
   })
 }
@@ -62,7 +62,7 @@ export const queryBloodKinshipMaterializedView = () => {
     AND create_table_query LIKE '%SOURCE(CLICKHOUSE(%'
     ORDER BY target_schema, target_table, source_schema, source_table
   `
-  return query(sql, undefined, undefined, undefined, true).then(res => {
+  return query(sql).then(res => {
     return res
   })
 }

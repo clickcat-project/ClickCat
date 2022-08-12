@@ -1,24 +1,25 @@
 <script lang='ts' setup>
-import { onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, reactive, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import * as echarts from 'echarts/core'
-import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 
 import sqls from '@/components/metrics/dataAnalysis/sqls'
 import { query } from '@/utils/http'
 import { formatBarOptions, generateBarInstance } from '@/components/metrics/charts/useBar'
 import i18n from '@/i18n'
+import { addOne, queryColumnByDatabase } from '../query'
 
 type List = {name: string}[]
 type Link = {
-  id: string,
   source_node: string,
   source_link_field: string,
   target_node: string,
   target_link_field: string,
-  relationship: string
-
+  relationship: string,
+  source_primary: string,
+  target_primary: string
 }
 
 const emit = defineEmits(['toResult', 'toList'])
@@ -28,7 +29,7 @@ const renderer = ref<HTMLElement>()
 const ruleFormRef = ref<FormInstance>()
 const database = ref<List>([])
 const tables = ref<List>([])
-const checkedList = ref<string[]>([])
+const columnsGroupByTable = ref<{[key: string]: any[]}>({})
 const formLabelAlign = reactive<{
   database: string,
   jobName: string,
@@ -39,52 +40,8 @@ const formLabelAlign = reactive<{
   database: '',
   jobName: '',
   desc: '',
-  nodes: [
-    {
-      id: '1',
-      table: '1',
-      primary: '2',
-      check: false
-    },
-    {
-      id: '1',
-      table: '1',
-      primary: '2',
-      check: false
-    },
-    {
-      id: '1',
-      table: '1',
-      primary: '2',
-      check: false
-    }
-  ],
-  links: [
-    {
-      id: '1',
-      source_node: '1',
-      source_link_field: '2',
-      target_node: '1',
-      target_link_field: '1',
-      relationship: ''
-    },
-    {
-      id: '2',
-      source_node: '1',
-      source_link_field: '2',
-      target_node: '1',
-      target_link_field: '1',
-      relationship: ''
-    },
-    {
-      id: '3',
-      source_node: '1',
-      source_link_field: '2',
-      target_node: '1',
-      target_link_field: '1',
-      relationship: ''
-    }
-  ]
+  nodes: [],
+  links: []
 })
 
 const rules = reactive<FormRules>({
@@ -93,13 +50,23 @@ const rules = reactive<FormRules>({
   ],
   jobName: [
     { required: true, message: t('Please input job name'), trigger: 'blur' }
+  ],
+  nodes: [
+    { validator: () => {console.log('111111')}, required: true, trigger: 'change' }
+  ],
+  links: [
+    { validator: () => {console.log('111111')}, required: true, trigger: 'change' }
   ]
 })
 
 let chartInstance: echarts.ECharts
 
-onBeforeMount(() => {
-  queryDatabases()
+const checkedList = computed(() => {
+  return formLabelAlign.nodes.filter(item => item.check)
+})
+
+onBeforeMount(async () => {
+  await queryDatabases()
 })
 
 onMounted(() => {
@@ -115,54 +82,82 @@ const nextStep = async () => {
       console.log('error submit!', fields)
     }
   })
+  const data = {
+    name: formLabelAlign.jobName,
+    desc: formLabelAlign.desc,
+    nodes: formLabelAlign.nodes.map(item => {
+      return {
+        database: formLabelAlign.database,
+        table: item.table,
+        primary: item.primary
+      }
+    }),
+    links: formLabelAlign.links.map(item => ({ ...item, database: formLabelAlign.database }))
+  }
+  await addOne(JSON.stringify(data))
+  ElMessage.success('添加成功')
   emit('toResult')
 }
 
 const queryDatabases = () => {
-  query(sqls.queryAllDatabases())
+  return query(sqls.queryAllDatabases())
     .then(res => {
       database.value = res.data
     })
 }
 
-const changeDatabase = () => {
-  console.log('change database')
-  queryTables()
+const queryTableByDatabaseInPage = (val: string) => {
+  return query(sqls.queryTablesByDatabase(val))
+}
+
+const changeDatabase = async (val: string) => {
+  const tableByDatabase = await queryTableByDatabaseInPage(val)
+  const columnsByDatabase = await queryColumnByDatabase(val)
+  columnsGroupByTable.value = tableByDatabase.data.reduce((total: any, table: any) => {
+    if (!total[table.name]) {
+      total[table.name] = columnsByDatabase.data.filter((column: any) => column.table === table.name)
+    }
+    return total
+  }, {})
+  formLabelAlign.nodes = tableByDatabase.data.map((item: any, index: number) => {
+    return {
+      table: item.name,
+      id: index + '',
+      check: false,
+      primary: ''
+    }
+  })
 }
 
 const toList = () => {
   emit('toList')
 }
 
-const queryTables = () => {
-  query(sqls.queryTablesByDatabase(formLabelAlign.database))
-    .then(res => {
-      tables.value = res.data
-    })
-}
-
-const changeTable = () => {
-  console.log('change table')
-}
-
-const queryField = () => {
-  console.log('queryField')
-}
-
 const addLinks = () => {
   formLabelAlign.links.push({
-    id: +new Date() + '',
-    source_node: '1',
-    source_link_field: '2',
-    target_node: '1',
-    target_link_field: '1',
-    relationship: ''
+    source_node: '',
+    source_link_field: '',
+    target_node: '',
+    target_link_field: '',
+    relationship: '',
+    source_primary: '',
+    target_primary: ''
   })
 }
-const deleteLink = (id: string) => {
-  const index = formLabelAlign.links.findIndex(item => item.id === id)
-  if (index < 0) return
-  formLabelAlign.links.splice(index, 1)
+const deleteLink = (i: number) => {
+  formLabelAlign.links.splice(i, 1)
+}
+
+const changeSourceNode = (val: string, i: number) => {
+  const chooedNode = checkedList.value.find(item => item.table === val)
+  formLabelAlign.links[i].source_primary = chooedNode?.primary || ''
+  formLabelAlign.links[i].source_link_field = ''
+}
+
+const changeTargetNode = (val: string, i: number) => {
+  const chooedNode = checkedList.value.find(item => item.table === val)
+  formLabelAlign.links[i].target_primary = chooedNode?.primary || ''
+  formLabelAlign.links[i].target_link_field = ''
 }
 </script>
 <template>
@@ -248,26 +243,10 @@ const deleteLink = (id: string) => {
             prop="table"
             label="Table"
           >
-            <template #default="scope">
-              <el-select
-                v-model="scope.row.table"
-                popper-class="primary-select-dropdown" 
-                placeholder="Select Table"
-                filterable
-                @change="changeTable"
-              >
-                <el-option
-                  v-for="item in tables"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
-                />
-              </el-select>
-            </template>
           </el-table-column>
           <el-table-column
             prop="primary"
-            label="Field"
+            label="Primary"
           >
             <template #default="scope">
               <el-select
@@ -277,7 +256,7 @@ const deleteLink = (id: string) => {
                 filterable
               >
                 <el-option
-                  v-for="item in tables"
+                  v-for="item in columnsGroupByTable[scope.row.table]"
                   :key="item.name"
                   :label="item.name"
                   :value="item.name"
@@ -306,12 +285,13 @@ const deleteLink = (id: string) => {
                 popper-class="primary-select-dropdown" 
                 placeholder="Select source_node"
                 filterable
+                @change="val => changeSourceNode(val, scope.$index)"
               >
                 <el-option
-                  v-for="item in tables"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
+                  v-for="item in checkedList"
+                  :key="item.table"
+                  :label="item.table"
+                  :value="item.table"
                 />
               </el-select>
             </template>
@@ -328,7 +308,7 @@ const deleteLink = (id: string) => {
                 filterable
               >
                 <el-option
-                  v-for="item in tables"
+                  v-for="item in columnsGroupByTable[scope.row.source_node]"
                   :key="item.name"
                   :label="item.name"
                   :value="item.name"
@@ -346,12 +326,13 @@ const deleteLink = (id: string) => {
                 popper-class="primary-select-dropdown" 
                 placeholder="Select Field"
                 filterable
+                @change="val => changeTargetNode(val, scope.$index)"
               >
                 <el-option
-                  v-for="item in tables"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
+                  v-for="item in checkedList"
+                  :key="item.table"
+                  :label="item.table"
+                  :value="item.table"
                 />
               </el-select>
             </template>
@@ -368,7 +349,7 @@ const deleteLink = (id: string) => {
                 filterable
               >
                 <el-option
-                  v-for="item in tables"
+                  v-for="item in columnsGroupByTable[scope.row.target_node]"
                   :key="item.name"
                   :label="item.name"
                   :value="item.name"
@@ -402,7 +383,7 @@ const deleteLink = (id: string) => {
             <template #default="scope">
               <span
                 class="link-del-btn"
-                @click="deleteLink(scope.row.id)"
+                @click="deleteLink(scope.$index)"
               >{{ $t('delete') }}</span>
             </template>
           </el-table-column>

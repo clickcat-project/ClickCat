@@ -6,15 +6,24 @@
 </route>
 <template>
   <section class="graph-add-wrapper">
-    <AddVue @to-result="toResult" />
+    <AddVue
+      @to-result="toResult"
+      @to-list="toList"
+    />
   </section>
 </template>
 
 <script lang='ts' setup>
 import AddVue from '@/components/graph/add/Add.vue'
+import { useGoTo } from '@/layout/hooks'
+
+const goto = useGoTo()
 
 const toResult = () => {
   console.log('跳转关系图')
+}
+const toList = () => {
+  goto('GraphList')
 }
 </script>
 <style lang='scss' scoped>

@@ -8,16 +8,13 @@
 import { computed, onBeforeMount, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { useLoginStore } from '@/store'
-import { deleteOne as deleteOneOrigin } from '@/components/machine-learning/query'
 
 import ListItemVue from './ListItem.vue'
 
-import { queryList } from '../query'
+import { queryList, deleteOne as deleteOneOrigin } from '../query'
 
-const loginStore = useLoginStore()
 const emit = defineEmits(['add', 'toResult'])
-const list = ref<{job_name: string}[]>([])
+const list = ref<any[]>([])
 const loading = ref<boolean>(false)
 
 const listLengthLess = computed(() => {
@@ -26,8 +23,8 @@ const listLengthLess = computed(() => {
 
 onBeforeMount(async () => {
   loading.value = true
-  const data = await queryList(loginStore.connection)
-  list.value = data
+  const res = await queryList()
+  list.value = res.data
   loading.value = false
 })
 
@@ -41,8 +38,8 @@ const toResult = (item: any) => {
 
 const deleteOne = async (item: any) => {
   await ElMessageBox.confirm(
-    'Kill?',
-    'Kill',
+    'Delete?',
+    'Delete',
     {
       confirmButtonText: 'OK',
       cancelButtonText: 'Cancel',
@@ -51,9 +48,9 @@ const deleteOne = async (item: any) => {
     }
   )
   loading.value = true
-  await deleteOneOrigin(loginStore.connection, item)
-  const data = await queryList(loginStore.connection)
-  list.value = data
+  await deleteOneOrigin(item.ID)
+  const res = await queryList()
+  list.value = res.data
   loading.value = false
 }
 </script>

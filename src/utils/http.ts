@@ -82,11 +82,8 @@ function getRequestUrl(connection?: Connection, settings?: string): string {
   return url
 }
 
-export function query(sql?: string, settings?: string, connection?: Connection, isLogin = false, noJson = false): Promise<any> {
-  let sqlStr = sql ? (sql.includes('FORMAT JSON') ? sql : sql + '\n\n FORMAT JSON') : undefined
-  if (noJson) {
-    sqlStr = sqlStr?.replace('FORMAT JSON', '')
-  }
+export function query(sql?: string, settings?: string, connection?: Connection, isLogin = false): Promise<any> {
+  const sqlStr = sql ? (sql.includes('FORMAT JSON') ? sql : sql + '\n\n FORMAT JSON') : undefined
   const init = getRequestInit(sqlStr, isLogin)
   const loginStore = useLioginOutsideStore()
   const connectionData = connection ?? loginStore.connection
