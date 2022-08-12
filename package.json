@@ -28,6 +28,7 @@
     "monaco-editor": "0.32.1",
     "pinia": "^2.0.14",
     "pinia-plugin-persist": "^1.0.0",
+    "randomcolor": "^0.6.2",
     "three": "^0.143.0",
     "three-css2drender": "^1.0.0",
     "three-spritetext": "^1.6.5",

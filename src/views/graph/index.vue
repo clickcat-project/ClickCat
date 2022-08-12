@@ -19,6 +19,7 @@
 
 <script lang='ts' setup>
 import ForceGraph3D from '3d-force-graph'
+import randomColor from 'randomcolor'
 import {onMounted} from 'vue'
 import {query} from '@/utils/http'
 import SpriteText from 'three-spritetext'
@@ -32,17 +33,9 @@ const detailData  = reactive({
   nodeInfo: {}
 })
 
-const genRgbColor = () => {
-  let r = Math.floor(Math.random()*256)
-  let g = Math.floor(Math.random()*256)
-  let b = Math.floor(Math.random()*256)
-
-  return [r, g, b]
-}
-
 interface typeListType {
-  Tables: {name: string, color?: number[]}[]
-  RelationShips: {name: string, color?: number[]}[]
+  Tables: {name: string, color: string}[]
+  RelationShips: {name: string, color: string, linkWidth?: number}[]
 }
 
 const typeList = reactive<typeListType>({
@@ -55,15 +48,12 @@ onMounted(async () => {
   const jobDetail = JSON.parse(graph.data[0].JOB_DETAIL)
   let nodes = []
   for(const item of jobDetail.nodes){
-    const displayName = item.displayFields?.split(',')[0]
-
     const node = await query('SELECT  *, \''+item.table+'\' as _label, \''+item.table+'\'||'+item.primary+' as _id FROM ' + item.database+'.'+item.table + ' where ' + item.primary + ' is not null')
     nodes =  nodes.concat(node.data.map(item => {
       return {
         ...item,
         label: item._label,
-        id: item._id,
-        name: item[displayName]
+        id: item._id
       }
     }))
   }
@@ -76,7 +66,10 @@ onMounted(async () => {
     if( labelIndex === -1) {
       typeList.Tables.push({
         name: label,
-        color: genRgbColor()
+        color: randomColor({
+          luminosity: 'dark',
+          seed: label
+        })
       })
     }
   })
@@ -87,7 +80,7 @@ onMounted(async () => {
     links = links.concat(link.data)
   }
 
-    links.forEach(link => {
+  links.forEach(link => {
     const label:string = link.label || link._label || ''
 
     const labelIndex = typeList?.RelationShips?.findIndex(typeItem => typeItem?.name === label)
@@ -95,7 +88,11 @@ onMounted(async () => {
     if( labelIndex === -1) {
       typeList.RelationShips.push({
         name: label,
-        color: genRgbColor()
+        color: randomColor({
+          luminosity: 'dark',
+          seed: label
+        }),
+        linkWidth: 100 * (typeList.RelationShips.length + 1)
       })
     }
   })
@@ -106,6 +103,8 @@ onMounted(async () => {
     links: links
   }
 
+  const excludeKey = ['x', 'y', 'z', 'vx', 'vy', 'vz', 'id', '_id', '_label', 'ref_']
+
   const Graph = ForceGraph3D({
     extraRenderers: [new THREE.CSS2DRenderer()]
   })(document.getElementById('3d-graph') as HTMLElement)
@@ -113,26 +112,40 @@ onMounted(async () => {
       .backgroundColor('#fff')
       .linkColor((linkObj:any) => {
         const label = linkObj.label
-        const typeInfo = typeList.RelationShips.find(type => type.name === label)
-
-        return `rgb(${typeInfo?.color?.join(',')})`
+        return randomColor({
+          luminosity: 'dark',
+          seed: label
+        })
       })
       .linkOpacity(1)
-      .linkWidth(0.2)
+      .linkWidth(0.4)
       .linkLabel('label')
+      .nodeColor((obj:any) => {
+        const label = obj.label
+
+        return randomColor({
+          luminosity: 'dark',
+          seed: label
+        })
+      })
       .nodeThreeObject((node:any) => {
         const label = node.label
-        const typeInfo = typeList.Tables.find(type => type.name === label)
-
         const nodeEl = document.createElement('div')
-        nodeEl.textContent = node.name
-        nodeEl.style.color = `rgb(${typeInfo?.color?.join(',')})`
+
+        for(let key in node) {
+          if(excludeKey.indexOf(key) === -1) {
+            const infoDiv = document.createElement('div')
+            infoDiv.textContent = `${node[key]}`
+            nodeEl.appendChild(infoDiv)
+          }
+        }
+        nodeEl.style.color = randomColor({
+          luminosity: 'dark',
+          seed: label
+        })
         nodeEl.className = 'node-label'
 
         nodeEl.onclick = (el) => {
-          console.log(el)
-          console.log(node)
-
           // 弹出右侧窗口
           detailData.nodeInfo = node
           showDetail.value = true
@@ -140,8 +153,18 @@ onMounted(async () => {
 
         return new THREE.CSS2DObject(nodeEl)
       })
+      .nodeThreeObjectExtend(true)
       .linkDirectionalArrowLength(3)
       .linkDirectionalArrowRelPos(1)
+      
+      Graph?.d3Force('link')?.distance((link:any) => {
+        const label = link.label
+
+        const typeInfo = typeList.RelationShips.find(item => item.name === label)
+
+        console.log(link)
+        return typeInfo?.linkWidth || 100
+      })
 })
 
 const closeDetail = () => {
@@ -155,6 +178,12 @@ const closeDetail = () => {
 }
 .node-label{
   pointer-events: auto;
+  width: 200px;
+  height: 80px;
+  overflow: auto;
+  position: relative;
+  left: 110px;
+  text-align: left;
 }
 
 </style>

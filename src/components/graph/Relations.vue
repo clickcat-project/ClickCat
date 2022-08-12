@@ -15,11 +15,11 @@
       >
         <span
           class="type-name"
-          :style="{color: `rgb(${item.color.join(',')})`, border: `1px solid rgb(${item.color.join(',')})`, background: `rgba(${item.color.join(',')}, 0.2)`}"
+          :style="{color: item.color, border: `1px solid ${item.color}`}"
         >{{ item.name }}</span>
         <span
           class="type-color"
-          :style="{background: `rgb(${item.color.join(',')})`}"
+          :style="{background: item.color}"
         ></span>
       </div>
     </div>
