@@ -34,14 +34,14 @@ onMounted(async () => {
   const jobDetail = JSON.parse(graph.data[0].JOB_DETAIL)
   let nodes = []
   for(const item of jobDetail.nodes){
-    const node = await query('SELECT  *, \''+item.table+'\' as _label, \''+item.table+'\'||'+item.field+' as _id FROM ' + item.database+'.'+item.table + ' where ' + item.field + ' is not null')
+    const node = await query('SELECT  *, \''+item.table+'\' as _label, \''+item.table+'\'||'+item.primary+' as _id FROM ' + item.database+'.'+item.table + ' where ' + item.primary + ' is not null')
     nodes =  nodes.concat(node.data)
   }
   nodes.map(item => {item.label = item._label; item.id = item._id})
 
   let links = []
   for(const item of jobDetail.links){
-    const link = await query('SELECT   \''+item.source_type+'\'||'+item.source_field+' as source, \''+item.target_type+'\'||'+item.target_field+' as target, \''+item.source_type+'-'+item.target_type+'\' as label FROM ' + item.database+'.'+ item.linkTable  + ' where ' + item.source_field + ' is not null and '  + item.target_field + ' is not null ')
+    const link = await query('SELECT   \''+item.source_node+'\'||'+item.source_primary+' as source, \''+item.target_node+'\'||'+item.target_primary+' as target, \''+item.relationship+'\' as label FROM ' + item.database+'.'+ item.source_node + ' join '+item.database+'.'+ item.target_node+ ' on ' + item.source_link_field + ' = ' + item.target_link_field)
     links = links.concat(link.data)
   }
 
