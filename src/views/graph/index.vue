@@ -5,7 +5,7 @@
 }
 </route>
 <template>
-  <div id="3d-graph"></div>
+  <div id="graph-3d"></div>
 
 
   <Detail
@@ -29,8 +29,10 @@ import Relations from '@/components/graph/Relations.vue'
 import { ref, reactive } from 'vue'
 const showDetail = ref(false)
 
+const excludeKey = ['x', 'y', 'z', 'vx', 'vy', 'vz', 'id', '_id', '_label', 'ref_', '__threeObj']
+
 const detailData  = reactive({
-  nodeInfo: {}
+  nodeInfo: {},
 })
 
 interface typeListType {
@@ -103,11 +105,9 @@ onMounted(async () => {
     links: links
   }
 
-  const excludeKey = ['x', 'y', 'z', 'vx', 'vy', 'vz', 'id', '_id', '_label', 'ref_']
-
   const Graph = ForceGraph3D({
     extraRenderers: [new THREE.CSS2DRenderer()]
-  })(document.getElementById('3d-graph') as HTMLElement)
+  })(document.getElementById('graph-3d') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
       .linkColor((linkObj:any) => {
@@ -146,8 +146,17 @@ onMounted(async () => {
         nodeEl.className = 'node-label'
 
         nodeEl.onclick = (el) => {
+          const nodeInfo = {
+            ...node
+          }
+
+          // 处理无用字段
+          excludeKey.forEach(key => {
+            key in nodeInfo && delete nodeInfo[key]
+          })
+
           // 弹出右侧窗口
-          detailData.nodeInfo = node
+          detailData.nodeInfo = nodeInfo
           showDetail.value = true
         }
 
@@ -169,17 +178,21 @@ const closeDetail = () => {
 }
 </script>
 <style>
+#graph-3d{
+  height: 100%;
+  overflow: hidden;
+}
 .scene-tooltip {
   color: black;
   font-size: 15px;
 }
 .node-label{
   pointer-events: auto;
-  width: 200px;
   height: 60px;
+  max-width: 100px;
   overflow: auto;
   position: relative;
-  left: 130px;
+  left: 120px;
   text-align: left;
 }
 

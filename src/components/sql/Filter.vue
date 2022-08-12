@@ -45,7 +45,7 @@ onMounted(() => {
 })
 
 const getTreeData = () => {
-  dataloading.value = true
+  //dataloading.value = true
   
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {

@@ -43,6 +43,7 @@ const emit = defineEmits(['closeDetail'])
 </script>
 <style lang='scss' scoped>
 .graph-details{
+  background: #ffffff;
   z-index: 1000;
   position: fixed;
   right: 30px;

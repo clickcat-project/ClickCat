@@ -44,6 +44,7 @@ defineProps({
 </script>
 <style lang='scss' scoped>
 .relation-details{
+  background: #ffffff;
   z-index: 1000;
   position: fixed;
   right: 30px;
