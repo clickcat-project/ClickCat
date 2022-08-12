@@ -92,7 +92,7 @@ onMounted(async () => {
           luminosity: 'dark',
           seed: label
         }),
-        linkWidth: 100 * (typeList.RelationShips.length + 1)
+        linkWidth: 80 * (typeList.RelationShips.length + 1)
       })
     }
   })
@@ -156,14 +156,11 @@ onMounted(async () => {
       .nodeThreeObjectExtend(true)
       .linkDirectionalArrowLength(3)
       .linkDirectionalArrowRelPos(1)
-      
-      Graph?.d3Force('link')?.distance((link:any) => {
-        const label = link.label
 
-        const typeInfo = typeList.RelationShips.find(item => item.name === label)
 
-        console.log(link)
-        return typeInfo?.linkWidth || 100
+
+      Graph.cameraPosition({
+        z: 200
       })
 })
 
@@ -179,10 +176,10 @@ const closeDetail = () => {
 .node-label{
   pointer-events: auto;
   width: 200px;
-  height: 80px;
+  height: 60px;
   overflow: auto;
   position: relative;
-  left: 110px;
+  left: 130px;
   text-align: left;
 }
 
