@@ -190,7 +190,7 @@ const closeDetail = () => {
   pointer-events: auto;
   height: 60px;
   max-width: 100px;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
   left: 120px;
   text-align: left;
