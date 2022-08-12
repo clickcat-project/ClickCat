@@ -13,8 +13,14 @@
         :key="item.name"
         class="type-item"
       >
-        <span class="type-name">{{ item.name }}</span>
-        <span class="type-color"></span>
+        <span
+          class="type-name"
+          :style="{color: `rgb(${item.color.join(',')})`, border: `1px solid rgb(${item.color.join(',')})`, background: `rgba(${item.color.join(',')}, 0.2)`}"
+        >{{ item.name }}</span>
+        <span
+          class="type-color"
+          :style="{background: `rgb(${item.color.join(',')})`}"
+        ></span>
       </div>
     </div>
   </div>

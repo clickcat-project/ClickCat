@@ -32,9 +32,17 @@ const detailData  = reactive({
   nodeInfo: {}
 })
 
+const genRgbColor = () => {
+  let r = Math.floor(Math.random()*256)
+  let g = Math.floor(Math.random()*256)
+  let b = Math.floor(Math.random()*256)
+
+  return [r, g, b]
+}
+
 interface typeListType {
-  Tables: {name: string, color?: string}[]
-  RelationShips: {name: string, color?: string}[]
+  Tables: {name: string, color?: number[]}[]
+  RelationShips: {name: string, color?: number[]}[]
 }
 
 const typeList = reactive<typeListType>({
@@ -53,17 +61,12 @@ onMounted(async () => {
     nodes =  nodes.concat(node.data.map(item => {
       return {
         ...item,
+        label: item._label,
+        id: item._id,
         name: item[displayName]
       }
     }))
   }
-
-  console.log(nodes)
-
-  nodes.map(item => {
-    item.label = item._label
-    item.id = item._id
-  })
 
   nodes.forEach(node => {
     const label:string = node.label || node._label || ''
@@ -72,7 +75,8 @@ onMounted(async () => {
 
     if( labelIndex === -1) {
       typeList.Tables.push({
-        name: label
+        name: label,
+        color: genRgbColor()
       })
     }
   })
@@ -90,7 +94,8 @@ onMounted(async () => {
 
     if( labelIndex === -1) {
       typeList.RelationShips.push({
-        name: label
+        name: label,
+        color: genRgbColor()
       })
     }
   })
@@ -106,19 +111,22 @@ onMounted(async () => {
   })(document.getElementById('3d-graph') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
-      .nodeAutoColorBy('label')
-      .linkAutoColorBy('label')
+      .linkColor((linkObj:any) => {
+        const label = linkObj.label
+        const typeInfo = typeList.RelationShips.find(type => type.name === label)
+
+        return `rgb(${typeInfo?.color?.join(',')})`
+      })
       .linkOpacity(1)
       .linkWidth(0.2)
       .linkLabel('label')
-      // .onNodeClick(node => {
-      //   detailData.nodeInfo = node
-      //   showDetail.value = true
-      // })
       .nodeThreeObject((node:any) => {
+        const label = node.label
+        const typeInfo = typeList.Tables.find(type => type.name === label)
+
         const nodeEl = document.createElement('div')
         nodeEl.textContent = node.name
-        nodeEl.style.color = node.color
+        nodeEl.style.color = `rgb(${typeInfo?.color?.join(',')})`
         nodeEl.className = 'node-label'
 
         nodeEl.onclick = (el) => {
