@@ -1,33 +1,24 @@
 <route>
 {
-  name: "GraphList",
+  name: "GraphAdd",
   meta: { title: 'Graph' }
 }
 </route>
 <template>
-  <section class="graph-list-container">
-    <ListVue
-      @to-result="toResult"
-      @add="toAdd"
-    />
+  <section class="graph-add-wrapper">
+    <AddVue @to-result="toResult" />
   </section>
 </template>
 
 <script lang='ts' setup>
-import ListVue from '@/components/graph/List/List.vue'
-import { useGoTo } from '@/layout/hooks'
-
-const goto = useGoTo()
+import AddVue from '@/components/graph/add/Add.vue'
 
 const toResult = () => {
   console.log('跳转关系图')
 }
-const toAdd = () => {
-  goto('GraphAdd')
-}
 </script>
 <style lang='scss' scoped>
-.graph-list-container {
+.graph-add-wrapper {
   width: 100%;
   height: 100%;
   padding: 20px 30px;
