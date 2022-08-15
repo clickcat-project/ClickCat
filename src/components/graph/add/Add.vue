@@ -115,7 +115,8 @@ const nextStep = async () => {
       return {
         database: formLabelAlign.database,
         table: item.table,
-        primary: item.primary
+        primary: item.primary,
+        display_field: item.display_field
       }
     }),
     links: formLabelAlign.links.map(item => ({ ...item, database: formLabelAlign.database }))
