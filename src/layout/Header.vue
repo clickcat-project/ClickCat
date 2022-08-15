@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useGoTo } from './hooks'
 import { RouteName } from './types'
 import i18n from '@/i18n'
+import { computed } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -18,6 +19,11 @@ const nvaList = [
   RouteName.Ml,
   RouteName.HistorySQL
 ]
+
+const hasRouteName = (item: string) => {
+  return (route.name as string)?.includes(item)
+}
+
 const logoutFunc = () => {
   router.push({
     path: '/login'
@@ -54,7 +60,7 @@ const goGithub = () => {
         <span
           v-for="item in nvaList"
           :key="item"
-          :class="{active: route.name === item}"
+          :class="{active: hasRouteName(item)}"
           @click="goTo(item)"
         >
           {{ $t(item) }}

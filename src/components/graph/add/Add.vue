@@ -199,7 +199,7 @@ const changeTargetNode = (val: string, i: number) => {
   <section class="graph-add-container">
     <h3 class="title">
       <el-icon
-        style="margin-right: 10px"
+        style="margin-right: 10px;cursor: pointer;"
         @click="toList"
       >
         <ArrowLeft />

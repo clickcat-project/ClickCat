@@ -24,7 +24,7 @@ const toResult = (id: string) => {
   console.log('跳转关系图')
 }
 const toList = () => {
-  goto('GraphList')
+  goto('Graph')
 }
 </script>
 <style lang='scss' scoped>
