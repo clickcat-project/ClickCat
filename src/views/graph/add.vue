@@ -19,7 +19,8 @@ import { useGoTo } from '@/layout/hooks'
 
 const goto = useGoTo()
 
-const toResult = () => {
+const toResult = (id: string) => {
+  goto('GraphResult', { id })
   console.log('跳转关系图')
 }
 const toList = () => {

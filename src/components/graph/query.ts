@@ -11,9 +11,9 @@ export const queryList = async () => {
   })
 }
 
-export function addOne(dataStr: string) {
-  const sql = `insert into clickcat.GRAPH_TASK values('shjdhsjdhsj','${dataStr}')`
-  return query(sql)
+export function addOne(id: string, dataStr: string) {
+  const sql = `insert into clickcat.GRAPH_TASK values('${id}','${dataStr}')`
+  return query(sql, undefined, undefined, undefined, true)
     .catch(err => {
       console.log(err)
     })

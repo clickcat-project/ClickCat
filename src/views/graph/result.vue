@@ -1,7 +1,7 @@
 <route>
 {
-  name: "Graph",
-  meta: { title: 'Graph' }
+  name: "GraphResult",
+  meta: { title: 'GraphResult' }
 }
 </route>
 <template>
@@ -20,14 +20,16 @@
 <script lang='ts' setup>
 import ForceGraph3D from '3d-force-graph'
 import randomColor from 'randomcolor'
-import {onMounted} from 'vue'
+import {computed, onMounted} from 'vue'
 import {query} from '@/utils/http'
 import SpriteText from 'three-spritetext'
 import Detail from '@/components/graph/Detail.vue'
 import Relations from '@/components/graph/Relations.vue'
 
 import { ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 const showDetail = ref(false)
+const route = useRoute()
 
 const excludeKey = ['x', 'y', 'z', 'vx', 'vy', 'vz', 'id', '_id', '_label', 'ref_', '__threeObj']
 
@@ -45,8 +47,13 @@ const typeList = reactive<typeListType>({
   RelationShips: []
 })
 
+const currentId = computed(() => {
+  console.log()
+  return route.query.id
+})
+
 onMounted(async () => {
-  const graph = await query('SELECT  * FROM clickcat.GRAPH_TASK where ID = \'1\'')
+  const graph = await query(`SELECT  * FROM clickcat.GRAPH_TASK where ID = '${currentId.value}'`)
   const jobDetail = JSON.parse(graph.data[0].JOB_DETAIL)
   let nodes = []
   for(const item of jobDetail.nodes){

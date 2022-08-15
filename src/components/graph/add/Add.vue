@@ -4,6 +4,7 @@ import { Plus } from '@element-plus/icons-vue'
 import * as echarts from 'echarts/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
+import UUID from 'uuidjs'
 
 import sqls from '@/components/metrics/dataAnalysis/sqls'
 import { query } from '@/utils/http'
@@ -21,6 +22,7 @@ type Link = {
   source_primary: string,
   target_primary: string
 }
+type Node = {primary: string, table: string, check: boolean, id: string}
 
 const emit = defineEmits(['toResult', 'toList'])
 
@@ -34,7 +36,7 @@ const formLabelAlign = reactive<{
   database: string,
   jobName: string,
   desc: string,
-  nodes: {primary: string, table: string, check: boolean, id: string}[]
+  nodes: Node[]
   links: Link[]
 }>({
   database: '',
@@ -44,6 +46,27 @@ const formLabelAlign = reactive<{
   links: []
 })
 
+const validateNodes = (rule: any, value: Node[], callback: any) => {
+  const checkedList = value.filter(item => item.check)
+  const noPrimary = checkedList.filter(item => !item.primary)
+  if (noPrimary.length) {
+    callback(new Error('please choose primary'))
+  } else {
+    callback()
+  }
+}
+
+const validateLinks = (rule: any, value: Link[], callback: any) => {
+  const noValue = value.filter((item: any) => {
+    return Object.keys(item).some((key: any) => !item[key])
+  })
+  if (noValue.length) {
+    callback(new Error('Please complete all links options'))
+  } else {
+    callback()
+  }
+}
+
 const rules = reactive<FormRules>({
   database: [
     { required: true, message: t('Please select database'), trigger: 'change' }
@@ -52,10 +75,10 @@ const rules = reactive<FormRules>({
     { required: true, message: t('Please input job name'), trigger: 'blur' }
   ],
   nodes: [
-    { validator: () => {console.log('111111')}, required: true, trigger: 'change' }
+    { validator: validateNodes, required: true, trigger: 'change' }
   ],
   links: [
-    { validator: () => {console.log('111111')}, required: true, trigger: 'change' }
+    { validator: validateLinks, required: true, trigger: 'change' }
   ]
 })
 
@@ -77,6 +100,7 @@ onMounted(() => {
 })
 
 const nextStep = async () => {
+  console.log(formLabelAlign.nodes, 'formLabelAlign.nodes')
   await ruleFormRef.value?.validate((valid, fields) => {
     if (!valid) {
       console.log('error submit!', fields)
@@ -85,7 +109,7 @@ const nextStep = async () => {
   const data = {
     name: formLabelAlign.jobName,
     desc: formLabelAlign.desc,
-    nodes: formLabelAlign.nodes.map(item => {
+    nodes: checkedList.value.map(item => {
       return {
         database: formLabelAlign.database,
         table: item.table,
@@ -94,9 +118,14 @@ const nextStep = async () => {
     }),
     links: formLabelAlign.links.map(item => ({ ...item, database: formLabelAlign.database }))
   }
-  await addOne(JSON.stringify(data))
-  ElMessage.success('添加成功')
-  emit('toResult')
+  const currentId: string = UUID.generate()
+  try {
+    await addOne(currentId, JSON.stringify(data))
+    ElMessage.success('添加成功')
+    emit('toResult', currentId)
+  } catch (error) {
+    ElMessage.error('添加失败')
+  }
 }
 
 const queryDatabases = () => {

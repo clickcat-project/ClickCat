@@ -19,8 +19,9 @@ import { useGoTo } from '@/layout/hooks'
 
 const goto = useGoTo()
 
-const toResult = () => {
-  console.log('跳转关系图')
+const toResult = (item: any) => {
+  goto('GraphResult', { id: item.ID })
+  // console.log('跳转关系图')
 }
 const toAdd = () => {
   goto('GraphAdd')
