@@ -3,7 +3,7 @@ import { onBeforeMount, ref, watch } from 'vue'
 
 import Card from '../Card.vue'
 import { CommonObj, DataQueryFunc } from '../types'
-import Item from './item.vue'
+import Item from './Item.vue'
 import EmptyVue from '../Empty.vue'
 
 import { countDataItem } from './types'
