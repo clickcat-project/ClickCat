@@ -22,7 +22,7 @@ type Link = {
   source_primary: string,
   target_primary: string
 }
-type Node = {primary: string, table: string, check: boolean, id: string}
+type Node = {primary: string, table: string, check: boolean, id: string, display_field: string}
 
 const emit = defineEmits(['toResult', 'toList'])
 
@@ -30,7 +30,6 @@ const t = i18n.global.t
 const renderer = ref<HTMLElement>()
 const ruleFormRef = ref<FormInstance>()
 const database = ref<List>([])
-const tables = ref<List>([])
 const columnsGroupByTable = ref<{[key: string]: any[]}>({})
 const formLabelAlign = reactive<{
   database: string,
@@ -156,7 +155,8 @@ const changeDatabase = async (val: string) => {
       table: item.name,
       id: index + '',
       check: false,
-      primary: columnsGroupByTable.value[item.name][0].name
+      primary: columnsGroupByTable.value[item.name][0].name,
+      display_field: columnsGroupByTable.value[item.name][0].name
     }
   })
 }
@@ -285,6 +285,26 @@ const changeTargetNode = (val: string, i: number) => {
             <template #default="scope">
               <el-select
                 v-model="scope.row.primary"
+                popper-class="primary-select-dropdown" 
+                placeholder="Select Field"
+                filterable
+              >
+                <el-option
+                  v-for="item in columnsGroupByTable[scope.row.table]"
+                  :key="item.name"
+                  :label="item.name"
+                  :value="item.name"
+                />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="display_field"
+            label="display_field"
+          >
+            <template #default="scope">
+              <el-select
+                v-model="scope.row.display_field"
                 popper-class="primary-select-dropdown" 
                 placeholder="Select Field"
                 filterable
