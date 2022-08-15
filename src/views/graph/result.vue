@@ -85,7 +85,7 @@ onMounted(async () => {
 
   let links = []
   for(const item of jobDetail.links){
-    const link = await query('SELECT   \''+item.source_node+'\'||'+item.source_primary+' as source, \''+item.target_node+'\'||'+item.target_primary+' as target, \''+item.relationship+'\' as label FROM ' + item.database+'.'+ item.source_node + ' join '+item.database+'.'+ item.target_node+ ' on ' + item.source_link_field + ' = ' + item.target_link_field)
+    const link = await query('SELECT   \''+item.source_node+'\'||'+item.source_node+'.' + item.source_primary + ' as source, \''+item.target_node+'\'||'+item.target_node+'.'+item.target_primary+' as target, \''+item.relationship+'\' as label FROM ' + item.database+'.'+ item.source_node + ' join '+item.database+'.'+ item.target_node+ ' on ' + item.source_node + '.'+item.source_link_field + ' = ' + item.target_node + '.' + item.target_link_field)
     links = links.concat(link.data)
   }
 
