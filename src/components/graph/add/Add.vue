@@ -49,7 +49,9 @@ const formLabelAlign = reactive<{
 const validateNodes = (rule: any, value: Node[], callback: any) => {
   const checkedList = value.filter(item => item.check)
   const noPrimary = checkedList.filter(item => !item.primary)
-  if (noPrimary.length) {
+  if (!checkedList.length) {
+    callback(new Error('please choose Nodes'))
+  } else if (noPrimary.length) {
     callback(new Error('please choose primary'))
   } else {
     callback()
@@ -60,7 +62,9 @@ const validateLinks = (rule: any, value: Link[], callback: any) => {
   const noValue = value.filter((item: any) => {
     return Object.keys(item).some((key: any) => !item[key])
   })
-  if (noValue.length) {
+  if (!value.length) {
+    callback(new Error('please choose Links'))
+  } else if (noValue.length) {
     callback(new Error('Please complete all links options'))
   } else {
     callback()
@@ -100,7 +104,6 @@ onMounted(() => {
 })
 
 const nextStep = async () => {
-  console.log(formLabelAlign.nodes, 'formLabelAlign.nodes')
   await ruleFormRef.value?.validate((valid, fields) => {
     if (!valid) {
       console.log('error submit!', fields)
