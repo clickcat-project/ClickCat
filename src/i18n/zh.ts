@@ -55,7 +55,7 @@ export default {
 
   // graph
   'delete': '删除',
-  'Graph': 'Graph',
+  'Graph': '关系图谱',
   'Turn on': '打开',
   'Describe': '描述',
   'Nodes': '节点',
