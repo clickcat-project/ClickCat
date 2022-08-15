@@ -369,10 +369,10 @@ const changeTargetNode = (val: string, i: number) => {
                 filterable
               >
                 <el-option
-                  v-for="item in tables"
-                  :key="item.name"
-                  :label="item.name"
-                  :value="item.name"
+                  v-for="item in checkedList"
+                  :key="item.table"
+                  :label="item.table"
+                  :value="item.table"
                 />
               </el-select>
             </template>
