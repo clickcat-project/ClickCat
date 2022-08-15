@@ -153,7 +153,7 @@ const changeDatabase = async (val: string) => {
       table: item.name,
       id: index + '',
       check: false,
-      primary: ''
+      primary: columnsGroupByTable.value[item.name][0].name
     }
   })
 }
@@ -181,12 +181,14 @@ const changeSourceNode = (val: string, i: number) => {
   const chooedNode = checkedList.value.find(item => item.table === val)
   formLabelAlign.links[i].source_primary = chooedNode?.primary || ''
   formLabelAlign.links[i].source_link_field = ''
+  formLabelAlign.links[i].relationship = val + '_' + formLabelAlign.links[i].target_node
 }
 
 const changeTargetNode = (val: string, i: number) => {
   const chooedNode = checkedList.value.find(item => item.table === val)
   formLabelAlign.links[i].target_primary = chooedNode?.primary || ''
   formLabelAlign.links[i].target_link_field = ''
+  formLabelAlign.links[i].relationship = formLabelAlign.links[i].source_node + '_' + val
 }
 </script>
 <template>
@@ -391,7 +393,11 @@ const changeTargetNode = (val: string, i: number) => {
             label="relationship"
           >
             <template #default="scope">
-              <el-select
+              <el-input
+                v-model="scope.row.relationship"
+                placeholder="Please input"
+              />
+              <!-- <el-select
                 v-model="scope.row.relationship"
                 popper-class="primary-select-dropdown" 
                 placeholder="Select Field"
@@ -403,7 +409,7 @@ const changeTargetNode = (val: string, i: number) => {
                   :label="item.table"
                   :value="item.table"
                 />
-              </el-select>
+              </el-select> -->
             </template>
           </el-table-column>
           <el-table-column
