@@ -421,7 +421,10 @@ const changeTargetNode = (val: string, i: number) => {
           class="add-link-btn"
           @click="addLinks"
         >
-          <el-icon :size="14">
+          <el-icon
+            :size="14"
+            color="#FFB300"
+          >
             <Plus />
           </el-icon>
         </span>
