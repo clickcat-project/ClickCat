@@ -1,12 +1,12 @@
 export default {
-  // 头部菜单栏
+  // Header
   'Machine Learning': 'Machine Learning',
   'Metrics': 'Metrics',
   'SQL': 'SQL',
   'Processes': 'Processes',
   'History SQL': 'History SQL',
 
-  // 机器学习
+  // ML
   'Sign out': 'Sign out',
   'Delete': 'Delete',
   'View Results': 'View Results',
@@ -31,15 +31,15 @@ export default {
   'Run': 'Run',
   'Add': 'Add',
 
-  // 历史SQL
+  // history sql
   'Edit': 'Edit',
 
-  // 进程
+  // processes
   'Mutations': 'Mutations',
   'Kill': 'Kill',
   'Refresh': 'Refresh',
 
-  // 分析总览
+  // metrics
   'Data Analysis': 'Data Analysis',
   'Query Analysis': 'Query Analysis',
   'Cluster Analysis': 'Cluster Analysis',
@@ -49,6 +49,14 @@ export default {
   'Query status': 'Query status',
   'User': 'User',
 
-  // SQL语句
-  'Add new tab': 'Add new tab'
+  // SQL
+  'Add new tab': 'Add new tab',
+
+  // graph
+  'delete': 'delete',
+  'Graph': 'Graph',
+  'Turn on': 'Turn on',
+  'Describe': 'Describe',
+  'Nodes': 'Nodes',
+  'Links': 'Links'
 }

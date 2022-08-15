@@ -51,5 +51,13 @@ export default {
   'User': '用户',
 
   // SQL语句
-  'Add new tab': '添加标签页'
+  'Add new tab': '添加标签页',
+
+  // graph
+  'delete': '删除',
+  'Graph': 'Graph',
+  'Turn on': '打开',
+  'Describe': '描述',
+  'Nodes': '节点',
+  'Links': '链接',
 }

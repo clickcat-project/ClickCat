@@ -20,7 +20,7 @@ import { useGoTo } from '@/layout/hooks'
 const goto = useGoTo()
 
 const toResult = (item: any) => {
-  goto('GraphResult', { id: item.ID })
+  goto('GraphResult', { id: item.id })
   // console.log('跳转关系图')
 }
 const toAdd = () => {

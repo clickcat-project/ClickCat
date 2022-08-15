@@ -48,7 +48,7 @@ const deleteOne = async (item: any) => {
     }
   )
   loading.value = true
-  await deleteOneOrigin(item.ID)
+  await deleteOneOrigin(item.id)
   const res = await queryList()
   list.value = res.data
   loading.value = false
