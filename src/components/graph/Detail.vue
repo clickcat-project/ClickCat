@@ -4,6 +4,7 @@
       <span class="title">details</span>
       <SvgIcon
         class="close"
+        color="#ffffff"
         name="svg-close"
         @click="emit('closeDetail')"
       ></SvgIcon>
@@ -43,19 +44,19 @@ const emit = defineEmits(['closeDetail'])
 </script>
 <style lang='scss' scoped>
 .graph-details{
-  background: #ffffff;
+  background: #FFFAF6;
+  box-shadow: 0px 0px 18px 0px rgba(193, 173, 133, 0.3);
   z-index: 1000;
   position: fixed;
   right: 30px;
   bottom: 30px;
   height: 43.6vh;
-  border: 1px solid #E4E4E4;
   display: flex;
   flex-direction: column;
   .details-title{
     width: 268px;
     height: 52px;
-    background: #F0F0F0;
+    background: #FFB300;
     border: 1px solid #E4E4E4;
     display: flex;
     align-items: center;
@@ -63,7 +64,7 @@ const emit = defineEmits(['closeDetail'])
     padding: 0 15px;
     .title{
       font-size: 20px;
-      color: rgba(0, 0, 0, 0.85);
+      color: #FFFFFF;
       font-weight: bold;
     }
     .close{
@@ -76,6 +77,7 @@ const emit = defineEmits(['closeDetail'])
     flex: 1;
     overflow: auto;
     padding: 15px 0;
+    
     .detail-item{
       flex-shrink: 0;
       min-height: 46px;

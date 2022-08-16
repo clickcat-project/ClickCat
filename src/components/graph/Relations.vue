@@ -44,14 +44,14 @@ defineProps({
 </script>
 <style lang='scss' scoped>
 .relation-details{
-  background: #ffffff;
+  background: #FFFAF6;
+  box-shadow: 0px 0px 18px 0px rgba(193, 173, 133, 0.3);
   z-index: 1000;
   position: fixed;
   right: 30px;
   bottom: calc(43.6vh + 60px);
   width: 298px;
   height: 33.6vh;
-  border: 1px solid #E4E4E4;
   display: flex;
   flex-direction: column;
   :deep(.el-radio-button__inner){
