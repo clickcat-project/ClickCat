@@ -15,3 +15,5 @@ declare module 'virtual:*' {
 declare module 'randomcolor'
 
 declare const THREE: any
+
+declare module 'lodash'
