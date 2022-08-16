@@ -91,9 +91,11 @@ const emit = defineEmits(['closeDetail'])
       .label{
         display: inline-block;
         width: 105px;
+        margin-right: 10px;
         font-size: 14px;
         color: rgba(0, 0, 0, 0.6);
         flex-shrink: 0;
+        overflow: hidden;
       }
       .value{
         display: inline-block;
