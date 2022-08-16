@@ -38,6 +38,9 @@ export default {
   'Mutations': 'Mutations',
   'Kill': 'Kill',
   'Refresh': 'Refresh',
+  'Are you sure you want to delete it?': 'Are you sure you want to delete it?',
+  'Sure': 'Sure',
+  'Cancel': 'Cancel',
 
   // metrics
   'Data Analysis': 'Data Analysis',

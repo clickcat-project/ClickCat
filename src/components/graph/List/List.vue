@@ -8,6 +8,7 @@
 import { computed, onBeforeMount, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import i18n from '@/i18n'
 
 import ListItemVue from './ListItem.vue'
 
@@ -16,6 +17,7 @@ import { queryList, deleteOne as deleteOneOrigin } from '../query'
 const emit = defineEmits(['add', 'toResult'])
 const list = ref<any[]>([])
 const loading = ref<boolean>(false)
+const t = i18n.global.t
 
 const listLengthLess = computed(() => {
   return !list.value.length || list.value.length < 3
@@ -38,11 +40,11 @@ const toResult = (item: any) => {
 
 const deleteOne = async (item: any) => {
   await ElMessageBox.confirm(
-    'Are you sure you want to delete it?',
-    'Delete',
+    t('Are you sure you want to delete it?'),
+    t('Delete'),
     {
-      confirmButtonText: 'OK',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('Sure'),
+      cancelButtonText: t('Cancel'),
       type: 'warning',
       customClass: 'show-custom-primary-color',
     }

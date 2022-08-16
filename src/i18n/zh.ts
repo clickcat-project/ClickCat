@@ -39,6 +39,9 @@ export default {
   'Mutations': '突变',
   'Kill': '关闭',
   'Refresh': '刷新',
+  'Are you sure you want to delete it?': '确定删除么?',
+  'Sure': '确定',
+  'Cancel': '取消',
 
   // 分析总览
   'Data Analysis': '数据分析',
