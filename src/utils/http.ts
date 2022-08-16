@@ -66,7 +66,7 @@ function getRequestUrl(connection?: Connection, settings?: string): string {
 
   let url = `${httpProto}${connection.connectionUrl}`
   // add /?
-  url = `${url}/?output_format_json_quote_denormals=1&output_format_json_quote_64bit_integers=1&log_queries=1&enable_http_compression=1&add_http_cors_header=1&result_overflow_mode=throw&timeout_overflow_mode=throw&max_execution_time=10&max_result_rows=90000&max_result_bytes=10000000`
+  url = `${url}/?output_format_json_quote_denormals=1&output_format_json_quote_64bit_integers=1&log_queries=1&enable_http_compression=1&add_http_cors_header=1&result_overflow_mode=throw&timeout_overflow_mode=throw&max_execution_time=100&max_result_rows=90000&max_result_bytes=10000000`
   if (connection.password) {
     url += `&user=${encodeURIComponent(connection.username)}&password=${encodeURIComponent(
       connection.password
