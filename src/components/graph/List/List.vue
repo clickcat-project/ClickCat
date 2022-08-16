@@ -38,7 +38,7 @@ const toResult = (item: any) => {
 
 const deleteOne = async (item: any) => {
   await ElMessageBox.confirm(
-    'Delete?',
+    'Are you sure you want to delete it?',
     'Delete',
     {
       confirmButtonText: 'OK',
