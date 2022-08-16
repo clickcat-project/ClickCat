@@ -37,13 +37,17 @@ watch(() => props.tab.sql, (newVal) => {
 })
 
 onMounted(async () => {
+  await setHints()
+  initEditor()
+})
+
+const setHints = async () => {
   const res = await queryAllTables()
   const database = res.data.map((item: any) => item.database)
   const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
   const realdata = sqlStore.visitNumber !== 1 ? [] : [...database, ...databaseDotTable]
   await registerTable(realdata)
-  initEditor()
-})
+}
 
 const initEditor = () => {
   editorInstance = monaco.editor.create(editorRenderer.value as HTMLElement, {
@@ -72,6 +76,7 @@ const getEditorContainer = () => {
 }
 
 const registerTable = async (databaseHints: string[]) => {
+  // registerCompletionItemProvider
   monaco.languages.registerCompletionItemProvider(
     'sql',
     createSqlCompleter(getHints, databaseHints) as any
@@ -79,7 +84,8 @@ const registerTable = async (databaseHints: string[]) => {
 }
 
 defineExpose({
-  getEditorContainer
+  getEditorContainer,
+  registerTable
 })
 </script>
 <template>

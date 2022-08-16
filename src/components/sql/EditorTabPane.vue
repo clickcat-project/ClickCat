@@ -91,10 +91,14 @@ const queryTableData = (rows = 100) => {
           elapsed: elapsed.toFixed(2),
           rows_read
         }
+      } else {
+        queryTableDataErrorMsg.value = 'Completed'
+        // if (sql.trim().toLocaleLowerCase().startsWith('create')) {
+        //   simpleEditorInstance.value.registerTable([])
+        // }
       }
     })
     .catch(e => {
-      console.log(e)
       queryTableDataErrorMsg.value = e
       tableData.value = []
     })
