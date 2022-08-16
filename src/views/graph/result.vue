@@ -66,7 +66,6 @@ const currentId = computed(() => {
 const updateGraph = (active:string[]) => {
   console.log(toRaw(active))
   activeTypes.value = toRaw(active)
-  console.log(graphObj.value)
   graphObj.value?.nodeColor(graphObj.value.nodeColor()).linkColor(graphObj.value.linkColor())
 }
 

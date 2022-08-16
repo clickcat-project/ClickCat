@@ -62,11 +62,11 @@ const props = defineProps({
 
 watch(props.typeList, () => {
   for(let i=0; i<props.typeList.Tables?.length; i++) {
-    active.value.push(props.typeList.Tables[i].name)
+    active.value.indexOf(props.typeList.Tables[i].name) === -1 && active.value.push(props.typeList.Tables[i].name)
   }
 
   for(let i=0; i<props.typeList.RelationShips?.length; i++) {
-    active.value.push(props.typeList.RelationShips[i].name)
+    active.value.indexOf(props.typeList.Tables[i].name) === -1 && active.value.push(props.typeList.RelationShips[i].name)
   }
 
   emit('updateGraph', active.value)
