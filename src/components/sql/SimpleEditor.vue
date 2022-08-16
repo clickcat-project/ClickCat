@@ -83,9 +83,15 @@ const registerTable = async (databaseHints: string[]) => {
   )
 }
 
+const getSelectionValue = () => {
+  // editorInstance.getModel().getValueInRange(editorInstance.getSelection())
+  return editorInstance.getModel()?.getValueInRange(editorInstance.getSelection() as monaco.IRange)
+}
+
 defineExpose({
   getEditorContainer,
-  registerTable
+  registerTable,
+  getSelectionValue
 })
 </script>
 <template>

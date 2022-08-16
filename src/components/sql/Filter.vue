@@ -225,7 +225,7 @@ defineExpose({
                   <span>{{ node.label }}</span>
                 </span>
               </el-tooltip>
-              <!-- <span class="suffix">{{ node.data.type }}</span> -->
+              <span class="column-type">{{ node.data.type }}</span>
               <div :class="`absolute-back ${node.data.selected ? 'active' : ''}`"></div>
             </template>
             <template v-else>
@@ -365,6 +365,10 @@ defineExpose({
     right: 10px;
     color: rgba(255, 255, 255, 0.45);
     z-index: 2;
+  }
+  .column-type {
+    margin-left: 20px;
+    color: rgba(255, 255, 255, 0.45);
   }
 
   .root-btn {

@@ -63,19 +63,32 @@ const changeValue = (val: string) => {
 }
 
 const queryTableData = (rows = 100) => {
+  const selecttionValue = simpleEditorInstance.value.getSelectionValue()
   loadingForTableData.value = true
-  const staticSql = props.tab.sql
+  const staticSql = selecttionValue ? selecttionValue : props.tab.sql
   const originSql = props.tab.sql?.replace(';', '')
   let sql = ''
   const originSqlTrim = originSql?.trim()
-  if (originSqlTrim?.toLowerCase()?.includes('select')) {
-    if (!originSql?.toLowerCase()?.includes('limit')) {
-      sql = originSql + ` limit ${rows} FORMAT JSON`
+  if (selecttionValue) {
+    if (selecttionValue?.trim().toLowerCase()?.startsWith('select')) {
+      if (!selecttionValue?.trim().toLowerCase()?.includes('limit')) {
+        sql = selecttionValue + ` limit ${rows} FORMAT JSON`
+      } else {
+        sql = selecttionValue + ' FORMAT JSON'
+      }
     } else {
-      sql = originSql + ' FORMAT JSON'
+      sql = selecttionValue
     }
   } else {
-    sql = originSql as string
+    if (originSqlTrim?.toLowerCase()?.includes('select')) {
+      if (!originSql?.toLowerCase()?.includes('limit')) {
+        sql = originSql + ` limit ${rows} FORMAT JSON`
+      } else {
+        sql = originSql + ' FORMAT JSON'
+      }
+    } else {
+      sql = originSql as string
+    }
   }
   
   staticSql && sqlStore.addHistorySql(staticSql)
