@@ -5,7 +5,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { useGoTo } from './hooks'
 import { RouteName } from './types'
 import i18n from '@/i18n'
-import { computed } from 'vue'
 
 const router = useRouter()
 const route = useRoute()

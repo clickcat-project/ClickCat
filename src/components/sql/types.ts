@@ -33,7 +33,6 @@ export type DatabaseItem = {
   name: string
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export enum TextInsertType {
   Sql = 'sql',
   Table = 'table',
@@ -55,4 +54,11 @@ export enum ColumnCommand {
   OpenTable = 'openTable',
   MakeSelect = 'makeSelect',
   MakeSqlDescribe = 'makeSqlDescribe'
+}
+
+export type LineageDataItem = {
+  source_schema: string,
+  source_table: string,
+  target_schema: string,
+  target_table: string
 }

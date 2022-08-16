@@ -14,15 +14,7 @@ import { computed, ref } from 'vue'
 import { getRealSqlOfArr, getStartAndEndTime, getUndefined } from './utils'
 import dayjs from 'dayjs'
 import TableBanner from '../TableBanner.vue'
-
-type ChangeValue = {
-  database?: string,
-  table?: string,
-  time?: string | number,
-  queryKind?: string,
-  user?: string,
-  type?: string
-}
+import { ChangeValue } from '../types'
 
 const queryFunc = (sql: string) => {
   return query(sql)
@@ -30,9 +22,10 @@ const queryFunc = (sql: string) => {
 const databaseReal = ref<string | undefined>(undefined)
 const tableReal = ref<string | undefined>(undefined)
 const timeReal = ref<string | number>(dayjs.duration(24, 'hours').asMilliseconds())
+const timeDuration = ref<string>('1 MINUTE')
 
 const selectChangeData = (data: ChangeValue) => {
-  const { database, table, time } = data
+  const { database, table, time, option } = data
   if (database) {
     databaseReal.value = getRealSqlOfArr(getUndefined(database))
   }
@@ -41,6 +34,7 @@ const selectChangeData = (data: ChangeValue) => {
   }
   if (time) {
     timeReal.value = time
+    timeDuration.value = option?.duration || '1 MINUTE'
   }
 }
 
@@ -99,6 +93,20 @@ const queryFunction = (
           sql-func-name="queryTotalColumns"
           show-type="toLocaleString"
         ></count>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <ChartsVue
+          index="3"
+          title="Write Rows"
+          sql-func-name="queryWriteRowDataAnalysis"
+          :time-range="timeRange"
+          :time-duration="timeDuration"
+          :query-func="queryFunction"
+          type="line"
+          :height="470"
+        ></ChartsVue>
       </el-col>
     </el-row>
     <el-row :gutter="10">

@@ -12,13 +12,7 @@
   </div>
 </template>
 <script lang='ts' setup>
-import Header from './Header.vue' 
-import { loginDatahub } from '@/components/sql/query'
-import { onBeforeMount } from 'vue'
-
-onBeforeMount(() => {
-  loginDatahub()
-})
+import Header from './Header.vue'
 </script>
 <style lang='scss' scoped>
 .layout-container {

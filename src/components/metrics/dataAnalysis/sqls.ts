@@ -304,6 +304,26 @@ function queryMaxPartsPerPartition({database, table}: SqlParams) {
       LIMIT 10
     `)
 }
+
+/**
+ * 查询近期的分析
+ */
+function queryWriteRowDataAnalysis ({
+  timeDuration,
+  startTime,
+  endTime
+}: SqlParams) {
+  const whereStr = dealSQLWhere([
+    { value: `event_time > '${startTime}' AND event_time < '${endTime}'` }
+  ])
+
+  return formatJson(`
+    SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),
+    sum(written_rows) written_rows FROM system.query_log
+    ${whereStr} GROUP BY event_time ORDER BY event_time ASC
+  `)
+}
+
 /**
  * 查询近期的分析
  */
@@ -919,6 +939,7 @@ export default {
   queryPartsOverTimeWithRowCount,
   queryMaxPartsPerPartition,
   queryRecentPartAnalysis,
+  queryWriteRowDataAnalysis,
   // Cluster Analysis start
   queryDatabaseNumber,
   queryTableNumber,

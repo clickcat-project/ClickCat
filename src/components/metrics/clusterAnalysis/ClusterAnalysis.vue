@@ -14,15 +14,7 @@ import sqls, { SqlParams } from '../dataAnalysis/sqls'
 import { ref, watch } from 'vue'
 import { getRealSqlOfArr, getUndefined } from '../dataAnalysis/utils'
 import TableBanner from '../TableBanner.vue'
-
-type ChangeValue = {
-  database?: string,
-  table?: string,
-  time?: string | number,
-  queryKind?: string,
-  user?: string,
-  type?: string
-}
+import { ChangeValue } from '../types'
 
 const props = defineProps<{
   activeName: string

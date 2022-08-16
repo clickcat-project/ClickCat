@@ -15,20 +15,7 @@ import { getRealSqlOfArr, getStartAndEndTime, getUndefined } from '../dataAnalys
 import totalImg from '@/assets/images/metrics/total_query_analysis.svg'
 import aveMemory from '@/assets/images/metrics/ave_memory.svg'
 import aveTime from '@/assets/images/metrics/ave_time.svg'
-
-type ChangeValue = {
-  database?: string,
-  table?: string,
-  time?: string | number,
-  queryKind?: string,
-  user?: string,
-  type?: string,
-  option?: {
-    duration: string,
-    name: string,
-    value: number | string
-  }
-}
+import { ChangeValue } from '../types'
 
 const props = defineProps<{
   activeName: string

@@ -109,8 +109,13 @@ function canvasReDraw (data: any) {
 //   }
 // }
 
+function getCanvas () {
+  return canvas
+}
+
 defineExpose({
-  canvasReDraw
+  canvasReDraw,
+  getCanvas
 })
 </script>
 
