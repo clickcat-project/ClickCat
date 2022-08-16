@@ -157,7 +157,7 @@ const queryFunction = (
       </el-col>
     </el-row>
     <el-row :gutter="10">
-      <el-col :span="12">
+      <el-col :span="24">
         <TableBanner
           title="Database summary"
           :height="390"
@@ -167,7 +167,9 @@ const queryFunction = (
           :query-func="queryFunction"
         ></TableBanner>
       </el-col>
-      <el-col :span="12">
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :span="24">
         <TableBanner
           title="Table summary"
           :height="390"
