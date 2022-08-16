@@ -4,7 +4,7 @@ import ButterFlyVue from './butterFlyVue.vue'
 import { queryViewsTable, queryMaterializedViewTable } from './query'
 import nodeRender from './node'
 import { TabItem } from '@/store/modules/sql/types'
-import { LineageDataItem } from './types'
+// import { LineageDataItem } from './types'
 
 const props = defineProps<{
   isFirstRender: boolean,
@@ -79,7 +79,7 @@ async function getNodeData ({ database, name, engine }: any) {
   }
   if (!res) return
 
-  for (let item: LineageDataItem of res.data) {
+  for (let item of res.data) {
     const sourceId = item.source_schema + '_' + item.source_table
     const tergetId = item.target_schema + '_' + item.target_table
     nodesForAdd.push(

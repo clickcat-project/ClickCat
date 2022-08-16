@@ -42,8 +42,6 @@ const detailData  = reactive({
   nodeInfo: {},
 })
 
-declare const THREE: any
-
 interface typeListType {
   Tables: {name: string, color: string, count: number}[]
   RelationShips: {name: string, color: string, count: number, linkWidth?: number}[]
