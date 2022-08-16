@@ -42,7 +42,7 @@ const detailData  = reactive({
   nodeInfo: {},
 })
 
-
+declare const THREE: any
 
 interface typeListType {
   Tables: {name: string, color: string, count: number}[]
@@ -63,10 +63,10 @@ onMounted(async () => {
   const graph = await query(`SELECT  * FROM clickcat.GRAPH_TASK where ID = '${currentId.value}'`)
   const jobDetail = JSON.parse(graph.data[0].JOB_DETAIL)
   
-  let nodes = []
+  let nodes: any = []
   for(const detailItem of jobDetail.nodes){
     const node = await query('SELECT  *, \''+detailItem.table+'\' as _label, \''+detailItem.table+'\'||'+detailItem.primary+' as _id, \''+detailItem.display_field+'\' as display_field FROM ' + detailItem.database+'.'+detailItem.table + ' where ' + detailItem.primary + ' is not null')
-    nodes =  nodes.concat(node.data.map(item => {
+    nodes =  nodes.concat(node.data.map((item: any) => {
       return {
         ...item,
         label: item._label,
@@ -75,7 +75,7 @@ onMounted(async () => {
     }))
   }
 
-  nodes.forEach(node => {
+  nodes.forEach((node: any) => {
     const label:string = node.label || node._label || ''
 
     const labelIndex = typeList?.Tables?.findIndex(typeItem => typeItem?.name === label)
@@ -94,7 +94,7 @@ onMounted(async () => {
     }
   })
 
-  let links = []
+  let links: any[] = []
   for(const item of jobDetail.links){
     const link = await query(
         'SELECT   \''+item.source_node+'\'||toString(t1.'+item.source_primary+`) as source,
