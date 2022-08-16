@@ -45,8 +45,8 @@ const detailData  = reactive({
 
 
 interface typeListType {
-  Tables: {name: string, color: string}[]
-  RelationShips: {name: string, color: string, linkWidth?: number}[]
+  Tables: {name: string, color: string, count: number}[]
+  RelationShips: {name: string, color: string, count: number, linkWidth?: number}[]
 }
 
 const typeList = reactive<typeListType>({
@@ -86,8 +86,11 @@ onMounted(async () => {
         color: randomColor({
           luminosity: 'dark',
           seed: label
-        })
+        }),
+        count: 1
       })
+    }else {
+      typeList.Tables[labelIndex].count++
     }
   })
 
@@ -114,8 +117,11 @@ onMounted(async () => {
           luminosity: 'dark',
           seed: label
         }),
+        count: 1,
         linkWidth: 80 * (typeList.RelationShips.length + 1)
       })
+    }else {
+      typeList.RelationShips[labelIndex].count++
     }
   })
 

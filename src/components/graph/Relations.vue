@@ -16,7 +16,7 @@
         <span
           class="type-name"
           :style="{color: item.color, border: `1px solid ${item.color}`}"
-        >{{ item.name }}</span>
+        >{{ item.name }}  {{ item.count }}</span>
         <span
           class="type-color"
           :style="{background: item.color}"
@@ -44,6 +44,8 @@ defineProps({
 </script>
 <style lang='scss' scoped>
 .relation-details{
+  --el-button-bg-color: rgba(255,179,0,.2);
+  --el-button-text-color: rgba(62, 62, 69, 0.45);
   background: #FFFAF6;
   box-shadow: 0px 0px 18px 0px rgba(193, 173, 133, 0.3);
   z-index: 1000;
