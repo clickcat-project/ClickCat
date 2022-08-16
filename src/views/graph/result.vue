@@ -17,13 +17,17 @@
     @close-detail="closeDetail"
   ></Detail>
 
-  <Relations :type-list="typeList" />
+  <Relations
+    :type-list="typeList"
+    @update-graph="updateGraph"
+  />
 </template>
 
 <script lang='ts' setup>
 import ForceGraph3D from '3d-force-graph'
+import { ForceGraph3DInstance } from '3d-force-graph'
 import randomColor from 'randomcolor'
-import {computed, onMounted} from 'vue'
+import {computed, onMounted, toRaw} from 'vue'
 import {query} from '@/utils/http'
 import SpriteText from 'three-spritetext'
 import Detail from '@/components/graph/Detail.vue'
@@ -47,6 +51,9 @@ interface typeListType {
   RelationShips: {name: string, color: string, count: number, linkWidth?: number}[]
 }
 
+const graphObj = ref<ForceGraph3DInstance | null>(null)
+const activeTypes = ref<string[]>([])
+
 const typeList = reactive<typeListType>({
   Tables: [],
   RelationShips: []
@@ -55,6 +62,13 @@ const typeList = reactive<typeListType>({
 const currentId = computed(() => {
   return route.query.id
 })
+
+const updateGraph = (active:string[]) => {
+  console.log(toRaw(active))
+  activeTypes.value = toRaw(active)
+  console.log(graphObj.value)
+  graphObj.value?.nodeColor(graphObj.value.nodeColor()).linkColor(graphObj.value.linkColor())
+}
 
 onMounted(async () => {
   loading.value = true
@@ -77,14 +91,17 @@ onMounted(async () => {
     const label:string = node.label || node._label || ''
 
     const labelIndex = typeList?.Tables?.findIndex(typeItem => typeItem?.name === label)
+    const rgbArr = randomColor({
+      luminosity: 'dark',
+      seed: label,
+      format: 'rgbArray'
+    })
+
 
     if( labelIndex === -1) {
       typeList.Tables.push({
         name: label,
-        color: randomColor({
-          luminosity: 'dark',
-          seed: label
-        }),
+        color: `rgb(${rgbArr.join(',')})`,
         count: 1
       })
     }else {
@@ -107,14 +124,16 @@ onMounted(async () => {
     const label:string = link.label || link._label || ''
 
     const labelIndex = typeList?.RelationShips?.findIndex(typeItem => typeItem?.name === label)
+    const rgbArr = randomColor({
+      luminosity: 'dark',
+      seed: label,
+      format: 'rgbArray'
+    })
 
     if( labelIndex === -1) {
       typeList.RelationShips.push({
         name: label,
-        color: randomColor({
-          luminosity: 'dark',
-          seed: label
-        }),
+        color: `rgb(${rgbArr.join(',')})`,
         count: 1,
         linkWidth: 80 * (typeList.RelationShips.length + 1)
       })
@@ -129,28 +148,44 @@ onMounted(async () => {
     links: links
   }
 
-  const Graph = ForceGraph3D({
+  graphObj.value = ForceGraph3D({
     extraRenderers: [new THREE.CSS2DRenderer()]
   })(document.getElementById('graph-3d') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
       .linkColor((linkObj:any) => {
         const label = linkObj.label
-        return randomColor({
+
+        const rgbArr = randomColor({
           luminosity: 'dark',
-          seed: label
+          seed: label,
+          format: 'rgbArray'
         })
+
+        if(activeTypes.value.indexOf(label) === -1) {
+          return `rgba(${rgbArr.join(',')},0.3)`
+        }else {
+          return `rgb(${rgbArr.join(',')})`
+        }
       })
-      .linkOpacity(1)
+      //.linkOpacity(0.1)
+      //.nodeOpacity(0.3)
       .linkWidth(0.4)
       .linkLabel('label')
       .nodeColor((obj:any) => {
         const label = obj.label
 
-        return randomColor({
+        const rgbArr = randomColor({
           luminosity: 'dark',
-          seed: label
+          seed: label,
+          format: 'rgbArray'
         })
+
+        if(activeTypes.value.indexOf(label) === -1) {
+          return `rgba(${rgbArr.join(',')},0.3)`
+        }else {
+          return `rgb(${rgbArr.join(',')})`
+        }
       })
       .onNodeClick((node:any)=>{
         const nodeInfo = {
@@ -171,10 +206,18 @@ onMounted(async () => {
         const display_field = node.display_field
         const sprite:any = new SpriteText(node[display_field])
         sprite.material.depthWrite = false // make sprite background transparent
-        sprite.color = randomColor({
+        const rgbArr = randomColor({
           luminosity: 'dark',
-          seed: label
+          seed: label,
+          format: 'rgbArray'
         })
+
+        if(activeTypes.value.indexOf(label) === -1) {
+          sprite.color = `rgba(${rgbArr.join(',')},0.3)`
+        }else {
+          sprite.color = `rgb(${rgbArr.join(',')})`
+        }
+        
         sprite.textHeight = 5
         return sprite.translateY(10).translateX(10).translateZ(10)
       })
@@ -222,10 +265,7 @@ onMounted(async () => {
       .nodeThreeObjectExtend(true)
       .linkDirectionalArrowLength(3)
       .linkDirectionalArrowRelPos(1)
-
-
-
-      Graph.cameraPosition({
+      .cameraPosition({
         z: 200
       })
 

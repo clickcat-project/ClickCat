@@ -12,25 +12,43 @@
         v-for="item of typeList[type]"
         :key="item.name"
         class="type-item"
+        @click="handleClickType(item.name)"
       >
         <span
           class="type-name"
-          :style="{color: item.color, border: `1px solid ${item.color}`}"
+          :style="{color: item.color, border: `1px solid ${item.color}`, opacity: active.indexOf(item.name) === -1 ? 0.4 : 1}"
         >{{ item.name }}  {{ item.count }}</span>
         <span
           class="type-color"
-          :style="{background: item.color}"
+          :style="{background: item.color, opacity: active.indexOf(item.name) === -1 ? 0.4 : 1}"
         ></span>
       </div>
     </div>
   </div>
 </template>
 <script lang='ts' setup>
-import {ref} from 'vue'
+import {ref, onMounted, watch} from 'vue'
 
 const type = ref('Tables')
+const active = ref<string[]>([])
 
-defineProps({
+const emit = defineEmits<{
+  (e: 'updateGraph', active: string[]): void
+}>()
+
+const handleClickType = (typeName:string) => {
+  const index = active.value.indexOf(typeName)
+
+  if(index === -1) {
+    active.value.push(typeName)
+  }else {
+    active.value.splice(index, 1)
+  }
+
+  emit('updateGraph', active.value)
+}
+
+const props = defineProps({
   typeList: {
     type: Object,
     default() {
@@ -41,6 +59,19 @@ defineProps({
     }
   }
 })
+
+watch(props.typeList, () => {
+  for(let i=0; i<props.typeList.Tables?.length; i++) {
+    active.value.push(props.typeList.Tables[i].name)
+  }
+
+  for(let i=0; i<props.typeList.RelationShips?.length; i++) {
+    active.value.push(props.typeList.RelationShips[i].name)
+  }
+
+  emit('updateGraph', active.value)
+})
+
 </script>
 <style lang='scss' scoped>
 .relation-details{
