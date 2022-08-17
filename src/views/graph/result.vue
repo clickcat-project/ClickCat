@@ -161,7 +161,7 @@ onMounted(async () => {
           format: 'rgbArray'
         })
 
-        if(activeTypes.value.indexOf(label) === -1) {
+        if(activeTypes.value.length && activeTypes.value.indexOf(label) === -1) {
           return `rgba(${rgbArr.join(',')},0.3)`
         }else {
           return `rgb(${rgbArr.join(',')})`
@@ -180,7 +180,7 @@ onMounted(async () => {
           format: 'rgbArray'
         })
 
-        if(activeTypes.value.indexOf(label) === -1) {
+        if(activeTypes.value.length  && activeTypes.value.indexOf(label) === -1) {
           return `rgba(${rgbArr.join(',')},0.3)`
         }else {
           return `rgb(${rgbArr.join(',')})`
