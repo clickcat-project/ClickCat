@@ -29,6 +29,7 @@
     "pinia": "^2.0.14",
     "pinia-plugin-persist": "^1.0.0",
     "randomcolor": "^0.6.2",
+    "sql-limiter": "^3.0.0",
     "three": "^0.143.0",
     "three-css2drender": "^1.0.0",
     "three-spritetext": "^1.6.5",
@@ -40,13 +41,13 @@
     "vue-router": "4"
   },
   "devDependencies": {
-    "3d-force-graph": "^1.67.7",
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "@types/jquery": "^3.5.14",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "@vitejs/plugin-vue": "^2.3.3",
+    "3d-force-graph": "^1.67.7",
     "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
     "eslint-config-standard": "^17.0.0",

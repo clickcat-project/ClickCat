@@ -1,5 +1,6 @@
 <script lang='ts' setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import * as sqlLimiter from 'sql-limiter'
 
 import SimpleEditorVue from './SimpleEditor.vue'
 import EditorTabPaneTableVue from './EditorTabPaneTable.vue'
@@ -8,7 +9,6 @@ import { useSqlStore } from '@/store'
 import { query } from '@/utils/http'
 import { Statistics } from './types'
 import { ExportData } from './ExportData'
-
 const sqlStore = useSqlStore()
 
 const props = defineProps<{
@@ -65,34 +65,15 @@ const changeValue = (val: string) => {
 const queryTableData = (rows = 100) => {
   const selecttionValue = simpleEditorInstance.value.getSelectionValue()
   loadingForTableData.value = true
-  const staticSql = selecttionValue ? selecttionValue : props.tab.sql
-  const originSql = props.tab.sql?.replace(';', '')
-  let sql = ''
-  const originSqlTrim = originSql?.trim()
-  if (selecttionValue) {
-    if (selecttionValue?.trim().toLowerCase()?.startsWith('select')) {
-      if (!selecttionValue?.trim().toLowerCase()?.includes('limit')) {
-        sql = selecttionValue + ` limit ${rows} FORMAT JSON`
-      } else {
-        sql = selecttionValue + ' FORMAT JSON'
-      }
-    } else {
-      sql = selecttionValue
-    }
-  } else {
-    if (originSqlTrim?.toLowerCase()?.includes('select')) {
-      if (!originSql?.toLowerCase()?.includes('limit')) {
-        sql = originSql + ` limit ${rows} FORMAT JSON`
-      } else {
-        sql = originSql + ' FORMAT JSON'
-      }
-    } else {
-      sql = originSql as string
-    }
-  }
-  
-  staticSql && sqlStore.addHistorySql(staticSql)
-  query(sql)
+  const selectedSql = selecttionValue ? selecttionValue : props.tab.sql
+  const enforcedSql = sqlLimiter.limit(
+      selectedSql,
+      ["limit"],
+      rows
+  )?.replace(';', '')
+
+  selectedSql && sqlStore.addHistorySql(selectedSql)
+  query(enforcedSql)
     .then(res => {
       queryTableDataErrorMsg.value = undefined
       if (res !== 'OK') {
