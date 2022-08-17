@@ -1,9 +1,8 @@
 <script lang='ts' setup>
-import { ref, toRaw } from 'vue'
+import { ref } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
 import Empty from '../metrics/Empty.vue'
-import { ElNotification } from 'element-plus'
 
 defineProps<{
   columns: any[],
@@ -34,30 +33,6 @@ const fullScreen = () => {
 
 const getDragElement = () => {
   return dragEle.value
-}
-
-const dbclick = (row, column) => {
-  const rowData = toRaw(row)
-  const columnInfo = toRaw(column)
-  const value = rowData[columnInfo.label]
-
-  copyText(value)
-}
-
-function copyText(text:string){
-  const textareaC = document.createElement('textarea')
-  textareaC.setAttribute('readonly', 'readonly') //设置只读属性防止手机上弹出软键盘
-  textareaC.value = text
-  document.body.appendChild(textareaC) //将textarea添加为body子元素
-  textareaC.select()
-  const res = document.execCommand('copy')
-  document.body.removeChild(textareaC)//移除DOM元素
-  ElNotification.success({
-    title: 'Success',
-    message: '单元格内容已成功复制到剪切板中',
-    duration: 1500
-  })
-  return res
 }
 
 defineExpose({
@@ -97,7 +72,6 @@ defineExpose({
           height="100%"
           tooltip-effect="dark"
           :border="true"
-          @cell-dblclick="dbclick"
         >
           <el-table-column
             type="index"
