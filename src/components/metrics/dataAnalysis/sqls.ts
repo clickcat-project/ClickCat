@@ -318,9 +318,9 @@ function queryWriteRowDataAnalysis ({
   ])
 
   return formatJson(`
-    SELECT toStartOfInterval(toDateTime(event_time), INTERVAL ${timeDuration}),
+    SELECT toStartOfInterval(toDateTime(event_time) , INTERVAL ${timeDuration}) time,
     sum(written_rows) written_rows FROM system.query_log
-    ${whereStr} GROUP BY event_time ORDER BY event_time ASC
+    ${whereStr} GROUP BY time  ORDER BY time ASC
   `)
 }
 
@@ -787,7 +787,7 @@ function queryReadWriteQueryAnalysis (
     { value: `event_time > '${startTime}' AND event_time < '${endTime}'` },
   ])
   return formatJson(
-      `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL 60 second),  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY event_time ORDER BY event_time ASC`
+      `SELECT toStartOfInterval(toDateTime(event_time), INTERVAL 60 second) time,  sum(read_rows) read_rows, sum(written_rows) written_rows FROM system.query_log ${whereStr} GROUP BY time ORDER BY time ASC`
     )
 }
 
