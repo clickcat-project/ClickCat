@@ -17,3 +17,5 @@ declare module 'randomcolor'
 declare const THREE: any
 
 declare module 'lodash'
+
+declare module 'sql-limiter'

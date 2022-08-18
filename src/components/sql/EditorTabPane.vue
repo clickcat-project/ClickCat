@@ -68,7 +68,7 @@ const queryTableData = (rows = 100) => {
   const selectedSql = selecttionValue ? selecttionValue : props.tab.sql
   const enforcedSql = sqlLimiter.limit(
       selectedSql,
-      ["limit"],
+      ['limit'],
       rows
   )?.replace(';', '')
 
