@@ -1,8 +1,8 @@
 import { query } from '@/utils/http'
 
-export const queryViewsTable = ({
+export const queryLineage = ({
   database,
-  table
+  name
 }: any) => {
   const sql = `
     WITH
@@ -16,19 +16,13 @@ export const queryViewsTable = ({
     FROM system.tables
             ARRAY JOIN arrayIntersect(splitByRegexp('[\\s()'']+', create_table_query), tables) AS source
     WHERE engine IN ('View')
-      AND NOT (source_schema = target_schema AND source_table = target_table) and database = '${database}' and name = '${table}'
-    ORDER BY target_schema, target_table, source_schema, source_table`
-
-  return query(sql).then(res => {
-    return res
-  })
-}
-
-export const queryMaterializedViewTable = ({
-  database,
-  table
-}: any) => {
-  const sql = `
+      AND NOT (source_schema = target_schema AND source_table = target_table) and 
+      (
+                    source_schema = '${database}' and source_table = '${name}'
+            or
+                    target_schema = '${database}' and target_table = '${name}'
+        )
+    union all    
     SELECT source_schema, source_table, target_schema, target_table
     FROM (
         WITH
@@ -44,7 +38,13 @@ export const queryMaterializedViewTable = ({
                  ARRAY JOIN arrayIntersect(splitByRegexp('[\\s()'']+', create_table_query), tables) AS source
         WHERE engine IN ('MaterializedView')
           AND NOT (source_schema = target_schema AND source_table = target_table)
-          AND source <> extract_to and database = '${database}' and name = '${table}'
+          AND source <> extract_to and
+            (
+          source_schema = '${database}' and source_table = '${name}'
+           or
+          target_schema = '${database}' and target_table = '${name}'
+          )
+
         UNION ALL
         SELECT database                                                AS source_schema
              , name                                                    AS source_table
@@ -53,9 +53,15 @@ export const queryMaterializedViewTable = ({
              , extract(create_table_query, 'TO (.*?) \\(')             AS extract_to
         FROM system.tables
         WHERE engine IN ('MaterializedView')
-          AND extract_to <> '' and database = '${database}' and name = '${table}' )
-    ORDER BY target_schema, target_table, source_schema, source_table
-  `
+          AND extract_to <> '' and
+            (
+          source_schema = '${database}' and source_table = '${name}'
+           or
+          target_schema = '${database}' and target_table = '${name}'
+          )
+
+         )
+    `
 
   return query(sql).then(res => {
     return res

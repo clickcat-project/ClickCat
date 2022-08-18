@@ -1,7 +1,7 @@
 <script lang='ts' setup>
 import { onBeforeMount, reactive, ref, watch } from 'vue'
 import ButterFlyVue from './butterFlyVue.vue'
-import { queryViewsTable, queryMaterializedViewTable } from './query'
+import { queryLineage } from './query'
 import nodeRender from './node'
 import { TabItem } from '@/store/modules/sql/types'
 // import { LineageDataItem } from './types'
@@ -71,12 +71,7 @@ function redraw (data: any) {
 }
 
 async function getNodeData ({ database, name, engine }: any) {
-  let res
-  if (engine === 'View') {
-    res = await queryViewsTable({database, table: name})
-  } else if (engine === 'MaterializedView') {
-    res = await queryMaterializedViewTable({database, name})
-  }
+  const res = await queryLineage({database, name})
   if (!res) return
 
   for (let item of res.data) {
@@ -99,7 +94,7 @@ async function getNodeData ({ database, name, engine }: any) {
       source: sourceId,
       target: tergetId
     })
-    await getNodeData({database: item.source_schema, table: item.source_table, engine })
+   // await getNodeData({database: item.source_schema, table: item.source_table, engine })
   }
   
 }
