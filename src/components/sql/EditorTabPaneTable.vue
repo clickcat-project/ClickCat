@@ -1,10 +1,10 @@
 <script lang='ts' setup>
-import { ref } from 'vue'
+import { ref, toRaw, toRefs, onMounted } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
 import Empty from '../metrics/Empty.vue'
 
-defineProps<{
+const props = defineProps<{
   columns: any[],
   tableData: any[],
   statistics?: Statistics,
@@ -13,6 +13,8 @@ defineProps<{
   loading: boolean,
   errorMsg?: string
 }>()
+
+const { columns } = toRefs(props)
 
 const emit = defineEmits(['changeRows', 'export', 'fullScreen'])
 
@@ -33,6 +35,30 @@ const fullScreen = () => {
 
 const getDragElement = () => {
   return dragEle.value
+}
+
+const resetEditMode = () => {
+  //reset
+  props.tableData.forEach(rowItem => {
+    rowItem.editMode = false
+  })
+  columns.value.forEach(item => {
+    item.editMode = false
+  })
+}
+
+const entryEditMode = (row:any, column:any) => {
+  resetEditMode()
+
+  // 设置单元格编辑模式
+  row.editMode = true
+  const { label } = toRaw(column)
+  const index = columns.value.findIndex(item => {
+    return toRaw(item).name === label
+  })
+  columns.value[index].editMode = true
+
+  // 设置输入框焦点
 }
 
 defineExpose({
@@ -72,6 +98,7 @@ defineExpose({
           height="100%"
           tooltip-effect="dark"
           :border="true"
+          @cell-dblclick="entryEditMode"
         >
           <el-table-column
             type="index"
@@ -86,7 +113,17 @@ defineExpose({
               :prop="col.name"
               :label="col.name"
               min-width="150"
-            />
+            >
+              <template #default="scope">
+                <el-input
+                  v-if="col.editMode && scope.row.editMode"
+                  v-model="scope.row[col.name]"
+                  @blur="scope.row.editMode=false"
+                ></el-input>
+                
+                <span v-else>{{ scope.row[col.name] }}</span>
+              </template>
+            </el-table-column>
           </template>
         </el-table>
         <Empty
