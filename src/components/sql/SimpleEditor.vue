@@ -9,6 +9,7 @@ import createSqlCompleter from './utils/sql-completion'
 import { TabItem } from '@/store/modules/sql/types'
 import { useSqlStore } from '@/store'
 import { queryAllTables } from './query'
+import { error } from 'console'
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
 
@@ -36,8 +37,13 @@ watch(() => props.tab.sql, (newVal) => {
   sqlStore.addSqlIsCommand && editorInstance.setValue(newVal as string)
 })
 
-onMounted(async () => {
-  await setHints()
+onMounted(() => {
+  // try {
+  //   await 
+  // } catch (err) {
+  //   console.log(err)
+  // }
+  setHints()
   initEditor()
 })
 
@@ -46,7 +52,7 @@ const setHints = async () => {
   const database = res.data.map((item: any) => item.database)
   const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
   const realdata = sqlStore.visitNumber !== 1 ? [] : [...database, ...databaseDotTable]
-  await registerTable(realdata)
+  await registerTable(realdata, res.data)
 }
 
 const initEditor = () => {
@@ -75,11 +81,11 @@ const getEditorContainer = () => {
   return simpleEditorContainer.value
 }
 
-const registerTable = async (databaseHints: string[]) => {
+const registerTable = async (databaseHints: string[], table: any[]) => {
   // registerCompletionItemProvider
   monaco.languages.registerCompletionItemProvider(
     'sql',
-    createSqlCompleter(getHints, databaseHints) as any
+    createSqlCompleter(getHints, databaseHints, table) as any
   )
 }
 
