@@ -42,11 +42,14 @@ function createCompleter(getExtraHints: any, databaseHints: string[] = []) {
   const createSuggestions = function (model: any, textUntilPosition: any) {
     const text = model.getValue()
     textUntilPosition = textUntilPosition.replace(/[\*\[\]@\$\(\)]/g, '').replace(/(\s+|\.)/g, ' ')
-    const arr = textUntilPosition.split(/[\s;]/)
+    const arr = textUntilPosition.split(/[\s]+/)
+    console.log(arr, '3333333')
     const activeStr = arr[arr.length - 1]
     const len = activeStr.length
     const rexp = new RegExp('([^\\w]|^)' + activeStr + '\\w*', 'gim')
+    console.log(text, '000000')
     const match = text.match(rexp)
+    console.log(match, '111111')
     const textHints = !match ? [] :
       match.map((ele: any) => {
         const rexp = new RegExp(activeStr, 'gim')

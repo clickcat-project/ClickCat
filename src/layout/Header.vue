@@ -20,7 +20,7 @@ const nvaList = [
 ]
 
 const hasRouteName = (item: string) => {
-  return (route.name as string)?.includes(item)
+  return (route.name as string)?.startsWith(item)
 }
 
 const logoutFunc = () => {

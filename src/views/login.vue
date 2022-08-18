@@ -185,7 +185,7 @@
 
   const previousConnection = loginStore.previousConnection
 
-  const activeName = ref('demo') // direct | demo
+  const activeName = ref('direct') // direct | demo
   const loginForm = reactive(previousConnection ? previousConnection : {
     connectionName: '',
     connectionUrl: '',
