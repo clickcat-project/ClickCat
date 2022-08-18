@@ -4,8 +4,6 @@ import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
 import Empty from '../metrics/Empty.vue'
 
-const editInput = ref<HTMLElement | null>(null)
-
 const props = defineProps<{
   columns: any[],
   tableData: any[],
@@ -123,7 +121,6 @@ defineExpose({
               <template #default="scope">
                 <el-input
                   v-if="col.editMode && scope.row.editMode"
-                  ref="editInput"
                   v-model="scope.row[col.name]"
                   @blur="scope.row.editMode=false"
                 ></el-input>
