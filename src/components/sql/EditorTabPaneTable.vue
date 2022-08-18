@@ -1,8 +1,10 @@
 <script lang='ts' setup>
-import { ref, toRaw, toRefs, onMounted } from 'vue'
+import { ref, toRaw, toRefs, nextTick } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
 import Empty from '../metrics/Empty.vue'
+
+const editInput = ref<HTMLElement | null>(null)
 
 const props = defineProps<{
   columns: any[],
@@ -47,7 +49,7 @@ const resetEditMode = () => {
   })
 }
 
-const entryEditMode = (row:any, column:any) => {
+const entryEditMode = (row:any, column:any, cell:any) => {
   resetEditMode()
 
   // 设置单元格编辑模式
@@ -59,6 +61,10 @@ const entryEditMode = (row:any, column:any) => {
   columns.value[index].editMode = true
 
   // 设置输入框焦点
+  nextTick(() => {
+    const input = cell.querySelector('input')
+    input.focus()
+  })
 }
 
 defineExpose({
@@ -117,6 +123,7 @@ defineExpose({
               <template #default="scope">
                 <el-input
                   v-if="col.editMode && scope.row.editMode"
+                  ref="editInput"
                   v-model="scope.row[col.name]"
                   @blur="scope.row.editMode=false"
                 ></el-input>
