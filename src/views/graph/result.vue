@@ -26,6 +26,7 @@
 <script lang='ts' setup>
 import ForceGraph3D from '3d-force-graph'
 import { ForceGraph3DInstance } from '3d-force-graph'
+import { CSS2DRenderer } from 'three-css2drender'
 import randomColor from 'randomcolor'
 import {computed, onMounted, toRaw} from 'vue'
 import {query} from '@/utils/http'
@@ -148,7 +149,7 @@ onMounted(async () => {
   }
 
   graphObj.value = ForceGraph3D({
-    extraRenderers: [new THREE.CSS2DRenderer()]
+    extraRenderers: [new CSS2DRenderer()]
   })(document.getElementById('graph-3d') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
