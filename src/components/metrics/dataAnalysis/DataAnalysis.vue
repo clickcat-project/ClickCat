@@ -99,7 +99,7 @@ const queryFunction = (
       <el-col :span="24">
         <ChartsVue
           index="3"
-          title="Write Rows"
+          title="Write rows"
           sql-func-name="queryWriteRowDataAnalysis"
           :time-range="timeRange"
           :time-duration="timeDuration"

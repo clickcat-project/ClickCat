@@ -21,7 +21,15 @@ const addEditorTabs = () => {
 </script>
 <template>
   <section class="list-item-container">
-    <div>{{ sql }}</div>
+    <div class="sql-container">
+      <el-tooltip
+        :content="sql"
+        placement="bottom-start"
+      >
+        <span>{{ sql }}</span>
+      </el-tooltip>
+    </div>
+    
     <div
       class="btn-box"
       @click="addEditorTabs"
@@ -49,7 +57,13 @@ const addEditorTabs = () => {
   box-sizing: border-box;
   border-radius: 2px;
   cursor: pointer;
-
+  .sql-container {
+    width: 80%;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   .btn-box {
     display: flex;
     align-items: center;

@@ -96,7 +96,7 @@ defineExpose({
           {{ errorMsg }}
         </div>
         <el-table
-          v-if="tableData?.length"
+          v-if="tableData?.length && columns.length"
           :data="tableData"
           style="width: 100%;"
           height="100%"

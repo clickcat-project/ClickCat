@@ -165,6 +165,7 @@
       class="sign-btn"
       type="primary"
       @click="login"
+      @keyup.enter="login"
     >
       SING IN
     </el-button>
