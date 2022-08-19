@@ -114,7 +114,10 @@ defineExpose({
 </script>
 
 <template>
-  <section class="siderbar-content">
+  <section
+    v-loading="treeLoading"
+    class="siderbar-content"
+  >
     <div
       ref="dragEle"
       class="drag-box"
@@ -162,7 +165,6 @@ defineExpose({
         <!-- <el-tree-v2 -->
         <el-tree
           ref="treeInstance"
-          v-loading="treeLoading"
           :data="tree"
           node-key="name"
           :default-expanded-keys="defaultExpandKeys"

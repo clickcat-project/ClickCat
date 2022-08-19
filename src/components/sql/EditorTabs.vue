@@ -22,8 +22,8 @@ onBeforeMount(() => {
   if (currentActive) {
     editableTabsValue.value = sqlStore.activeTabs
   } else {
-    editableTabsValue.value = tabs.value[0].name
-    sqlStore.setActiveTabs(tabs.value[0].name)
+    editableTabsValue.value = tabs.value[0]?.name
+    sqlStore.setActiveTabs(tabs.value[0]?.name)
   }
 })
 
