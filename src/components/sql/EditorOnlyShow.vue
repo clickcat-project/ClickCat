@@ -19,7 +19,7 @@ const getHints = (model: any) => {
 
 monaco.languages.registerCompletionItemProvider(
   'sql',
-  createSqlCompleter(getHints) as any
+  createSqlCompleter(getHints, [], []) as any
 )
 
 const props = defineProps<{

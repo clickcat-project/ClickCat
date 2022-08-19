@@ -29,6 +29,7 @@ module.exports = {
     }],
     // 空标签自动闭合
     'vue/html-self-closing': 'off',
+    'vue/comment-directive': 'off',
     // 禁止使用any
     '@typescript-eslint/no-explicit-any': 'off',
   }

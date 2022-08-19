@@ -26,6 +26,7 @@
 <script lang='ts' setup>
 import ForceGraph3D from '3d-force-graph'
 import { ForceGraph3DInstance } from '3d-force-graph'
+import { CSS2DRenderer } from 'three-css2drender'
 import randomColor from 'randomcolor'
 import {computed, onMounted, toRaw} from 'vue'
 import {query} from '@/utils/http'
@@ -35,7 +36,6 @@ import Relations from '@/components/graph/Relations.vue'
 
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { AnyColumn } from 'element-plus/es/components/table-v2/src/common'
 const showDetail = ref(false)
 const loading = ref(true)
 const route = useRoute()
@@ -148,7 +148,7 @@ onMounted(async () => {
   }
 
   graphObj.value = ForceGraph3D({
-    extraRenderers: [new THREE.CSS2DRenderer()]
+    extraRenderers: [new CSS2DRenderer()]
   })(document.getElementById('graph-3d') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
