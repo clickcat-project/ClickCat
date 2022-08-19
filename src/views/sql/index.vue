@@ -79,7 +79,7 @@ const tableCommand = ({node, command}: any) => {
     >
       <FilterVue
         ref="filterInstance"
-        @tableCommand="tableCommand"
+        @table-command="tableCommand"
       />
     </aside>
     <section class="content">

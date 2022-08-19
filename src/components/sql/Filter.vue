@@ -13,6 +13,7 @@ import SvgIcon from '../SvgIcon/index.vue'
 const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
 
+const treeLoading = ref(false)
 const columns = ref<any[]>([])
 const selectV2Columns = ref<any[]>([])
 const tree = ref<any[]>([])
@@ -45,7 +46,8 @@ onMounted(() => {
 })
 
 const getTreeData = () => {
-  //dataloading.value = true
+  //dataloading.value = true  
+  treeLoading.value = true
   
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {
@@ -60,7 +62,7 @@ const getTreeData = () => {
       defaultExpandKeys.value = [tree.value[0].name]
     })
     .finally(() => {
-      dataloading.value = false
+      treeLoading.value = false
     })
 }
 
@@ -160,6 +162,7 @@ defineExpose({
         <!-- <el-tree-v2 -->
         <el-tree
           ref="treeInstance"
+          v-loading="treeLoading"
           :data="tree"
           node-key="name"
           :default-expanded-keys="defaultExpandKeys"
@@ -271,6 +274,7 @@ defineExpose({
   height: 100%;
   padding: 30px 10px;
   box-sizing: border-box;
+  --el-mask-color: #10223E;
   .drag-box {
     position: absolute;
     right: 4px;
