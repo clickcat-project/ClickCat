@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, onMounted, ref } from 'vue'
 import { Search, Refresh } from '@element-plus/icons-vue'
+import { ScrollbarInstance } from 'element-plus'
 
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
@@ -25,6 +26,7 @@ const dataloading = ref<boolean>(false)
 const dragEle = ref<HTMLElement>()
 const treeContainerHeight = ref<number>()
 const br = '\n'
+const scrollBar = ref<ScrollbarInstance>()
 
 onBeforeMount(() => {
   // dataloading.value = true
@@ -43,7 +45,19 @@ onBeforeMount(() => {
 
 onMounted(() => {
   treeContainerHeight.value = document.querySelector('.tree-content')?.getBoundingClientRect().height
+  // closeTooltip()
 })
+
+// const closeTooltip = () => {
+// 	// 此处事件源可以替换，按需切换即可
+//   (scrollBar.value?.wrap$ as HTMLElement).onscroll = () => {
+//     console.log('111111111')
+//     let list = document.querySelectorAll('.el-popper.is-dark.click-cat-dark')
+//     if (list.length > 0) {
+//       (list[list.length - 1] as HTMLElement).style.display = 'none'
+//     }
+//   }
+// }
 
 const getTreeData = () => {
   //dataloading.value = true  
@@ -159,7 +173,7 @@ defineExpose({
       </div>
     </div>
     <div class="tree-content">
-      <el-scrollbar>
+      <el-scrollbar ref="scrollBar">
         <!-- , class: () => 'no-back' -->
         <!-- :height="treeContainerHeight" -->
         <!-- <el-tree-v2 -->

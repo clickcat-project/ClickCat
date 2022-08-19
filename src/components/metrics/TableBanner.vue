@@ -42,7 +42,21 @@ const getData = () => {
           name: item.name
         }
       })
-      tableData.value = res.data
+      const columnsType = res.meta.reduce((result: any, item: any) => {
+        result[item.name] = item.type
+        return result
+      }, {})
+      tableData.value = res.data.map((item: any) => {
+        const newData: any = {}
+        Object.keys(item).forEach((key: any) => {
+          if (columnsType[key] === 'UInt64') {
+            newData[key] = +item[key]
+          } else {
+            newData[key] = item[key]
+          }
+        })
+        return newData
+      })
     })
 }
 
@@ -61,16 +75,6 @@ watch([
 onBeforeMount(() => {
   getData()
 })
-
-const sortMethod = (a: any, b: any) => {
-  if (a < b) {
-    return -1
-  }
-  if (a > b) {
-    return 1
-  }
-  return 0
-}
 
 </script>
 <template>
@@ -96,7 +100,7 @@ const sortMethod = (a: any, b: any) => {
             :prop="col.name"
             :label="col.name"
             :sortable="true"
-            :sort-method="sortMethod"
+            :sort-by="col.name"
             min-width="150"
           >
             <template #header>
@@ -116,7 +120,7 @@ const sortMethod = (a: any, b: any) => {
             :prop="col.name"
             :label="col.name"
             :sortable="true"
-            :sort-method="sortMethod"
+            :sort-by="col.name"
             min-width="150"
           >
             <template #default="scope">
