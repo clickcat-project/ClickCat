@@ -5,7 +5,7 @@ import { formatData, formatDataPredict } from './utils'
 export const queryList = async (connection: any = {}) => {
   const { connectionUrl, username, password } = connection
   // http://192.168.202.63
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/list`, {
+  const res = await fetch(`${import.meta.env.VITE_MACHINELEARNING_URL}/list`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -46,7 +46,7 @@ export async function addTraining({
   job_name,
   time_interval
 }: any) {
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/train`, {
+  const res = await fetch(`${import.meta.env.VITE_MACHINELEARNING_URL}/train`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -88,7 +88,7 @@ export async function queryResultForMl (connection: Connection, finalValue: any)
     time_interval = '1 day'
   } = finalValue
   // http://192.168.202.63
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/back_testing`, {
+  const res = await fetch(`${import.meta.env.VITE_MACHINELEARNING_URL}/back_testing`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -141,7 +141,7 @@ export async function queryResultForMlUsePredict (data: any) {
     realKey: realKeyOrigin,
     diff: diffOrigin
   } = data
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/predict`, {
+  const res = await fetch(`${import.meta.env.VITE_MACHINELEARNING_URL}/predict`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -187,7 +187,7 @@ export async function deleteOne (connection: Connection, data: any) {
     job_id,
     model_path
   } = data
-  const res = await fetch(`${import.meta.env.VITE_BASE_URL}/delete`, {
+  const res = await fetch(`${import.meta.env.VITE_MACHINELEARNING_URL}/delete`, {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
