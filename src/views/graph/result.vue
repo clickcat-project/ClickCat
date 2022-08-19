@@ -36,7 +36,6 @@ import Relations from '@/components/graph/Relations.vue'
 
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { AnyColumn } from 'element-plus/es/components/table-v2/src/common'
 const showDetail = ref(false)
 const loading = ref(true)
 const route = useRoute()
