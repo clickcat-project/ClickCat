@@ -37,63 +37,72 @@ const hints = [
   'FORM',
   'ORDER BY'
 ]
-function createCompleter(getExtraHints: any, databaseHints: string[] = [], table: any[] = []) {
+
+function getSuggestionItem (item: any) {
+  return {
+    label: item.name,
+    kind: monaco.languages.CompletionItemKind.Constant,
+    documentation: item.name,
+    insertText: item.name
+  }
+}
+
+function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[]) {
   // [...hints, ...databaseHints]
-  const hasDatabaseHints = [...hints, ...table.map(item => item.database)]
+  const hasDatabaseHints = [...hints, ...tables.map(item => item.database)]
   const createSuggestions = function (model: any, textUntilPosition: any) {
-    const text = model.getValue()
-    const textUntilPositionFirstReplace = textUntilPosition.replace(/[\*\[\]@\$\(\)]/g, '')
-    const textUntilPositionSecond = textUntilPositionFirstReplace.replace(/(\s+|\.)/g, ' ')
-    const arr = textUntilPositionSecond.split(/[\s;]/)
-    const activeStr = arr[arr.length - 1]
-    
-    if (text.includes('.')) {
-      // const database = table.map(item => item.database)
-      const noEmptyArr = arr.filter((item: string) => !!item)
-      const noEmptyActiveStr = noEmptyArr[noEmptyArr.length - 1]
-      if (text.endsWith('.')) {
-        
-        const tables = table.filter(item => item.database === noEmptyActiveStr)
-        if (tables.length) {
-          return tables.map(item => {
-            return {
-              label: item.name,
-              kind: monaco.languages.CompletionItemKind.Constant,
-              documentation: item.name,
-              insertText: item.name
-            }
+
+    const textCurrent = model.getValue()
+    const textNoSpecial = textUntilPosition.replace(/[\*\[\]@\$\(\)]/g, '')
+
+    const textHasSpot = textNoSpecial.replace(/(\s+)/g, ' ')
+    const HasSpotTextArr = textHasSpot.split(/[\s;]/)
+    const hasSpotActiveStr = HasSpotTextArr[HasSpotTextArr.length - 1]
+
+    if (hasSpotActiveStr.includes('.')) {
+      const activeStrArr = hasSpotActiveStr.split('.')
+      const last = activeStrArr[activeStrArr.length - 1]
+      if (!last) {
+        if (activeStrArr.length === 2) {
+          const database = activeStrArr[0]
+          const tableByDatabase = tables.filter(item => item.database === database)
+          return tableByDatabase.map(item => {
+            return getSuggestionItem(item)
           })
-        } else {
-          return []
+        } else if (activeStrArr.length === 3) {
+          const tableName = activeStrArr[1]
+          const columnsByTable = columns.filter(item => item.table === tableName)
+          return columnsByTable.map(item => {
+            return getSuggestionItem(item)
+          })
+        }
+      } else if (last) {
+        if (activeStrArr.length === 2) {
+          const database = activeStrArr[0]
+          const tableByDatabase = tables.filter(item => item.database === database && item.name.includes(last))
+          return tableByDatabase.map(item => {
+            return getSuggestionItem(item)
+          })
+        } else if (activeStrArr.length === 3) {
+          const tableName = activeStrArr[1]
+          const columnsByTable = columns.filter(item => item.table === tableName && item.name.includes(last))
+          return columnsByTable.map(item => {
+            return getSuggestionItem(item)
+          })
         }
       } else {
-        const newtextUntilPosition = textUntilPositionFirstReplace.replace(/(\s+)/g, ' ')
-        const newArr = newtextUntilPosition.split(/[\s;]/)
-        const last = newArr[newArr.length - 1]
-        if (last.includes('.')) {
-          const [database, tableStr] = last.split('.')
-          const tables = table.filter((item: any) => item.database === database)
-            .filter((item: any) => item.name.includes(tableStr))
-          return tables.map((item: any) => {
-            return {
-              label: item.name,
-              kind: monaco.languages.CompletionItemKind.Constant,
-              documentation: item.name,
-              insertText: item.name
-            }
-          })
-        }
+        return []
       }
     } else {
-      // const textUntilPositionSecond = textUntilPositionFirstReplace.replace(/(\s+|\.)/g, ' ')
-      // const arr = textUntilPositionSecond.split(/[\s;]/)
-      // const activeStr = arr[arr.length - 1]
-      const len = activeStr.length
-      const rexp = new RegExp('([^\\w]|^)' + activeStr + '\\w*', 'gim')
-      const match = text.match(rexp)
+      const testNoSpot = textNoSpecial.replace(/(\s+|\.)/g, ' ')
+      const noSpotTextArr = testNoSpot.split(/[\s;]/)
+      const noSpotActiveStr = noSpotTextArr[noSpotTextArr.length - 1]
+      const len = noSpotActiveStr.length
+      const rexp = new RegExp('([^\\w]|^)' + noSpotActiveStr + '\\w*', 'gim')
+      const match = textCurrent.match(rexp)
       const textHints = !match ? [] :
         match.map((ele: any) => {
-          const rexp = new RegExp(activeStr, 'gim')
+          const rexp = new RegExp(noSpotActiveStr, 'gim')
           const search = ele.search(rexp)
           return ele.substr(search)
         })
@@ -101,8 +110,8 @@ function createCompleter(getExtraHints: any, databaseHints: string[] = [], table
         .sort()
         .filter(ele => {
           const rexp = new RegExp(ele.substr(0, len), 'gim')
-          return (match && match.length === 1 && ele === activeStr) ||
-            ele.length === 1 ? false : activeStr.match(rexp)
+          return (match && match.length === 1 && ele === noSpotActiveStr) ||
+            ele.length === 1 ? false : noSpotActiveStr.match(rexp)
         })
       return mergeHints.map(ele => ({
         label: ele,

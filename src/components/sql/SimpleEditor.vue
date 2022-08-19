@@ -8,7 +8,7 @@ import { themeCobalt } from './theme/Cobalt'
 import createSqlCompleter from './utils/sql-completion'
 import { TabItem } from '@/store/modules/sql/types'
 import { useSqlStore } from '@/store'
-import { queryAllTables } from './query'
+import { queryAllColumns, queryAllTables } from './query'
 import { error } from 'console'
 
 let editorInstance: monaco.editor.IStandaloneCodeEditor
@@ -49,10 +49,11 @@ onMounted(() => {
 
 const setHints = async () => {
   const res = await queryAllTables()
-  const database = res.data.map((item: any) => item.database)
-  const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
-  const realdata = sqlStore.visitNumber !== 1 ? [] : [...database, ...databaseDotTable]
-  await registerTable(realdata, res.data)
+  const columnsRes = await queryAllColumns()
+  // const database = res.data.map((item: any) => item.database)
+  // const databaseDotTable = res.data.map((item: any) => `${item.database}.${item.name}`)
+  // const realdata = sqlStore.visitNumber !== 1 ? [] : [...database, ...databaseDotTable]
+  await registerTable(res.data, columnsRes.data)
 }
 
 const initEditor = () => {
@@ -81,11 +82,11 @@ const getEditorContainer = () => {
   return simpleEditorContainer.value
 }
 
-const registerTable = async (databaseHints: string[], table: any[]) => {
+const registerTable = async (table: any[], columns: any[]) => {
   // registerCompletionItemProvider
   monaco.languages.registerCompletionItemProvider(
     'sql',
-    createSqlCompleter(getHints, databaseHints, table) as any
+    createSqlCompleter(getHints, table, columns) as any
   )
 }
 
