@@ -27,7 +27,7 @@
   </div>
 </template>
 <script lang='ts' setup>
-import {ref, onMounted, watch} from 'vue'
+import {ref} from 'vue'
 
 const type = ref('Tables')
 const active = ref<string[]>([])
@@ -48,7 +48,7 @@ const handleClickType = (typeName:string) => {
   emit('updateGraph', active.value)
 }
 
-const props = defineProps({
+defineProps({
   typeList: {
     type: Object,
     default() {
@@ -59,18 +59,6 @@ const props = defineProps({
     }
   }
 })
-
-// watch(props.typeList, () => {
-//   for(let i=0; i<props.typeList.Tables?.length; i++) {
-//     active.value.indexOf(props.typeList.Tables[i].name) === -1 && active.value.push(props.typeList.Tables[i].name)
-//   }
-
-//   for(let i=0; i<props.typeList.RelationShips?.length; i++) {
-//     active.value.indexOf(props.typeList.RelationShips[i].name) === -1 && active.value.push(props.typeList.RelationShips[i].name)
-//   }
-
-//   emit('updateGraph', active.value)
-// })
 
 </script>
 <style lang='scss' scoped>
