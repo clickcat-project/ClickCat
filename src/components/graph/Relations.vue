@@ -94,8 +94,10 @@ defineProps({
         border-radius: 11px;
         margin: 0 19px 0 12px;
         background: #F4AA3A;
+        flex-shrink: 0;
       }
       .type-name{
+        width: 190px;
         height: 32px;
         line-height: 32px;
         text-align: center;
@@ -104,6 +106,8 @@ defineProps({
         color: #F4AA3A;
         border-radius: 114px;
         cursor: pointer;
+        flex-grow: 0;
+        overflow: hidden;
       }
     }
   }
