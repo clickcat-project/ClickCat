@@ -14,7 +14,9 @@ RUN pnpm build
 
 FROM nginx:alpine
 
-COPY /nginx/ /etc/nginx/
+RUN rm /etc/nginx/conf.d/default.conf
+  
+ADD default.conf /etc/nginx/conf.d/
 
 COPY  /click-cat/ /usr/share/nginx/html/
 
