@@ -22,3 +22,4 @@ COPY  /click-cat/ /usr/share/nginx/html/
 
 EXPOSE 80
 
+CMD ["nginx"]
