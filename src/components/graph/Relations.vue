@@ -97,7 +97,7 @@ defineProps({
         flex-shrink: 0;
       }
       .type-name{
-        width: 190px;
+        max-width: 190px;
         height: 32px;
         line-height: 32px;
         text-align: center;

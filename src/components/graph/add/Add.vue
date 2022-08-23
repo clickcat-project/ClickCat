@@ -103,32 +103,33 @@ onMounted(() => {
 })
 
 const nextStep = async () => {
-  await ruleFormRef.value?.validate((valid, fields) => {
+  await ruleFormRef.value?.validate(async (valid, fields) => {
     if (!valid) {
       console.log('error submit!', fields)
+    }else {
+      const data = {
+        name: formLabelAlign.jobName,
+        desc: formLabelAlign.desc,
+        nodes: checkedList.value.map(item => {
+          return {
+            database: formLabelAlign.database,
+            table: item.table,
+            primary: item.primary,
+            display_field: item.display_field
+          }
+        }),
+        links: formLabelAlign.links.map(item => ({ ...item, database: formLabelAlign.database }))
+      }
+      const currentId: string = UUID.generate()
+      try {
+        await addOne(currentId, JSON.stringify(data))
+        ElMessage.success('Add successful')
+        emit('toResult', currentId)
+      } catch (error) {
+        ElMessage.error('Add failed')
+      }
     }
   })
-  const data = {
-    name: formLabelAlign.jobName,
-    desc: formLabelAlign.desc,
-    nodes: checkedList.value.map(item => {
-      return {
-        database: formLabelAlign.database,
-        table: item.table,
-        primary: item.primary,
-        display_field: item.display_field
-      }
-    }),
-    links: formLabelAlign.links.map(item => ({ ...item, database: formLabelAlign.database }))
-  }
-  const currentId: string = UUID.generate()
-  try {
-    await addOne(currentId, JSON.stringify(data))
-    ElMessage.success('添加成功')
-    emit('toResult', currentId)
-  } catch (error) {
-    ElMessage.error('添加失败')
-  }
 }
 
 const queryDatabases = () => {
