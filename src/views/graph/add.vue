@@ -12,7 +12,7 @@
     />
   </section>
 </template>
-
+ 
 <script lang='ts' setup>
 import AddVue from '@/components/graph/add/Add.vue'
 import { useGoTo } from '@/layout/hooks'
