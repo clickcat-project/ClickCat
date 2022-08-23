@@ -34,4 +34,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: clickcat:latest
+          tags: clickcat/clickcat:latest
