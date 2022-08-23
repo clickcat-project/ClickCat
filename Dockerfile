@@ -1,6 +1,11 @@
 
 FROM nginx:alpine
 
+RUN install -g typescript
+RUN npm install -g pnpm
+RUN pnpm install
+RUN pnpm build
+
 RUN rm /etc/nginx/conf.d/default.conf
   
 ADD default.conf /etc/nginx/conf.d/
