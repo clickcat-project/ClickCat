@@ -5,7 +5,6 @@ specifiers:
   '@commitlint/cli': 17.0.2
   '@commitlint/config-conventional': 17.0.2
   '@element-plus/icons-vue': 2.0.6
-  '@rollup/plugin-alias': 3.1.9
   '@types/jquery': 3.5.14
   '@typescript-eslint/eslint-plugin': 5.28.0
   '@typescript-eslint/parser': 5.28.0
@@ -74,7 +73,6 @@ devDependencies:
   3d-force-graph: 1.67.7
   '@commitlint/cli': 17.0.2
   '@commitlint/config-conventional': 17.0.2
-  '@rollup/plugin-alias': 3.1.9_rollup@1.20.0
   '@types/jquery': 3.5.14
   '@typescript-eslint/eslint-plugin': 5.28.0_e31b29f1fecf005ba924419e2b988db8
   '@typescript-eslint/parser': 5.28.0_eslint@8.17.0+typescript@4.5.4
@@ -466,16 +464,6 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
-    dev: true
-
-  /@rollup/plugin-alias/3.1.9_rollup@1.20.0:
-    resolution: {integrity: sha512-QI5fsEvm9bDzt32k39wpOwZhVzRcL5ydcffUHMyLVaVaLeC70I8TJZ17F1z1eMoLu4E/UOcH9BWVkKpIKdrfiw==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0
-    dependencies:
-      rollup: 1.20.0
-      slash: 3.0.0
     dev: true
 
   /@sxzz/popperjs-es/2.11.7:
