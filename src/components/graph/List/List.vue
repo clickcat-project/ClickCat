@@ -1,9 +1,3 @@
-<route>
-{
-  name: "Graph",
-  meta: { title: 'Graph' }
-}
-</route>
 <script lang='ts' setup>
 import { computed, onBeforeMount, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
