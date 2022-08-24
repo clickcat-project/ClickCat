@@ -149,7 +149,7 @@ onMounted(async () => {
 
   graphObj.value = ForceGraph3D({
     extraRenderers: [new CSS2DRenderer()]
-  })(document.getElementById('graph-3d') as HTMLElement)
+  } as any)(document.getElementById('graph-3d') as HTMLElement)
       .graphData(gData)
       .backgroundColor('#fff')
       .linkColor((linkObj:any) => {
