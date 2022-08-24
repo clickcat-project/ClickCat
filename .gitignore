@@ -13,6 +13,7 @@ dist-ssr
 *.local
 click-cat
 *.zip
+package-lock.json
 
 # Editor directories and files
 .vscode/*

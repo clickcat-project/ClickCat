@@ -47,55 +47,195 @@ function getSuggestionItem (item: any) {
   }
 }
 
+const columnsWantedKeyword = [
+  'select',
+  'where',
+  'group',
+  'having',
+  'on',
+]
+
+const tableWantedKeyword = ['from', 'join']
+
 function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[]) {
   // [...hints, ...databaseHints]
   const hasDatabaseHints = [...hints, ...tables.map(item => item.database)]
-  const createSuggestions = function (model: any, textUntilPosition: any) {
-
+  const createSuggestions = function (model: any, textUntilPosition: any, ...rest: any) {
     const textCurrent = model.getValue()
     const textNoSpecial = textUntilPosition.replace(/[\*\[\]@\$\(\)]/g, '')
+    const textUntilPositionLower = textUntilPosition.toLowerCase()
 
     const textHasSpot = textNoSpecial.replace(/(\s+)/g, ' ')
     const HasSpotTextArr = textHasSpot.split(/[\s;]/)
     const hasSpotActiveStr = HasSpotTextArr[HasSpotTextArr.length - 1]
 
-    if (hasSpotActiveStr.includes('.')) {
-      const activeStrArr = hasSpotActiveStr.split('.')
-      const last = activeStrArr[activeStrArr.length - 1]
-      if (!last) {
-        if (activeStrArr.length === 2) {
-          const database = activeStrArr[0]
-          const tableByDatabase = tables.filter(item => item.database === database)
-          return tableByDatabase.map(item => {
-            return getSuggestionItem(item)
-          })
-        } else if (activeStrArr.length === 3) {
-          // const tableName = activeStrArr[1]
-          // const columnsByTable = columns.filter(item => item.table === tableName)
-          // return columnsByTable.map(item => {
-          //   return getSuggestionItem(item)
-          // })
-          return []
-        }
-      } else if (last) {
-        if (activeStrArr.length === 2) {
-          const database = activeStrArr[0]
-          const tableByDatabase = tables.filter(item => item.database === database && item.name.includes(last))
-          return tableByDatabase.map(item => {
-            return getSuggestionItem(item)
-          })
-        } else if (activeStrArr.length === 3) {
-          // const tableName = activeStrArr[1]
-          // const columnsByTable = columns.filter(item => item.table === tableName && item.name.includes(last))
-          // return columnsByTable.map(item => {
-          //   return getSuggestionItem(item)
-          // })
-          return []
-        }
-      } else {
-        return []
+    const keywordsRegex = /\b(from|join|select|where|group|having|on)\b/gi
+    const tableRegex = new RegExp(`\\b(${tables.map(item => item.name).join('|')})\\b`, 'gi')
+
+    const allTokens = [...new Set(
+      textUntilPositionLower.match(tableRegex)
+    )]
+
+    const mostRecentKeyword = textUntilPositionLower.match(keywordsRegex)?.pop()
+    let wanted
+    let priorKeyword
+    if (mostRecentKeyword) {
+      if (columnsWantedKeyword.includes(mostRecentKeyword)) {
+        priorKeyword = mostRecentKeyword
+        wanted = 'COLUMN'
       }
-    } else {
+      if (tableWantedKeyword.includes(mostRecentKeyword)) {
+        priorKeyword = mostRecentKeyword
+        wanted = 'TABLE'
+      }
+    }
+
+    const hasDot = hasSpotActiveStr.includes('.')
+
+    const database = tables.map(item => item.database)
+      .filter(item => item.includes(hasSpotActiveStr))
+      .map(item => {
+        return {
+          label: item,
+          kind: monaco.languages.CompletionItemKind.Constant,
+          documentation: item,
+          insertText: item
+        }
+      })
+    const showTables = tables.filter(item => item.name.includes(hasSpotActiveStr))
+      .map(item => getSuggestionItem(item))
+
+    const defaultSuggestion = [
+      ...database,
+      ...showTables
+    ]
+
+    if (!hasDot && wanted === 'TABLE') {
+      return defaultSuggestion
+    }
+
+    if (!hasDot && wanted === 'COLUMN') {
+      return defaultSuggestion
+    }
+
+    if (hasDot && wanted === 'COLUMN') {
+      const dotStrArr = hasSpotActiveStr.split('.')
+      const last = dotStrArr[dotStrArr.length - 1]
+      const lastlast = dotStrArr[dotStrArr.length - 2]
+      const database = tables.filter(item => item.database === lastlast)
+      const tablesByName = tables.find(item => item.name === lastlast)
+      if (database.length) {
+        let returnData = database
+        if (last) {
+          returnData = database.filter(item => item.name.includes(last))
+        }
+        return returnData.map(item => {
+          return getSuggestionItem(item)
+        })
+      }
+      if (tablesByName) {
+        let returnData = columns.filter(item => item.table === lastlast)
+        if (last) {
+          returnData = returnData.filter(item => item.name.includes(last))
+        }
+        return returnData.map(item => {
+          return getSuggestionItem(item)
+        })
+      }
+      return []
+    }
+
+    if (hasDot && wanted === 'TABLE') {
+      const dotStrArr = hasSpotActiveStr.split('.')
+      const last = dotStrArr[dotStrArr.length - 1]
+      const lastlast = dotStrArr[dotStrArr.length - 2]
+      const database = tables.filter(item => item.database === lastlast)
+      if (database.length) {
+        let returnData = database
+        if (last) {
+          returnData = database.filter(item => item.name.includes(last))
+        }
+        return returnData.map(item => {
+          return getSuggestionItem(item)
+        })
+      }
+      return []
+    }
+
+    // const selectLast = HasSpotTextArr[HasSpotTextArr.length - 1]
+    // const selectStr = HasSpotTextArr[HasSpotTextArr.length - 2]
+    // if (selectStr && columnsWantedKeyword.includes(selectStr.toLowerCase())) {
+    //   const noRepeatColumns = [...new Set(columns.map(item => {
+    //     return item.name
+    //   }))]
+    //   if (selectLast === '') {
+    //     return [
+    //       {
+    //         label: '*',
+    //         kind: monaco.languages.CompletionItemKind.Constant,
+    //         documentation: '*',
+    //         insertText: '*'
+    //       },
+    //       ...(noRepeatColumns.map(item => {
+    //         return {
+    //           label: item,
+    //           kind: monaco.languages.CompletionItemKind.Constant,
+    //           documentation: item,
+    //           insertText: item
+    //         }
+    //       }))
+    //     ]
+    //   } else {
+    //     return [
+    //       ...noRepeatColumns.filter(item => item.includes(selectLast)).map(item => {
+    //         return {
+    //           label: item,
+    //           kind: monaco.languages.CompletionItemKind.Constant,
+    //           documentation: item,
+    //           insertText: item
+    //         }
+    //       })
+    //     ]
+    //   }
+    // }
+
+    // if (hasSpotActiveStr.includes('.')) {
+    //   const activeStrArr = hasSpotActiveStr.split('.')
+    //   const last = activeStrArr[activeStrArr.length - 1]
+    //   if (!last) {
+    //     if (activeStrArr.length === 2) {
+    //       const database = activeStrArr[0]
+    //       const tableByDatabase = tables.filter(item => item.database === database)
+    //       return tableByDatabase.map(item => {
+    //         return getSuggestionItem(item)
+    //       })
+    //     } else if (activeStrArr.length === 3) {
+    //       // const tableName = activeStrArr[1]
+    //       // const columnsByTable = columns.filter(item => item.table === tableName)
+    //       // return columnsByTable.map(item => {
+    //       //   return getSuggestionItem(item)
+    //       // })
+    //       return []
+    //     }
+    //   } else if (last) {
+    //     if (activeStrArr.length === 2) {
+    //       const database = activeStrArr[0]
+    //       const tableByDatabase = tables.filter(item => item.database === database && item.name.includes(last))
+    //       return tableByDatabase.map(item => {
+    //         return getSuggestionItem(item)
+    //       })
+    //     } else if (activeStrArr.length === 3) {
+    //       // const tableName = activeStrArr[1]
+    //       // const columnsByTable = columns.filter(item => item.table === tableName && item.name.includes(last))
+    //       // return columnsByTable.map(item => {
+    //       //   return getSuggestionItem(item)
+    //       // })
+    //       return []
+    //     }
+    //   } else {
+    //     return []
+    //   }
+    // } else {
       const testNoSpot = textNoSpecial.replace(/(\s+|\.)/g, ' ')
       const noSpotTextArr = testNoSpot.split(/[\s;]/)
       const noSpotActiveStr = noSpotTextArr[noSpotTextArr.length - 1]
@@ -123,7 +263,7 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
         documentation: ele,
         insertText: ele
       }))
-    }
+    // }
   }
   return {
     triggerCharacters: ['.'],
