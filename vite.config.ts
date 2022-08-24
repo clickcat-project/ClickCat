@@ -2,7 +2,6 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import path from 'path'
 import vue from '@vitejs/plugin-vue'
-import VitePages from 'vite-plugin-pages'
 import proxy from './config/vite/proxy'
 import { APP_TITLE, VITE_PORT } from './config/constant'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
@@ -39,10 +38,6 @@ export default defineConfig({
   plugins: [
     vue(), 
     monacoEditorPlugin(),
-    VitePages({
-      dirs: 'src/views',
-      exclude: ['**/components/*.vue', '**/views/**/login.vue']
-    }),
     createSvgIconsPlugin({
       // 指定需要缓存的图标文件夹
       iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
