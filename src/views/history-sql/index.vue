@@ -1,9 +1,3 @@
-<route>
-{
-  name: "History SQL",
-  meta: { title: 'History SQL' }
-}
-</route>
 <script lang='ts' setup>
 import { computed } from 'vue'
 

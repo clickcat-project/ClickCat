@@ -1,9 +1,3 @@
-<route>
-{
-  name: "GraphAdd",
-  meta: { title: 'Graph' }
-}
-</route>
 <template>
   <section class="graph-add-wrapper">
     <AddVue

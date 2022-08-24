@@ -1,9 +1,3 @@
-<route>
-{
-  name: "Graph",
-  meta: { title: 'Graph' }
-}
-</route>
 <template>
   <section class="graph-list-container">
     <ListVue

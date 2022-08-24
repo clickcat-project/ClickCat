@@ -1,9 +1,3 @@
-<route>
-{
-  name: "Processes",
-  meta: { title: 'Processes' }
-}
-</route>
 <script lang='ts' setup>
 import { ref } from 'vue'
 import { Close, Refresh, ArrowLeft, ArrowRight, ArrowDown } from '@element-plus/icons-vue'

@@ -1,9 +1,3 @@
-<route>
-{
-  name: "Metrics",
-  meta: { title: '工作台' }
-}
-</route>
 <script lang='ts' setup>
 import { ref } from 'vue'
 

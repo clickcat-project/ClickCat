@@ -1,9 +1,3 @@
-<route>
-{
-  name: "GraphResult",
-  meta: { title: 'GraphResult' }
-}
-</route>
 <template>
   <div
     id="graph-3d"

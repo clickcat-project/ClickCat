@@ -1,9 +1,3 @@
-<route>
-{
-  name: "SQL",
-  meta: { title: 'SQL' }
-}
-</route>
 <script lang='ts' setup>
 import { onMounted, ref } from 'vue'
 
