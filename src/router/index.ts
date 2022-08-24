@@ -1,23 +1,94 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import menuRoutes from 'virtual:generated-pages'
 type RouteItem = RouteRecordRaw & { meta: AppRoute.RouteMeta }
-console.log(menuRoutes, 'menuRoutes')
+
+export const menuRoutesList = [
+  {
+    name: 'GraphAdd',
+    path: '/graph/add',
+    'meta': {
+        'title': 'Graph'
+    },
+    component: () => import('@/views/graph/add.vue'),
+  },
+  {
+    'name': 'Graph',
+    'path': '/graph',
+    'props': true,
+    'meta': {
+        'title': 'Graph'
+    },
+    component: () => import('@/views/graph/index.vue'),
+  },
+{
+    'name': 'GraphResult',
+    'path': '/graph/result',
+    'props': true,
+    'meta': {
+        'title': 'GraphResult'
+    },
+    component: () => import('@/views/graph/result.vue'),
+  },
+  {
+    'name': 'History SQL',
+    'path': '/history-sql',
+    'props': true,
+    'meta': {
+        'title': 'History SQL'
+    },
+    component: () => import('@/views/history-sql/index.vue'),
+  },
+  {
+    'name': 'Machine Learning',
+    'path': '/machine-learning',
+    'props': true,
+    'meta': {
+        'title': '工作台'
+    },
+    component: () => import('@/views/machine-learning/index.vue'),
+  },
+  {
+    'name': 'Metrics',
+    'path': '/metrics',
+    'props': true,
+    'meta': {
+        'title': '工作台'
+    },
+    component: () => import('@/views/metrics/index.vue'),
+  },
+  {
+    'name': 'Processes',
+    'path': '/processes',
+    'props': true,
+    'meta': {
+        'title': 'Processes'
+    },
+    component: () => import('@/views/processes/index.vue'),
+  },
+  {
+    'name': 'SQL',
+    'path': '/sql',
+    'props': true,
+    'meta': {
+        'title': 'SQL'
+    },
+    component: () => import('@/views/sql/index.vue'),
+  }
+]
+
 const routes: RouteItem[] = [
   {
     path: '',
     component: () => import('@/layout/index.vue'),
     meta: {},
     redirect: '/metrics',
-    children: menuRoutes
+    children: menuRoutesList
   },
   {
     path: '/login',
     component: () => import('@/views/login.vue'),
     meta: {}
-  }
+  },
 ]
-
-export const menuRoutesList = menuRoutes
 
 export const router = createRouter({
   history: createWebHistory(),

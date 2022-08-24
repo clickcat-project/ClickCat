@@ -17,7 +17,7 @@ export default defineConfig({
     alias: [
       {
         find: /@\//,
-        replacement: pathResolve('src') + '/',
+        replacement: pathResolve('/src') + '/',
       },
       {
         find: 'vue-i18n',

@@ -70,11 +70,12 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
             return getSuggestionItem(item)
           })
         } else if (activeStrArr.length === 3) {
-          const tableName = activeStrArr[1]
-          const columnsByTable = columns.filter(item => item.table === tableName)
-          return columnsByTable.map(item => {
-            return getSuggestionItem(item)
-          })
+          // const tableName = activeStrArr[1]
+          // const columnsByTable = columns.filter(item => item.table === tableName)
+          // return columnsByTable.map(item => {
+          //   return getSuggestionItem(item)
+          // })
+          return []
         }
       } else if (last) {
         if (activeStrArr.length === 2) {
@@ -84,11 +85,12 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
             return getSuggestionItem(item)
           })
         } else if (activeStrArr.length === 3) {
-          const tableName = activeStrArr[1]
-          const columnsByTable = columns.filter(item => item.table === tableName && item.name.includes(last))
-          return columnsByTable.map(item => {
-            return getSuggestionItem(item)
-          })
+          // const tableName = activeStrArr[1]
+          // const columnsByTable = columns.filter(item => item.table === tableName && item.name.includes(last))
+          // return columnsByTable.map(item => {
+          //   return getSuggestionItem(item)
+          // })
+          return []
         }
       } else {
         return []
