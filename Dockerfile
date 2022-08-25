@@ -26,6 +26,9 @@ COPY ./main.sh /
 
 COPY --from=builder /click-cat/ /usr/share/nginx/html/
 
+# 容器内给shell文件添加所有用户可执行权限
+RUN chmod a+x ./main.sh
+
 EXPOSE 80
 
 #CMD ["nginx", "-g", "daemon off;"]
