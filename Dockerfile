@@ -2,8 +2,8 @@ FROM node:lts-alpine as builder
 
 # env set
 ENV EVA_ENTRYPOINT=/api
-ENV MACHINELEARNING_URL="http://172.16.1.192:8080/"
-ENV PORT="80"
+ENV MACHINELEARNING_URL=http://172.16.1.192:8080/
+ENV PORT=80
 
 WORKDIR /
 COPY package.json /

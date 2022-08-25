@@ -1,8 +1,8 @@
 # /bin/bash
 
 # 设置多个环境变量到 environment variable
-echo -e "set \$MACHINELEARNING_URL \"$MACHINELEARNING_URL\";
-set \$PORT \"$PORT\";" > /etc/nginx/conf.d/env.variable; 
+# echo -e "set \$MACHINELEARNING_URL $MACHINELEARNING_URL\; set \$PORT $PORT\;" > /etc/nginx/conf.d/env.variable; 
+echo set \$MACHINELEARNING_URL $MACHINELEARNING_URL\; > /etc/nginx/conf.d/env.variable
 
 # 设置单个环境变量到 environment variable
 # echo set \$MACHINELEARNING_URL $MACHINELEARNING_URL\; > /etc/nginx/conf.d/env.variable 
