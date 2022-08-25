@@ -73,7 +73,7 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
     const tableRegex = new RegExp(`\\b(${tables.map(item => item.name).join('|')})\\b`, 'gi')
 
     const allTokens = [...new Set(
-      textUntilPositionLower.match(tableRegex)
+      textCurrent.toLowerCase().match(tableRegex)
     )]
 
     const mostRecentKeyword = textUntilPositionLower.match(keywordsRegex)?.pop()
@@ -115,7 +115,20 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
     }
 
     if (!hasDot && wanted === 'COLUMN') {
-      return defaultSuggestion
+      if (priorKeyword === 'select') {
+        return defaultSuggestion
+      } else {
+        const tableByAlreadyShow = tables.filter(item => {
+          return allTokens.includes(item.name)
+        })
+        const columnsByAlreadyShow = columns.filter(item => {
+          return allTokens.includes(item.table)
+        })
+        return [
+          ...tableByAlreadyShow.map(item => getSuggestionItem(item)),
+          ...columnsByAlreadyShow.map(item => getSuggestionItem(item)),
+        ]
+      }
     }
 
     if (hasDot && wanted === 'COLUMN') {
