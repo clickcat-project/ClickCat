@@ -92,7 +92,7 @@ function createCompleter(getExtraHints: any, tables: any[] = [], columns: any[])
 
     const hasDot = hasSpotActiveStr.includes('.')
 
-    const database = tables.map(item => item.database)
+    const database = [...new Set(tables.map(item => item.database))]
       .filter(item => item.includes(hasSpotActiveStr))
       .map(item => {
         return {
