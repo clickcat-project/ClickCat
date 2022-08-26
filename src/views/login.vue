@@ -165,7 +165,6 @@
       class="sign-btn"
       type="primary"
       @click="login"
-      @keyup.enter="login"
     >
       SING IN
     </el-button>
@@ -176,7 +175,7 @@
   import logo from '@/assets/images/logo.svg'
   import { ElNotification } from 'element-plus'
   import { query } from '@/utils/http'
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, onMounted, onUnmounted } from 'vue'
   import { useLoginStore } from '@/store'
   import { useGoTo } from '@/layout/hooks'
   
@@ -200,6 +199,21 @@
     username: 'default',
     password: '123456',
     params: ''
+  }
+
+  onMounted(() => {
+    // @keyup.enter="login"
+    document.addEventListener('keyup', keyupLogin)
+  })
+
+  onUnmounted(() => [
+    document.removeEventListener('keyup', keyupLogin)
+  ])
+
+  const keyupLogin = (e: any) => {
+    if (e.keyCode === 13) {
+      login()
+    }
   }
 
   const login = () => {
