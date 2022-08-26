@@ -17,19 +17,23 @@ RUN pnpm build
 
 FROM nginx:alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
+# RUN rm /etc/nginx/conf.d/default.conf
   
-ADD default.conf /etc/nginx/conf.d/
+ADD nginx.template /etc/nginx/conf.d/
 
-COPY ./main.sh /
+# COPY ./main.sh /
 
 COPY --from=builder /click-cat/ /usr/share/nginx/html/
 
 # 容器内给shell文件添加所有用户可执行权限
-RUN chmod a+x ./main.sh
+# RUN chmod a+x ./main.sh
 
 EXPOSE 80
 
+WORKDIR /etc/nginx/conf.d
 
-CMD ["sh", "main.sh"]
+ENTRYPOINT envsubst '$MACHINELEARNING_URL'  < nginx.template > default.conf && cat default.conf && nginx -g 'daemon off;'
+
+
+# CMD ["sh", "main.sh"]
 #CMD ["nginx", "-g", "daemon off;"]
