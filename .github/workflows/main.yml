@@ -40,8 +40,8 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             docker pull clickcat/clickcat
             docker run -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 --name clickcat clickcat:v1.0
