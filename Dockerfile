@@ -30,5 +30,6 @@ RUN chmod a+x ./main.sh
 
 EXPOSE 80
 
-#CMD ["nginx", "-g", "daemon off;"]
+
 CMD ["sh", "main.sh"]
+#CMD ["nginx", "-g", "daemon off;"]
