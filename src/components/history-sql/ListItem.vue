@@ -15,6 +15,7 @@ const addEditorTabs = () => {
     sql: props.sql
   })
   const name = sqlStore.tabs[sqlStore.tabs.length - 1].name
+  console.log(name, '11111111')
   sqlStore.setActiveTabs(name)
   goto('SQL')
 }
