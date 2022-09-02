@@ -44,6 +44,8 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            docker pull clickcat/clickcat
-            docker restart -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 clickcat/clickcat
+            docker update --restart=always -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 clickcat/clickcat
+
+          # docker pull clickcat/clickcat
+          # docker restart -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 clickcat/clickcat
           
