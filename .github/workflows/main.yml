@@ -6,7 +6,8 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - 'v*'
 
 jobs:
   push_to_registry:
@@ -14,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Check out the repo
         uses: actions/checkout@v3
 
@@ -34,7 +39,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: clickcat/clickcat:latest
+          tags: |
+            clickcat/clickcat:${{ github.ref }}
+            clickcat/clickcat:latest
 
       # 部署到服务器
       - name: Deploy
