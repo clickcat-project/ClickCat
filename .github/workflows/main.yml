@@ -41,8 +41,8 @@ jobs:
         with:
           context: .
           push: true
+          # 获取 Get version 步骤中的 tag , steps.[步骤id].outputs.[关键字名称]
           tags: |
-            # 获取 Get version 步骤中的 tag , steps.[步骤id].outputs.[关键字名称]
             clickcat/clickcat:${{ steps.get_version.outputs.VERSION }}
             clickcat/clickcat:latest
 
@@ -53,14 +53,13 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          # docker update --restart=always clickcat/clickcat
+          # docker pull clickcat/clickcat
+          # docker run -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 --name clickcat clickcat/clickcat
           script: |
             docker stop clickcat
             docker rm clickcat
             docker image rm clickcat/clickcat
             docker pull clickcat/clickcat
             docker run -d -e MACHINELEARNING_URL=http://8.135.49.240:8081/ -e PORT=5555 -p 9090:5555 --name clickcat clickcat/clickcat
-
-            # docker update --restart=always clickcat/clickcat
-            # docker pull clickcat/clickcat
-            # docker run -d -e MACHINELEARNING_URL=http://172.16.1.192:8080/ -e PORT=5555 -p 9090:5555 --name clickcat clickcat/clickcat
           
