@@ -48,7 +48,7 @@ jobs:
             docker rm clickcat
             docker image rm clickcat/clickcat
             docker pull clickcat/clickcat
-            docker run -d -e MACHINELEARNING_URL=http://8.135.49.240:8080// -e PORT=5555 -p 9090:5555 --name clickcat clickcat/clickcat
+            docker run -d -e MACHINELEARNING_URL=http://8.135.49.240:8081/ -e PORT=5555 -p 9090:5555 --name clickcat clickcat/clickcat
 
             # docker update --restart=always clickcat/clickcat
             # docker pull clickcat/clickcat
