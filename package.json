@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build:test": "vue-tsc --noEmit && vite build --mode staging",
+    "build:updateVersion": "sh update.sh",
     "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky install",
