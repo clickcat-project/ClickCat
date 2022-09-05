@@ -31,3 +31,8 @@ You are free to open an [issue](https://github.com/clickcat-project/ClickCat/iss
 # Contribute
 At present, the ClickCat project is mainly composed of a front-end project(Vue3 + TypeScript) + a Python project (time series prediction model).
 We are always open to people who want to use the system or contribute to it. Contact us if you are looking for implementation tasks that fit your skills.
+
+# Deploy
+```bash
+pnpm build:updateVersion x.x.x 
+```
