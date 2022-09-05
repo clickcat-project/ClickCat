@@ -1,7 +1,7 @@
 {
   "name": "click-cat",
   "private": true,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "stone",
   "scripts": {
     "dev": "vite --host",
