@@ -17,7 +17,7 @@ if [ -z "${SKIP_PRECHECK}" ]; then
     git diff-index --quiet HEAD -- || { error '请先 stash 或 commit 你当前的改动.'; exit 1; }
 
     # Step 1: push current branch to remote
-    info '正在将当前分支同步至 GitLab.'
+    info '正在将当前分支同步.'
     git push || exit 1
 fi
 
