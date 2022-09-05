@@ -33,8 +33,14 @@ fi
 
 info "船新版本：$new_version"
 
+# 以下一行代码中 [[ -z $(git status -s) ]] 也可以哟并来检测是否有未提交的代码
 # [[ -z $(git status -s) ]] || { error '请先 stash 或 commit 你当前的改动.'; exit 1; }
 
+# 以下两行代码应该都可以单独作为检测是否有未提交代码的检测方法，但是没有测试过
+# git diff --quiet && git diff --cached --quiet
+# git diff --quiet HEAD
+
+# 检测是否有未提交的代码
 if [ -z "${SKIP_PRECHECK}" ]; then
     # Step 0: check for uncommitted changes
     git status
