@@ -56,5 +56,5 @@ git push
 info "提交 package 版本修改"
 
 # 提交tag
-git push origin "v$version"
+git push origin "v$new_version"
 info "提交 tag ，执行 git-action"
