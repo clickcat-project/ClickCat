@@ -17,8 +17,8 @@ if [ -z "${SKIP_PRECHECK}" ]; then
     git diff-index --quiet HEAD -- || { error '请先 stash 或 commit 你当前的改动.'; exit 1; }
 
     # Step 1: push current branch to remote
-    info '正在将当前分支同步.'
-    git push || exit 1
+    # info '正在将当前分支同步.'
+    # git push || exit 1
 fi
 
 # 通过 npm version 来修改 package.json 的版本号，并打出对应的 版本tag
@@ -32,5 +32,5 @@ git push
 echo "提交 package 版本修改"
 
 # 提交tag
-git push origin "$version"
+git push origin "v$version"
 echo "提交 tag ，执行 git-action"
