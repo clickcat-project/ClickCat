@@ -15,12 +15,9 @@ const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
 
 const treeLoading = ref(false)
-const columns = ref<any[]>([])
 const selectV2Columns = ref<any[]>([])
 const tree = ref<any[]>([])
 const defaultExpandKeys = ref<string[]>([])
-const seletedColumn = ref<string>()
-const selectedColumnObj = ref<any>()
 const treeInstance = ref<any>()
 const dataloading = ref<boolean>(false)
 const dragEle = ref<HTMLElement>()
@@ -66,8 +63,6 @@ const getTreeData = () => {
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {
       const dataArr = res.map(item => item.data)
-      columns.value = dataArr[0]
-      selectV2Columns.value = dataArr[0].map((item: any) => ({ label: item.name, value: `${item.database}.${item.table}.${item.name}`}))
       tree.value = createTree(
         dataArr[0],
         dataArr[1],
@@ -88,15 +83,15 @@ const clickCommand = (node: any, command: string) => {
 }
 
 const changeSelected = (val: string) => {
-  if (selectedColumnObj.value) {
-    selectedColumnObj.value.selected = false
-  }
-  const [database, table, currentCol] = val.split('.')
-  const selectedColumn = columns.value.find((item: any) => item.name === currentCol)
-  selectedColumnObj.value = selectedColumn
-  selectedColumn.selected = true
-  treeInstance.value.store.nodesMap[database].expanded = true
-  treeInstance.value.store.nodesMap[table].expanded = true
+  // if (selectedColumnObj.value) {
+  //   selectedColumnObj.value.selected = false
+  // }
+  // const [database, table, currentCol] = val.split('.')
+  // const selectedColumn = columns.value.find((item: any) => item.name === currentCol)
+  // selectedColumnObj.value = selectedColumn
+  // selectedColumn.selected = true
+  // treeInstance.value.store.nodesMap[database].expanded = true
+  // treeInstance.value.store.nodesMap[table].expanded = true
   
   // setTimeout(() => {
   //   console.log(`#${database}-${table}-${currentCol}`)
@@ -142,15 +137,17 @@ defineExpose({
       class="loading"
     ></div>
     <div class="search-box">
-      <el-select-v2
-        v-model="seletedColumn"
+      <!-- 
+              <el-select-v2
+        
         filterable
         :options="selectV2Columns"
         placeholder="Please select"
         class="filter-select"
-        @change="changeSelected"
       />
-      <!-- <el-select
+        v-model="seletedColumn"
+        <el-select
+        @change="changeSelected"
         v-model="seletedColumn"
         filterable
         placeholder="Select"

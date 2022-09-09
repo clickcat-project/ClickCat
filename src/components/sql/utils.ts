@@ -9,7 +9,7 @@ export const createTree = (columns: ColumnItem[], tables: TableItem[], database:
     const children = columns.filter((col) => col.table === item.name)
     return {
       ...item,
-      children
+      children: []
     }
   })
 

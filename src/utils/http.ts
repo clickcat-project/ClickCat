@@ -1,4 +1,5 @@
 import { useLioginOutsideStore } from '@/store/modules/login'
+import { cleanData } from 'jquery'
 
 function getRequestInit(query?: string, isLogin = false): RequestInit {
   const init: RequestInit = {
@@ -91,8 +92,11 @@ export function query(sql?: string, settings?: string, connection?: Connection, 
   const loginStore = useLioginOutsideStore()
   const connectionData = connection ?? loginStore.connection
   const url = getRequestUrl(connectionData, settings)
+  const start = Date.now()
   return request(url, init)
     .then((r) => {
+      const end = Date.now()
+      console.log('Query finished in ' + (end - start) + ' ms : ' + sql)
       return r
     })
 }
