@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -17,9 +17,12 @@ import 'virtual:svg-icons-register'
 import piniaStore from './store'
 import { addRouteHooks } from './router/utils'
 
+import { GlobalEvents } from 'vue-global-events'
+
 const app = createApp(App)
 app.use(i18n)
 app.use(ElementPlus)
 app.use(addRouteHooks(router))
 app.use(piniaStore)
 app.mount('#app')
+app.component('GlobalEvents', GlobalEvents)
