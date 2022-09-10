@@ -45,7 +45,8 @@ const queryData = (rows = 100) => {
       statistics.value = {
         bytes_read: +(bytes_read / 1024).toFixed(1),
         elapsed: elapsed.toFixed(2),
-        rows_read
+        rows_read,
+        timestamp: new Date()
       }
     })
     .finally(() => {

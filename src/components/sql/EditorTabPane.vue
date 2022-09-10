@@ -9,6 +9,7 @@ import { useSqlStore } from '@/store'
 import { query } from '@/utils/http'
 import { Statistics } from './types'
 import { ExportData } from './ExportData'
+
 const sqlStore = useSqlStore()
 
 const props = defineProps<{
@@ -83,7 +84,8 @@ const queryTableData = (rows = 100) => {
         statistics.value = {
           bytes_read: +(bytes_read / 1024).toFixed(1),
           elapsed: elapsed.toFixed(2),
-          rows_read
+          rows_read,
+          timestamp: new Date()
         }
       } else {
         queryTableDataErrorMsg.value = 'Completed'

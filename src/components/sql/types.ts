@@ -48,6 +48,7 @@ export type Statistics = {
   bytes_read: number
   elapsed: string
   rows_read: number
+  timestamp: Date
 }
 
 export enum ColumnCommand {
