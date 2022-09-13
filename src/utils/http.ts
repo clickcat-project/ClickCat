@@ -96,7 +96,7 @@ export function query(sql?: string, settings?: string, connection?: Connection, 
   return request(url, init)
     .then((r) => {
       const end = Date.now()
-      console.log('Query finished in ' + (end - start) + ' ms : ' + sql)
+      //console.log('Query finished in ' + (end - start) + ' ms : ' + sql)
       return r
     })
 }
