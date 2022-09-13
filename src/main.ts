@@ -19,6 +19,8 @@ import { addRouteHooks } from './router/utils'
 
 import { GlobalEvents } from 'vue-global-events'
 
+// import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 const app = createApp(App)
 app.use(i18n)
 app.use(ElementPlus)
@@ -26,3 +28,7 @@ app.use(addRouteHooks(router))
 app.use(piniaStore)
 app.mount('#app')
 app.component('GlobalEvents', GlobalEvents)
+
+// for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+//     app.component(key, component)
+// }

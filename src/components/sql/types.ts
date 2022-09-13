@@ -25,6 +25,7 @@ export type ColumnItem = {
 export type TableItem = {
   database: string
   engine: string
+  total_rows: number
   name: string
   size: string
 }

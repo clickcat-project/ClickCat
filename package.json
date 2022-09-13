@@ -23,7 +23,7 @@
     "butterfly-dag": "4.3.6",
     "dayjs": "1.11.3",
     "echarts": "5.3.3",
-    "element-plus": "2.2.6",
+    "element-plus": "2.2.16",
     "jquery": "3.6.0",
     "lodash": "4.17.21",
     "moment": "^2.29.4",

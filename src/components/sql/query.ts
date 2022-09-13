@@ -72,6 +72,7 @@ export const queryAllTables = () => {
   const sql = `SELECT t.database,
         t.name,
         t.engine,
+        t.total_rows,
         -- t.*,
         pa.size
     FROM system.tables as t ANY LEFT JOIN ( SELECT database,table as name,formatReadableSize(sum(bytes)) as size FROM system.parts  GROUP BY database,name ) as pa USING (database,name)
