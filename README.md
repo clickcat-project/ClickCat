@@ -2,7 +2,7 @@
 
 ClickCat is a firendly user interface that lets you search,explore and visualize your ClickHouse Data. 
 
-We provides the following features,you can access http://www.clickcat.cloud to try directly without any installing.
+We provides the following features,you can access http://8.135.49.240:8080 to try directly without any installing.
 # Features
 * An online SQL editor  which can run your SQL code without any installing.
 <img src="https://user-images.githubusercontent.com/22762150/184086489-20d872a9-32b6-4773-a86f-f17e5775467f.png" width="500"/>
