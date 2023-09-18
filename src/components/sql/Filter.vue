@@ -6,68 +6,69 @@ import { ScrollbarInstance } from 'element-plus'
 import { queryAllDatabases, queryAllColumns, queryAllTables } from './query'
 import { createTree } from './utils'
 import { ColumnCommand } from './types'
-// import { useLoginStore } from '@/store'
 import tableImg from '@/assets/images/sql/table.svg'
 import databaseImg from '@/assets/images/sql/database.svg'
+import openInNewImg from '@/assets/icons/svg/open_in_new.svg'
 import SvgIcon from '../SvgIcon/index.vue'
+import { ElTreeV2 } from 'element-plus'
+import { ColumnItem, DatabaseItem, TableItem } from './types'
 
 const emit = defineEmits(['tableCommand'])
 // const loginStore = useLoginStore()
 
 const treeLoading = ref(false)
-const columns = ref<any[]>([])
-const selectV2Columns = ref<any[]>([])
 const tree = ref<any[]>([])
 const defaultExpandKeys = ref<string[]>([])
-const seletedColumn = ref<string>()
-const selectedColumnObj = ref<any>()
-const treeInstance = ref<any>()
+const treeInstance = ref<InstanceType<typeof ElTreeV2>>()
 const dataloading = ref<boolean>(false)
 const dragEle = ref<HTMLElement>()
 const treeContainerHeight = ref<number>()
 const br = '\n'
 const scrollBar = ref<ScrollbarInstance>()
+const query = ref<string>()
+const hideEmptyTables = ref<boolean>()
+
+const filterTreeNodes = (query: string, node: any) => {  
+  let show = true
+  if (query != '') {
+    const label = node.name
+    show = show && label.includes(query)
+  }
+  if (hideEmptyTables.value && node.total_rows>=0) {
+    const total_rows = node.total_rows
+    show = show && (total_rows > 0)
+  }
+  return show
+}
+
+const onHideEmptyChanged = () => {
+  const filter: string = query?.value !== undefined ? query?.value : ''
+  onFilterChanged(filter)
+}
+
+const onFilterChanged = (query: string) => {
+  // TODO: fix typing when refactor tree-v2
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  treeInstance.value?.filter(query)
+}
 
 onBeforeMount(() => {
-  // dataloading.value = true
-  // var worker = new Worker('worker.js');
-  // worker.onmessage = (e) => {
-  //   const realData = JSON.parse(e.data)
-  //   columns.value = realData.columns
-  //   tree.value = realData.tree
-  //   defaultExpandKeys.value = [tree.value[0].name]
-  //   dataloading.value = false
-  // }
-  // worker.postMessage(JSON.stringify(loginStore.connection))
-  
   getTreeData()
 })
 
 onMounted(() => {
-  treeContainerHeight.value = document.querySelector('.tree-content')?.getBoundingClientRect().height
+  const height = Number(document.querySelector('.tree-content')?.getBoundingClientRect().height)
+  treeContainerHeight.value = height - 0
   // closeTooltip()
 })
 
-// const closeTooltip = () => {
-// 	// 此处事件源可以替换，按需切换即可
-//   (scrollBar.value?.wrap$ as HTMLElement).onscroll = () => {
-//     console.log('111111111')
-//     let list = document.querySelectorAll('.el-popper.is-dark.click-cat-dark')
-//     if (list.length > 0) {
-//       (list[list.length - 1] as HTMLElement).style.display = 'none'
-//     }
-//   }
-// }
-
 const getTreeData = () => {
-  //dataloading.value = true  
   treeLoading.value = true
   
   Promise.all([queryAllColumns(), queryAllTables(), queryAllDatabases()])
     .then(res => {
       const dataArr = res.map(item => item.data)
-      columns.value = dataArr[0]
-      selectV2Columns.value = dataArr[0].map((item: any) => ({ label: item.name, value: `${item.database}.${item.table}.${item.name}`}))
       tree.value = createTree(
         dataArr[0],
         dataArr[1],
@@ -87,24 +88,6 @@ const clickCommand = (node: any, command: string) => {
   })
 }
 
-const changeSelected = (val: string) => {
-  if (selectedColumnObj.value) {
-    selectedColumnObj.value.selected = false
-  }
-  const [database, table, currentCol] = val.split('.')
-  const selectedColumn = columns.value.find((item: any) => item.name === currentCol)
-  selectedColumnObj.value = selectedColumn
-  selectedColumn.selected = true
-  treeInstance.value.store.nodesMap[database].expanded = true
-  treeInstance.value.store.nodesMap[table].expanded = true
-  
-  // setTimeout(() => {
-  //   console.log(`#${database}-${table}-${currentCol}`)
-  //   const nodeEle = document.querySelector(`#${database}-${table}-${currentCol}`)
-  //   console.log(nodeEle, 'nodeEle')
-  //   nodeEle?.scrollIntoView()
-  // }, 100)
-}
 
 const getDragEle = () => {
   return dragEle.value
@@ -115,11 +98,9 @@ const refreshTree = () => {
 }
 
 const shrinkAll = () => {
-  Object.keys(treeInstance.value.store.nodesMap).forEach(key => {
-    if (treeInstance.value.store.nodesMap[key].expanded) {
-      treeInstance.value.store.nodesMap[key].expanded = false
-    }
-  })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  treeInstance.value?.setExpandedKeys([])
 }
 
 defineExpose({
@@ -142,108 +123,67 @@ defineExpose({
       class="loading"
     ></div>
     <div class="search-box">
-      <el-select-v2
-        v-model="seletedColumn"
-        filterable
-        :options="selectV2Columns"
-        placeholder="Please select"
-        class="filter-select"
-        @change="changeSelected"
+      <el-input
+        v-model="query"
+        placeholder="Search for any name (e.g. columns)"
+        @input="onFilterChanged"
       />
-      <!-- <el-select
-        v-model="seletedColumn"
-        filterable
-        placeholder="Select"
-        class="filter-select"
-        @change="changeSelected"
-      >
-        <el-option
-          v-for="item in columns"
-          :key="item.name"
-          :label="item.name"
-          :value="item.name"
-        >
-          <span>{{ item.name }}</span>
-        </el-option>
-      </el-select> -->
       <div class="search-btn">
         <el-icon color="#fff">
           <Search />
         </el-icon>
       </div>
     </div>
+    <div class="search-checkbox">
+      <el-checkbox
+        v-model="hideEmptyTables"
+        label="Hide empty tables"
+        size="large"
+        @change="onHideEmptyChanged"
+      />
+    </div>
     <div class="tree-content">
-      <el-scrollbar ref="scrollBar">
-        <!-- , class: () => 'no-back' -->
-        <!-- :height="treeContainerHeight" -->
-        <!-- <el-tree-v2 -->
-        <el-tree
+      <el-scrollbar
+        ref="scrollBar"
+        :noresize="true"
+      >
+        <el-tree-v2
           ref="treeInstance"
+          :filter-method="filterTreeNodes"
           :data="tree"
           node-key="name"
           :default-expanded-keys="defaultExpandKeys"
           render-after-expand
           auto-expand-parent
-          :props="{children: 'children', label: 'name'}"
+          :props="{children: 'children', label: 'name', value: 'name'}"
           :expand-on-click-node="false"
+          :height="treeContainerHeight"
         >
           <template #default="{ node }">
             <template v-if="node.data.database && !node.data.table">
-              <!-- append-to=".tree-content .el-scrollbar" -->
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                popper-class="click-cat-dark"
-                :content="`${node.data.engine}${br}${node.data.size}`"
-                placement="right"
+              <span
+                class="custom-tree-node has-dropdown"
               >
-                <el-dropdown
-                  trigger="contextmenu"
-                  popper-class="dark"
-                  @command="(command) => clickCommand(node, command)"
+                <img
+                  :src="tableImg"
+                  alt=""
                 >
-                  <span
-                    class="custom-tree-node has-dropdown"
-                    @dblclick="() => clickCommand(node, ColumnCommand.OpenTable)"
-                  >
-                    <img
-                      :src="tableImg"
-                      alt=""
-                    >
-                    <span>{{ node.label }}</span>
-                  </span>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item :command="ColumnCommand.OpenTable">
-                        Open table
-                      </el-dropdown-item>
-                      <el-dropdown-item :command="ColumnCommand.MakeSelect">
-                        Make SELECT
-                      </el-dropdown-item>
-                      <el-dropdown-item :command="ColumnCommand.MakeSqlDescribe">
-                        Make SQL Describe
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </el-tooltip>
+                <span>{{ node.label }}</span>
+                <img
+                  :src="openInNewImg"
+                  class="open-btn"
+                  alt=""
+                  @click="() => clickCommand(node, ColumnCommand.OpenTable)"
+                >
+              </span>
             </template>
             <template v-else-if="node.data.database && node.data.table">
-              <!-- append-to=".tree-content .el-scrollbar" -->
-              <el-tooltip
-                class="box-item"
-                effect="dark"
-                popper-class="click-cat-dark"
-                :content="`${node.data.name}${br}${node.data.type}${node.data.defaultType ? `${br}${node.data.defaultType}`:''}`"
-                placement="right"
+              <span
+                :id="`${node.data.database}-${node.data.table}-${node.label}`"
+                class="custom-tree-node has-dropdown"
               >
-                <span
-                  :id="`${node.data.database}-${node.data.table}-${node.label}`"
-                  class="custom-tree-node has-dropdown"
-                >
-                  <span>{{ node.label }}</span>
-                </span>
-              </el-tooltip>
+                <span>{{ node.label }}</span>
+              </span>
               <span class="column-type">{{ node.data.type }}</span>
               <div :class="`absolute-back ${node.data.selected ? 'active' : ''}`"></div>
             </template>
@@ -277,8 +217,7 @@ defineExpose({
               </span>
             </template>
           </template>
-        <!-- </el-tree-v2> -->
-        </el-tree>
+        </el-tree-v2>
       </el-scrollbar>
     </div>
   </section>
@@ -364,10 +303,15 @@ defineExpose({
   border-bottom-right-radius: 4px;
   border-top-right-radius: 4px;
 }
+.search-checkbox {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  height: 32px;
+}
 .custom-tree-node {
   position: relative;
   font-size: 16px;
-  line-height: 56px;
   z-index: 2;
 }
 .tree-content {
@@ -375,14 +319,12 @@ defineExpose({
   overflow-y: auto;
 
   :deep(.el-tree-node__content) {
-    position: relative;
-    height: 56px;
     background-color: unset;
   }
   .suffix {
     position: absolute;
-    top: 17px;
-    right: 10px;
+    top: 0px;
+    right: 0px;
     color: rgba(255, 255, 255, 0.45);
     z-index: 2;
   }
@@ -393,8 +335,8 @@ defineExpose({
 
   .root-btn {
     position: absolute;
-    top: 17px;
-    right: 10px;
+    top: 5px;
+    right: 0px;
     display: flex;
     z-index: 2;
 
@@ -416,6 +358,13 @@ defineExpose({
   :deep(.el-tree-node__content i) {
     position: relative;
     z-index: 2;
+  }
+  .open-btn {
+    margin-left: 2px;
+
+    *:hover {
+      color: var(--el-color-primary) !important;
+    }
   }
 }
 </style>

@@ -178,7 +178,10 @@
   import { ref, reactive, onMounted, onUnmounted } from 'vue'
   import { useLoginStore } from '@/store'
   import { useGoTo } from '@/layout/hooks'
+  import { useRoute, useRouter } from 'vue-router'
   
+  const router = useRouter()
+  const route = useRoute()
   const goTo = useGoTo()
 
   const loginStore = useLoginStore()
@@ -204,6 +207,27 @@
   onMounted(() => {
     // @keyup.enter="login"
     document.addEventListener('keyup', keyupLogin)
+    // Initialize defaults from URL parameters.
+    if (route.query.connectionName) {
+      if (typeof route.query.connectionName === 'string') {
+        loginForm.connectionName = route.query.connectionName
+      }
+    }
+    if (route.query.connectionUrl) {
+      if (typeof route.query.connectionUrl === 'string') {
+        loginForm.connectionUrl = route.query.connectionUrl
+      }
+    }
+    if (route.query.username) {
+      if (typeof route.query.username === 'string') {
+        loginForm.username = route.query.username
+      }
+    }
+    if (route.query.password) {
+      if (typeof route.query.password === 'string') {
+        loginForm.password = route.query.password
+      }
+    }
   })
 
   onUnmounted(() => [

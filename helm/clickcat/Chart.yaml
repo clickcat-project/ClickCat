@@ -1,0 +1,9 @@
+apiVersion: v2
+name: clickcat
+description: A friendly user interface that lets you search,explore and visualize your ClickHouse Data.
+
+type: application
+
+version: 0.1.0
+
+appVersion: "latest"

@@ -6,18 +6,27 @@ import { useGoTo } from './hooks'
 import { RouteName } from './types'
 import i18n from '@/i18n'
 
+import.meta.env.VITE_SOME_KEY
+
 const router = useRouter()
 const route = useRoute()
 const goTo = useGoTo()
 
-const nvaList = [
-  RouteName.Metrics,
+const getNavList = () => {
+  const routes= [RouteName.Metrics,
   RouteName.SQL,
-  RouteName.Processes,
-  RouteName.Graph,
-  RouteName.Ml,
-  RouteName.HistorySQL
-]
+  RouteName.Processes]
+  if (import.meta.env.VITE_ENABLE_GRAPH == 'true') {
+    routes.push(RouteName.Graph)
+  }
+  if (import.meta.env.VITE_ENABLE_ML == 'true') {
+    routes.push(RouteName.Ml)
+  }
+  routes.push(RouteName.HistorySQL)
+  return routes
+}
+
+const nvaList = [RouteName.SQL]
 
 const hasRouteName = (item: string) => {
   return (route.name as string)?.startsWith(item)
@@ -57,7 +66,7 @@ const goGithub = () => {
     <div class="nav-container">
       <nav class="nav">
         <span
-          v-for="item in nvaList"
+          v-for="item in getNavList()"
           :key="item"
           :class="{active: hasRouteName(item)}"
           @click="goTo(item)"

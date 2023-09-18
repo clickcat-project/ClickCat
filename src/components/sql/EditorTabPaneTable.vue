@@ -3,6 +3,7 @@ import { ref, toRaw, toRefs, nextTick } from 'vue'
 import { ArrowDown, Download, FullScreen } from '@element-plus/icons-vue'
 import { Statistics } from './types'
 import Empty from '../metrics/Empty.vue'
+import  moment from 'moment'
 
 const props = defineProps<{
   columns: any[],
@@ -68,6 +69,11 @@ const entryEditMode = (row:any, column:any, cell:any) => {
 defineExpose({
   getDragElement
 })
+
+function formatTimestamp(val: Date) {
+  return moment(val).format()
+
+}
 </script>
 <template>
   <section
@@ -138,11 +144,13 @@ defineExpose({
     </div>
     <div class="action-box">
       <template v-if="!errorMsg && !!statistics">
-        <span>{{ statistics?.elapsed }} sec</span>
+        <span>Executed: {{ formatTimestamp(statistics?.timestamp) }}</span>
         <el-divider direction="vertical" />
-        <span>{{ statistics?.rows_read }} rows</span>
+        <span>Elapsed {{ statistics?.elapsed }} sec.</span>
         <el-divider direction="vertical" />
-        <span class="marginright56">{{ statistics?.bytes_read }} KB</span>
+        <span>Processed {{ statistics?.rows_read }} rows, </span>
+        <el-divider direction="vertical" />
+        <span class="marginright56">{{ statistics?.bytes_read }} KB.</span>
       </template>
       <el-dropdown @command="handleChangeRows">
         <span class="el-dropdown-link">

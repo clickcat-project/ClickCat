@@ -100,8 +100,15 @@ defineExpose({
   registerTable,
   getSelectionValue
 })
+
+function runQuery() {
+  emit('queryAction')
+}
 </script>
 <template>
+  <global-events
+    @keydown.prevent.ctrl.enter="runQuery"
+  ></global-events>
   <section
     ref="simpleEditorContainer"
     class="simple-editor-container"
